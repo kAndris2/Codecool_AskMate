@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AskMate.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,6 @@ namespace AskMate
         List<QuestionModel> GetQuestions();
         QuestionModel GetQuestion(int id);
         void NewQuestion(string content);
-        String GetAnswer(int questionId); 
+        public List<AnswerModel> GetAnswers(int questionId);
     }
 }

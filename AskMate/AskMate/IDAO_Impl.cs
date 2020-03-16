@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
+using AskMate.Models;
 
 namespace AskMate
 {
@@ -18,11 +19,11 @@ namespace AskMate
             for (int i = 0; i < table.Length; i++)
             {
                 string[] temp = table[i].Split(",");
-                Questions.Add(new QuestionModel(int.Parse(temp[0]), temp[1], temp[2], temp[3]));
+                Questions.Add(new QuestionModel(int.Parse(temp[0]), temp[1], temp[2], temp[4]));
             }
         }
 
-        public String GetAnswer(int questionId)
+        public List<AnswerModel> GetAnswers(int questionId)
         {
             foreach (QuestionModel item in Questions)
             {

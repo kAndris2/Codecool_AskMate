@@ -56,6 +56,17 @@ namespace AskMate.Controllers
             return null;
         }
 
+        [HttpGet("/details/{id}")]
+        public IActionResult Details(int id)
+        {
+            foreach (QuestionModel item in new IDAO_Impl().GetQuestions())
+            {
+                if (id.Equals(item.Id))
+                    return View("Details", item);
+            }
+            return null;
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

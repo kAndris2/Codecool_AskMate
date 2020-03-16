@@ -3,21 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AskMate
+namespace AskMate.Models
 {
     public class QuestionModel
     {
         public int Id { get; set; }
+        public int Vote { get; set; }
+        public String Title { get; set; }
         public String Content { get; set; }
         public String ImgLink { get; set; }
-        public String Answer { get; set; }
+        public DateTime Date { get; set; }
+        public float Rate { get; set; }
+        public List<AnswerModel> Answer { get; set; }
 
-        public QuestionModel(int id, string content, string link, string answer)
+        public QuestionModel(int id, string title, string content, string link)
         {
             Id = id;
+            Title = title;
             Content = content;
             ImgLink = link;
-            Answer = answer; 
+            Date = DateTime.Now;
         }
 
         public void AddImage(string link)
@@ -25,9 +30,10 @@ namespace AskMate
             ImgLink = link;
         }
 
-        public void AddAnswer(String answer)
+        
+        public void AddAnswer(AnswerModel answer)
         {
-            Answer = answer;
+            Answer.Add(answer);
         }
     }
 }

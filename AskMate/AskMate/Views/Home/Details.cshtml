@@ -1,0 +1,14 @@
+﻿@model AskMate.Models.QuestionModel
+@{
+    ViewData["Title"] = "Deatails";
+}
+
+@foreach (QuestionModel item in new IDAO_Impl().GetQuestions())
+{
+    <ul class="nav-tabs">
+        <p>ID: @item.Id</p>
+        <p>Content: @item.Content</p>
+        <p>Answer: @item.Answer</p>
+    </ul>
+}
+
