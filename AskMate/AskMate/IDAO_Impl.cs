@@ -86,7 +86,9 @@ namespace AskMate
 
         public void NewQuestion(string title, string content)
         {
-            int id = Questions[Questions.Count - 1].Id++;
+            
+            int id = Questions[Questions.Count - 1].Id + 1;
+            QuestionModel question = new QuestionModel(id, title, content, "link");
             File.AppendAllText(FILENAME, $"\n{id},{title},{content},date,imglink,vote,rate,answer");
             //1,Title,Content,Date,ImgLink,Vote,Rate,Answer
         }
