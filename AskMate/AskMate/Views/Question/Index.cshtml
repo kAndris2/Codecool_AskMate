@@ -10,11 +10,18 @@
 {
     <div class="form-group">
         <label for="">Title</label>
-        @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", @required = "" })
     </div>
     <div class="form-group">
         <label for="">Question</label>
-        @Html.TextBoxFor(m => m.Content, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.Content, new { @class = "form-control", @required = "" })
     </div>
     <button type="submit" class="btn btn-success">Add</button>
+    <div class="float-right">
+        <span>
+            @Html.ActionLink("Back", "Index", "Home", null, new { @class = "btn btn-danger ml-auto mr-1" })
+        </span>
+    </div>
+
 }
+

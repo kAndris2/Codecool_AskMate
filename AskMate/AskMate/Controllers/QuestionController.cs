@@ -24,7 +24,7 @@ namespace AskMate.Controllers
             var newQ = new IDAO_Impl();
             newQ.NewQuestion(Title,Content);
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -3,19 +3,20 @@
 }
 @model AskMate.Controllers.HomeController
 
-<table class="table">
-    <tr>
-        <th>
-            #ID
-        </th>
-        <th>
-            Question
-        </th>
-        <th>
-            Actions
-        </th>
-    </tr>
-
+<table class="table"  id="mainTable">
+    <thead>
+        <tr>
+            <th class="th-sm">
+                #ID
+            </th>
+            <th class="th-sm">
+                Question
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
     @foreach (QuestionModel question in new IDAO_Impl().GetQuestions())
     {
         <tr>
