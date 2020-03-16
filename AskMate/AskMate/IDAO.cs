@@ -7,9 +7,9 @@ namespace AskMate
 {
     public interface IDAO
     {
-        List<Question> GetQuestions();
-        Question GetQuestion(int id);
+        List<QuestionModel> GetQuestions();
+        QuestionModel GetQuestion(int id);
         void NewQuestion(string content);
-        String GetAnswer(int questionId);
+        String GetAnswer(int questionId); 
     }
 }
