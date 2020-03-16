@@ -4,4 +4,7 @@
 }
 
 <h1>List</h1>
-
+@{ 
+    IDAO_Impl iDAO = new IDAO_Impl();
+    <p>@iDAO.GetQuestion(1).Content;</p>
+}

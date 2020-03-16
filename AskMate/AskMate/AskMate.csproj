@@ -5,7 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Resources\Questions.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Resources\Questions.csv" />
   </ItemGroup>
 
   <ItemGroup>

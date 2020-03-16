@@ -8,7 +8,7 @@ namespace AskMate
 {
     public class IDAO_Impl : IDAO
     {
-        const String FILENAME = "/Resources/Questions.csv";
+        const String FILENAME = "./Resources/Questions.csv";
         List<Question> Questions = new List<Question>();
 
         public IDAO_Impl()
