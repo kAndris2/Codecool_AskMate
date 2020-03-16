@@ -40,7 +40,7 @@ namespace AskMate.Controllers
             foreach (QuestionModel item in new IDAO_Impl().GetQuestions())
             {
                 if (id.Equals(item.Id))
-                    return View("QuestionResponse", item);
+                    return View("QuestionResponse",item);
             }
             return null;
         }
