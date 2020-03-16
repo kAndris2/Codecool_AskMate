@@ -9,7 +9,7 @@ namespace AskMate
     {
         List<Question> GetQuestions();
         Question GetQuestion(int id);
-        int NewQuestion(string title, string content);
-        List<String> GetAnswers(int questionId);
+        void NewQuestion(string content);
+        String GetAnswer(int questionId);
     }
 }

@@ -12,10 +12,12 @@ namespace AskMate
         public String ImgLink { get; set; }
         public String Answer { get; set; }
 
-        public Question(int id, string content)
+        public Question(int id, string content, string link, string answer)
         {
             Id = id;
             Content = content;
+            ImgLink = link;
+            Answer = answer;
         }
 
         public void AddImage(string link)
