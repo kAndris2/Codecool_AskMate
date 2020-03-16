@@ -8,8 +8,8 @@ namespace AskMate
 {
     public class IDAO_Impl : IDAO
     {
-        const String FILENAME = "./Resources/Questions.csv";
-        List<Question> Questions = new List<Question>();
+        const String FILENAME = "./Resources/Questions.csv"; 
+        List<QuestionModel> Questions = new List<QuestionModel>();
 
         public IDAO_Impl()
         {
@@ -18,13 +18,13 @@ namespace AskMate
             for (int i = 0; i < table.Length; i++)
             {
                 string[] temp = table[i].Split(",");
-                Questions.Add(new Question(int.Parse(temp[0]), temp[1], temp[2], temp[3]));
+                Questions.Add(new QuestionModel(int.Parse(temp[0]), temp[1], temp[2], temp[3]));
             }
         }
 
         public String GetAnswer(int questionId)
         {
-            foreach (Question item in Questions)
+            foreach (QuestionModel item in Questions)
             {
                 if (questionId.Equals(item.Id))
                     return item.Answer;
@@ -32,9 +32,9 @@ namespace AskMate
             throw new ArgumentException($"Invalid Question ID! ('{questionId}')");
         }
 
-        public Question GetQuestion(int id)
+        public QuestionModel GetQuestion(int id)
         {
-            foreach (Question item in Questions)
+            foreach (QuestionModel item in Questions)
             {
                 if (id.Equals(item.Id))
                     return item;
@@ -42,7 +42,7 @@ namespace AskMate
             throw new ArgumentException($"Invalid Question ID! ('{id}')");
         }
 
-        public List<Question> GetQuestions()
+        public List<QuestionModel> GetQuestions()
         {
             return Questions;
         }

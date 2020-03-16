@@ -15,7 +15,7 @@
         </th>
     </tr>
 
-    @foreach (Question question in new IDAO_Impl().GetQuestions())
+    @foreach (QuestionModel question in new IDAO_Impl().GetQuestions())
     {
         <tr>
             <td>
@@ -28,7 +28,7 @@
                 @Html.ActionLink("Edit", "question", new { id = question.Id }) |
                 @Html.ActionLink("Details", "question", new { id = question.Id }) |
                 @Html.ActionLink("Delete", "Delete", new { id = question.Id })
-            </td>
+            </td> 
         </tr>
     }
 
