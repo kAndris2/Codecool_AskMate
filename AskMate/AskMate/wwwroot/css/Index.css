@@ -2,40 +2,23 @@
 }
 
 .button {
-    background-color: #4CAF50; /* Green */
+    background-color: #f4511e;
     border: none;
     color: white;
-    padding: 15px 32px;
+    padding: 16px 32px;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
     font-size: 16px;
-}
-
-.button span {
-    cursor: pointer;
+    margin: 4px 2px;
+    opacity: 0.6;
+    transition: 0.3s;
     display: inline-block;
-    position: relative;
-    transition: 0.5s;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-.button span:after {
-    content: '\00bb';
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: -20px;
-    transition: 0.5s;
-}
-
-.button:hover span {
-    padding-right: 25px;
-}
-
-.button:hover span:after {
-    opacity: 1;
-    right: 0;
-}
+    .button:hover {
+        opacity: 1
+    }
 
 .disabled {
     opacity: 0.6;
