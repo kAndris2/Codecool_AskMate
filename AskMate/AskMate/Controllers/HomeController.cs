@@ -34,6 +34,19 @@ namespace AskMate.Controllers
             return View();
         }
         
+        [HttpPost]
+        public ActionResult Index(EditQuestionModel editedQuestion)
+        {
+            int Id = editedQuestion.Id;
+            string Title = editedQuestion.Title;
+            string Content = editedQuestion.Content;
+
+            var edit = new IDAO_Impl();
+            edit.EditLine(Id,Title,Content);
+            
+            return View();
+        }
+
         [HttpGet("/question/{id}")]
         public IActionResult Question(int id)
         {

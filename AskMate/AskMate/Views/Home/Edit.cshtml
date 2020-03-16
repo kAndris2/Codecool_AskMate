@@ -3,15 +3,24 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit - @Model.Content</h1>
-<form method="post" action="">
-    <div class="form-group">
-        <label for="">ID</label>
-        <input type="number" class="form-control" id="" placeholder="@Model.Id">
-    </div>
-    <div class="form-group">
-        <label for="">Question</label>
-        <input type="text" class="form-control" id="" value="@Model.Content">
-    </div>
-    <button type="submit" class="btn btn-success">Edit</button>
-</form>
+<h1>Edit - @Model.Title</h1>
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+
+
+<div class="form-group">
+    <label for="">ID: #@Model.Id</label>
+    @Html.TextBoxFor(m => m.Id,new { @class = "form-control", @type="hidden"})
+</div>
+<div class="form-group">
+    <label for="">Title</label>
+    @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+</div>
+<div class="form-group">
+    <label for="">Question</label>
+    @Html.TextBoxFor(m => m.Content, new { @class = "form-control" })
+</div>
+<button type="submit" class="btn btn-success">Edit</button>
+
+}

@@ -5,10 +5,10 @@
 
 @foreach (QuestionModel item in new IDAO_Impl().GetQuestions())
 {
-    <ul class="nav-tabs">
-        <p>ID: @item.Id</p>
-        <p>Content: @item.Content</p>
-        <p>Answer: @item.Answer</p>
+    <ul class="list-group">
+        <li class="list-group-item">ID: @item.Id</li>
+        <li class="list-group-item">Content: @item.Content</li>
+        <li class="list-group-item">Answer: @item.Answer</li>
     </ul>
 }
 

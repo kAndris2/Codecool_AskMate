@@ -23,6 +23,42 @@ namespace AskMate
             }
         }
 
+        public void EditLine(int id, string title, string content)
+        {
+            List<String> lines = new List<String>();
+
+            if (File.Exists(FILENAME)) 
+            {
+                using (StreamReader reader = new StreamReader(FILENAME))
+                {
+                    String line;
+
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        if (line.Contains(","))
+                        {
+                            String[] split = line.Split(',');
+
+                            if (split[0] == Convert.ToString(id))
+                            {
+                                split[1] = title;
+                                split[2] = content;
+                                line = String.Join(",", split);
+                            }
+                        }
+
+                        lines.Add(line);
+                    }
+                }
+
+                using (StreamWriter writer = new StreamWriter(FILENAME, false))
+                {
+                    foreach (String line in lines)
+                        writer.WriteLine(line);
+                }
+            }
+        }
+
         public List<AnswerModel> GetAnswers(int questionId)
         {
             foreach (QuestionModel item in Questions)

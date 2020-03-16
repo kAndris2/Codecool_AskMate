@@ -12,5 +12,6 @@ namespace AskMate
         QuestionModel GetQuestion(int id);
         void NewQuestion(string content);
         public List<AnswerModel> GetAnswers(int questionId);
+        void EditLine(int id, string title, string Content);
     }
 }
