@@ -37,7 +37,12 @@ namespace AskMate.Controllers
         [HttpGet("/question/{id}")]
         public IActionResult Question(int id)
         {
-            return View("QuestionResponse"+id);
+            foreach (QuestionModel item in new IDAO_Impl().GetQuestions())
+            {
+                if (id.Equals(item.Id))
+                    return View("QuestionResponse", item);
+            }
+            return null;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
