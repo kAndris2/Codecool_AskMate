@@ -2,11 +2,14 @@
 @{
     ViewData["Title"] = "Deatails";
 }
+<link rel="stylesheet" href="~/css/Index.css">
 
 <ul class="nav-tabs">
     <h3>(@Model.Id) - <u>@Model.Title</u></h3>
     <p>Content: @Model.Content</p>
+    <p>Rate: @Model.Rate</p>
     <p>Img:</p>
     <img src=@Model.ImgLink style="width:142px;height:142px;">
 </ul>
 
+<button class="button" onclick="window.location.href='/Home'">Back to questions</button>
