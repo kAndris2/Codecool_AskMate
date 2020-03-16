@@ -5,19 +5,19 @@ using System.Threading.Tasks;
 
 namespace AskMate
 {
-    public class Question
+    public class QuestionModel
     {
         public int Id { get; set; }
         public String Content { get; set; }
         public String ImgLink { get; set; }
         public String Answer { get; set; }
 
-        public Question(int id, string content, string link, string answer)
+        public QuestionModel(int id, string content, string link, string answer)
         {
             Id = id;
             Content = content;
             ImgLink = link;
-            Answer = answer;
+            Answer = answer; 
         }
 
         public void AddImage(string link)
