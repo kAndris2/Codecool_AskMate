@@ -33,7 +33,7 @@ namespace AskMate.Controllers
         {
             return View();
         }
-
+        
         [HttpGet("/question/{id}")]
         public IActionResult Question(int id)
         {
@@ -41,6 +41,17 @@ namespace AskMate.Controllers
             {
                 if (id.Equals(item.Id))
                     return View("QuestionResponse",item);
+            }
+            return null;
+        }
+        
+        [HttpGet("/edit/{id}")]
+        public IActionResult Edit(int id)
+        {
+            foreach (QuestionModel item in new IDAO_Impl().GetQuestions())
+            {
+                if (id.Equals(item.Id))
+                    return View("Edit", item);
             }
             return null;
         }
