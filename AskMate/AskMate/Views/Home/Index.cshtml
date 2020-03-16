@@ -2,19 +2,34 @@
     ViewData["Title"] = "Home Page";
 }
 
-<html>
-    <head>
-        <title>AskMate HomePage</title>
-        <link rel="stylesheet" href="~/css/Index.css">
-    </head>
+<table class="table">
+    <tr>
+        <th>
+            #ID
+        </th>
+        <th>
+            Question
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
 
-    <body>
-        @foreach (Question question in new IDAO_Impl().GetQuestions())
-        {
-            <a>(@question.Id).</a>
-            <a>@question.Content</a>
-            <br>
-        }
-    </body>
+    @foreach (Question question in new IDAO_Impl().GetQuestions())
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => question.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => question.Content)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = question.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = question.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = question.Id })
+            </td>
+        </tr>
+    }
 
-</html>
+</table>
