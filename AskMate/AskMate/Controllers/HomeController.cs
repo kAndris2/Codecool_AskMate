@@ -34,6 +34,12 @@ namespace AskMate.Controllers
             return View();
         }
 
+        [HttpGet("/question/{id}")]
+        public IActionResult Question(int id)
+        {
+            return View("QuestionResponse"+id);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

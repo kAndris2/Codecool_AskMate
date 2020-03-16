@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+@model AskMate.Controllers.HomeController
 <table class="table">
     <tr>
         <th>
@@ -25,8 +25,8 @@
                 @Html.DisplayFor(modelItem => question.Content)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = question.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = question.Id }) |
+                @Html.ActionLink("Edit", "question", new { id = question.Id }) |
+                @Html.ActionLink("Details", "question", new { id = question.Id }) |
                 @Html.ActionLink("Delete", "Delete", new { id = question.Id })
             </td>
         </tr>
