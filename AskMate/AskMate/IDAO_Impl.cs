@@ -84,10 +84,11 @@ namespace AskMate
             return Questions;
         }
 
-        public void NewQuestion(string content)
+        public void NewQuestion(string title, string content)
         {
             int id = Questions[Questions.Count - 1].Id++;
-            File.AppendAllText(FILENAME, $"{id},{content},link,answer");
+            File.AppendAllText(FILENAME, $"\n{id},{title},{content},date,imglink,vote,rate,answer");
+            //1,Title,Content,Date,ImgLink,Vote,Rate,Answer
         }
     }
 }

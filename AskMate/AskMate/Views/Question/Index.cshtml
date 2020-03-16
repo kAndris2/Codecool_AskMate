@@ -1,0 +1,20 @@
+﻿@model AskMate.Models.QuestionModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Add a new question</h1>
+
+@using (Html.BeginForm("Index", "Question", FormMethod.Post))
+{
+    <div class="form-group">
+        <label for="">Title</label>
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="">Question</label>
+        @Html.TextBoxFor(m => m.Content, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-success">Add</button>
+}

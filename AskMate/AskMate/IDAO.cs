@@ -10,7 +10,7 @@ namespace AskMate
     {
         List<QuestionModel> GetQuestions();
         QuestionModel GetQuestion(int id);
-        void NewQuestion(string content);
+        void NewQuestion(string title, string content);
         public List<AnswerModel> GetAnswers(int questionId);
         void EditLine(int id, string title, string Content);
     }

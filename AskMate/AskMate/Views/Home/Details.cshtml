@@ -5,11 +5,9 @@
 <link rel="stylesheet" href="~/css/Index.css">
 
 
-<ul class="nav-tabs">
-    <h3>(@Model.Id) - <u>@Model.Title</u></h3>
-    <p>Content: @Model.Content</p>
-    <p>Rate: @Model.Rate</p>
-    <p>Img:</p>
-    <img src=@Model.ImgLink style="width:142px;height:142px;">
+<ul class="list-group">
+    <li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center"><h3>(@Model.Id) - @Model.Title</h3><span class="badge badge-primary badge-pill">@Model.Rate</span></li>
+    <li class="list-group-item">Content: @Model.Content</li>
+    <li class="list-group-item">Img: <img src=@Model.ImgLink style="width:142px;height:142px;" /></li>
 </ul>
-<button class="button" onclick="window.location.href='/Home'">Back to questions</button>
+<button class="btn btn-info" onclick="window.location.href='/Home'">Back to questions</button>
