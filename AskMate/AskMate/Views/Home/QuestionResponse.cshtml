@@ -1,10 +1,18 @@
-﻿@{
+﻿@model AskMate.QuestionModel
+@{
     ViewData["Title"] = "QuestionResponse";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>QuestionResponse</h1>
+<h1>@Model.Id - @Model.Content</h1>
 
-@model AskMate.QuestionModel
-
-<p>@Model.Content</p>
+<table>
+    <tbody>
+        <tr>
+            <th>@Model.Content</th>
+        </tr>
+        <tr>
+            <td>@Model.Answer</td>
+        </tr>
+    </tbody>
+</table>
