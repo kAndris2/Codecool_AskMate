@@ -47,6 +47,7 @@ namespace AskMate.Controllers
             return View();
         }
 
+
         /*
         [HttpGet("/question/{id}")]
         public IActionResult Question(int id)
@@ -59,7 +60,20 @@ namespace AskMate.Controllers
             return null;
         }
         */
-        
+
+        //Modal
+        [HttpGet("/Modal/{id}")]
+        public ActionResult Modal(int id)
+        {
+            foreach (QuestionModel item in new IDAO_Impl().GetQuestions())
+            {
+                if (id.Equals(item.Id))
+                    return View("Index", item);
+            }
+            return null;
+        }
+
+
         [HttpGet("/edit/{id}")]
         public IActionResult Edit(int id)
         {

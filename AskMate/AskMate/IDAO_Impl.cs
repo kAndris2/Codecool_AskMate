@@ -102,6 +102,44 @@ namespace AskMate
                     break;
                 }
             }
+
+            //Delete From .csv
+            
+            string lineToDelete = "";
+
+            foreach (QuestionModel item in Questions)
+            {
+                if (id.Equals(item.Id))
+                {
+                    lineToDelete = Convert.ToString(item.Id);
+                }
+            }
+
+            if (File.Exists(FILENAME))
+            {
+                string[] lines = File.ReadAllLines(FILENAME);
+
+                using (StreamWriter sw = new StreamWriter(FILENAME, false))
+                {
+                    foreach (var line in lines)
+                    {
+                        string[] parts = line.Split(',');
+                        if (parts[0] != lineToDelete)
+                        {
+                            sw.WriteLine(line);
+                        }
+                        else
+                        {
+                            //Deleted
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //No FILENAME
+            }
+
         }
     }
 }
