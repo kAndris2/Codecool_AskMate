@@ -11,7 +11,7 @@ namespace AskMate.Controllers
 {
     public class HomeController : Controller
     {
-        
+        public IDAO_Impl Idao = new IDAO_Impl();
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -41,8 +41,7 @@ namespace AskMate.Controllers
             string Title = editedQuestion.Title;
             string Content = editedQuestion.Content;
 
-            var edit = new IDAO_Impl();
-            edit.EditLine(Id,Title,Content);
+            Idao.EditLine(Id,Title,Content);
             
             return View();
         }
@@ -63,7 +62,7 @@ namespace AskMate.Controllers
         [HttpGet("/edit/{id}")]
         public IActionResult Edit(int id)
         {
-            foreach (QuestionModel item in new IDAO_Impl().GetQuestions())
+            foreach (QuestionModel item in Idao.GetQuestions())
             {
                 if (id.Equals(item.Id))
                     return View("Edit", item);
@@ -74,7 +73,7 @@ namespace AskMate.Controllers
         [HttpGet("/question/{id}")]
         public IActionResult Question(int id)
         {
-            foreach (QuestionModel item in new IDAO_Impl().GetQuestions())
+            foreach (QuestionModel item in Idao.GetQuestions())
             {
                 if (id.Equals(item.Id))
                     return View("Question", item);
@@ -85,7 +84,7 @@ namespace AskMate.Controllers
         [HttpGet("/delete/{id}")]
         public IActionResult Delete(int id)
         {
-            new IDAO_Impl().DeleteQuestion(id);
+            Idao.DeleteQuestion(id);
             return View("Index");
         }
 
