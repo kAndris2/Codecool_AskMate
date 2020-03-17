@@ -102,8 +102,8 @@ namespace AskMate.Controllers
             return View("Index");
         }
 
-        [HttpPost("NewAnswer/{id}")]
-        public ActionResult NewAnswer([FromForm(Name = "answer")] string answer)
+       // [HttpPost("NewAnswer{id}")]
+        public ActionResult NewAnswer([FromForm(Name = "answer")] string answer, int id)
         {
             /*
             foreach (QuestionModel item in Idao.GetQuestions())
@@ -112,7 +112,7 @@ namespace AskMate.Controllers
                     return View("NewAnswer", item);
             }
             */
-            return View("NewAnswer");
+            return View("NewAnswer", new AnswerModel(69, answer));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
