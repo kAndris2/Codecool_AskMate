@@ -30,11 +30,9 @@
             <td>
                 @Html.ActionLink("Edit", "edit", new { id = question.Id }) |
                 @Html.ActionLink("Question", "question", new { id = question.Id }) |
-                @Html.ActionLink("Delete", "Modal", "Home", new { id = question.Id }, new { data_target = "#MyModal", data_toggle = "modal" })
-                
+                @Html.ActionLink("Delete", "Modal", "Home", new { id = question.Id }, new { data_target = "#MyModal", data_toggle = "modal" }) |
             </td>
         </tr>
-
     }
 </table>
 
