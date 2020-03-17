@@ -102,7 +102,6 @@ namespace AskMate.Controllers
             return View("Index");
         }
 
-       // [HttpPost("NewAnswer{id}")]
         public ActionResult NewAnswer([FromForm(Name = "answer")] string answer, int id)
         {
             /*
@@ -112,7 +111,7 @@ namespace AskMate.Controllers
                     return View("NewAnswer", item);
             }
             */
-            return View("NewAnswer", new AnswerModel(69, answer));
+            return View("NewAnswer", new AnswerModel(id, answer));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -15,10 +15,10 @@
     <li class="list-group-item">Img: <img src=@Model.ImgLink style="width:142px;height:142px;" /></li>
 
     <li class="list-group-item">
-        @using (Html.BeginForm("NewAnswer", "Home", FormMethod.Post))
+        @using (Html.BeginForm("NewAnswer"+Model.Id, "Home", FormMethod.Post))
         {
             <label>Add an answer:</label>
-            <textarea id="textbox" name="answer" required></textarea>
+            <textarea name="answer" required></textarea>
             <input type="submit" value="Submit">
         }
     </li>
