@@ -64,7 +64,7 @@ namespace AskMate
             foreach (QuestionModel item in Questions)
             {
                 if (questionId.Equals(item.Id))
-                    return item.Answer;
+                    return item.Answers;
             }
             throw new ArgumentException($"Invalid Question ID! ('{questionId}')");
         }

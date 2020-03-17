@@ -13,5 +13,18 @@
     </li>
     <li class="list-group-item">Content: @Model.Content</li>
     <li class="list-group-item">Img: <img src=@Model.ImgLink style="width:142px;height:142px;" /></li>
+
+    <li class="list-group-item">
+        <form method="post">
+            <label>Add an answer:</label>
+            <textarea id="textbox" name="message" required></textarea>
+            <input type="submit" value="Submit">
+        </form>
+    </li>
+
+    @foreach (AnswerModel answer in Model.GetAnswers())
+    {
+
+    }
 </ul>
 <button class="btn btn-info" onclick="window.location.href='/Home'">Back to questions</button>
