@@ -47,6 +47,7 @@ namespace AskMate.Controllers
             return View();
         }
 
+        /*
         [HttpGet("/question/{id}")]
         public IActionResult Question(int id)
         {
@@ -57,6 +58,7 @@ namespace AskMate.Controllers
             }
             return null;
         }
+        */
         
         [HttpGet("/edit/{id}")]
         public IActionResult Edit(int id)
@@ -69,15 +71,22 @@ namespace AskMate.Controllers
             return null;
         }
 
-        [HttpGet("/details/{id}")]
-        public IActionResult Details(int id)
+        [HttpGet("/question/{id}")]
+        public IActionResult Question(int id)
         {
             foreach (QuestionModel item in new IDAO_Impl().GetQuestions())
             {
                 if (id.Equals(item.Id))
-                    return View("Details", item);
+                    return View("Question", item);
             }
             return null;
+        }
+
+        [HttpGet("/delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            new IDAO_Impl().DeleteQuestion(id);
+            return View("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

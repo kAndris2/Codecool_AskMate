@@ -91,5 +91,17 @@ namespace AskMate
             File.AppendAllText(FILENAME, $"\n{id},{title},{content},date,imglink,vote,rate,answer");
             //1,Title,Content,Date,ImgLink,Vote,Rate,Answer
         }
+
+        public void DeleteQuestion(int id)
+        {
+            foreach (QuestionModel item in Questions)
+            {
+                if (id.Equals(item.Id))
+                {
+                    Questions.Remove(item);
+                    break;
+                }
+            }
+        }
     }
 }
