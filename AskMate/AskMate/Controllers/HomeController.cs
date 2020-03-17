@@ -102,15 +102,17 @@ namespace AskMate.Controllers
             return View("Index");
         }
 
-        [HttpGet("/{id}/new-answer")]
-        public IActionResult NewAnswer(int id)
+        [HttpPost("NewAnswer/{id}")]
+        public ActionResult NewAnswer([FromForm(Name = "answer")] string answer)
         {
+            /*
             foreach (QuestionModel item in Idao.GetQuestions())
             {
                 if (id.Equals(item.Id))
                     return View("NewAnswer", item);
             }
-            return null;
+            */
+            return View("NewAnswer");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
