@@ -9,7 +9,7 @@
 <ul class="list-group">
     <li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">
         <h3>#@Model.Id - @Model.Title</h3>
-        <a>@Model.Date</a>
+        <a>@Model.GetDate()</a>
         <div>
             <span id="rateDown" class="oi oi-chevron-bottom btn-rate" onclick="toggleRate(this)"></span>
             <span class="badge badge-primary badge-pill">@Model.Vote</span>

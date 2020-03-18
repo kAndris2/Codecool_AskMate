@@ -32,7 +32,7 @@ namespace AskMate
             for (int i = 0; i < table.Length; i++)
             {
                 string[] temp = table[i].Split(",");
-                Questions.Add(new QuestionModel(int.Parse(temp[0]), temp[1], temp[2], temp[3]));
+                Questions.Add(new QuestionModel(int.Parse(temp[0]), temp[1], temp[2], Convert.ToInt64(temp[3])));
             }
         }
 
@@ -101,9 +101,29 @@ namespace AskMate
         {
             
             int id = Questions[Questions.Count - 1].Id + 1;
-            Questions.Add(new QuestionModel(id, title, content, DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString()));
-            File.AppendAllText(FILENAME, $"\n{id},{title},{content},date,imglink,vote,rate,answer");
+            long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            QuestionModel question = new QuestionModel(id, title, content, milisec);
+            Questions.Add(question);
+            File.AppendAllText(FILENAME, 
+                $"\n{id}," +
+                $"{title}," +
+                $"{content}," +
+                $"{milisec}," +
+                $"imglink," +
+                $"vote," +
+                $"rate," +
+                $"answer");
             //1,Title,Content,Date,ImgLink,Vote,Rate,Answer
+        }
+
+        public void Refresh()
+        {
+            string text = "";
+            foreach (QuestionModel question in Questions)
+            {
+                text += $"{question.ToString()}\n";
+            }
+            File.WriteAllText(FILENAME, text);
         }
 
         public void DeleteQuestion(int id)

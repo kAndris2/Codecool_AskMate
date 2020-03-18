@@ -12,23 +12,36 @@ namespace AskMate.Models
         public String Title { get; private set; }
         public String Content { get; private set; }
         public String ImgLink { get; private set; }
-        public DateTime Date { get; }
+        public long Date { get; }
         public List<AnswerModel> Answers { get; } = new List<AnswerModel>();
 
-        public QuestionModel(int id, string title, string content, string time)
+        public QuestionModel(int id, string title, string content, long time)
         {
             Id = id;
             Title = title;
             Content = content;
-            Date = new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(time));
+            Date = time;
+            //new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(time))
         }
 
         public void AddImage(string link) { ImgLink = link; }
         public void AddAnswer(AnswerModel answer) { Answers.Add(answer); }
         public void VoteUp() { Vote++; }
         public void VoteDown() { Vote--; }
-        public void SetTitle(string title) { Title = title; }
+
+        public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
+
+        public void SetTitle(string title) 
+        { 
+            Title = title; 
+        }
+
         public void SetContent(string content) { Content = content; }
         public void SetImgLink(string link) { ImgLink = link; }
+
+        public override string ToString()
+        {
+            return $"{Id};{Title};{Content};{Date};{ImgLink};{Vote};{Answers}";
+        }
     }
 }
