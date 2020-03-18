@@ -48,10 +48,10 @@ namespace AskMate.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult Moddel(int Id)
+       
+        public ActionResult Moddel([FromForm(Name = "id")] int delid)
         {
-            Idao.DeleteQuestion(Id);
+            Idao.DeleteQuestion(delid);
             return View("Index");
         }
         public IActionResult ModalId(int id)
@@ -85,13 +85,6 @@ namespace AskMate.Controllers
                     return View("Question", item);
             }
             return null;
-        }
-
-        [HttpGet("/delete/{id}")]
-        public IActionResult Delete(int id)
-        {
-            Idao.DeleteQuestion(id);
-            return View("Index");
         }
 
         public ActionResult NewAnswer([FromForm(Name = "answer")] string answer, [FromForm(Name = "id")] int id)

@@ -158,7 +158,7 @@ namespace AskMate
                 {
                     foreach (var line in lines)
                     {
-                        string[] parts = line.Split(',');
+                        string[] parts = line.Split(';');
                         if (parts[0] != lineToDelete)
                         {
                             sw.WriteLine(line);
@@ -166,7 +166,6 @@ namespace AskMate
                         else
                         {
                             //Deleted from csv
-
                             //deleted from questions
                             Questions.Remove(questionToDelete);
                         }
