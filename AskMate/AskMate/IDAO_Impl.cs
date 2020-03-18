@@ -128,18 +128,21 @@ namespace AskMate
 
         public void DeleteQuestion(int id)
         {
+            
+
+            //Delete From .csv
+            QuestionModel questionToDelete = null;
+            string lineToDelete = "";
+
             foreach (QuestionModel item in Questions)
             {
                 if (id.Equals(item.Id))
                 {
-                    Questions.Remove(item);
+                    questionToDelete = item;
+                    
                     break;
                 }
             }
-
-            //Delete From .csv
-            
-            string lineToDelete = "";
 
             foreach (QuestionModel item in Questions)
             {
@@ -164,10 +167,14 @@ namespace AskMate
                         }
                         else
                         {
-                            //Deleted
+                            //Deleted from csv
+
+                            //deleted from questions
+                            Questions.Remove(questionToDelete);
                         }
                     }
                 }
+
             }
             else
             {
