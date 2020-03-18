@@ -110,7 +110,7 @@ namespace AskMate.Controllers
             {
                 if (id.Equals(question.Id))
                 {
-                    question.AddAnswer(new AnswerModel(id, answer));
+                    question.AddAnswer(new AnswerModel(question.GetAnswers().Count+1, answer));
                     return View("Question", question);
                 }
             }
