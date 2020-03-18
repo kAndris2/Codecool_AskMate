@@ -12,7 +12,7 @@
         <a>@Model.Date</a>
         <div>
             <span id="rateDown" class="oi oi-chevron-bottom btn-rate" onclick="toggleRate(this)"></span>
-            <span class="badge badge-primary badge-pill">@Model.Rate</span>
+            <span class="badge badge-primary badge-pill">@Model.Vote</span>
             <span id="rateUp" class="oi oi-chevron-top btn-rate" onclick="toggleRate(this)"></span>
         </div>
     </li>
@@ -31,9 +31,9 @@
     </li>
 
     <li class="list-group-item">
-        @if(Model.GetAnswers().Count >= 1)
+        @if(Model.Answers.Count >= 1)
         {
-            foreach (AnswerModel answer in Model.GetAnswers())
+            foreach (AnswerModel answer in Model.Answers)
             {
                 <a>@answer.Date</a>
                 <br>

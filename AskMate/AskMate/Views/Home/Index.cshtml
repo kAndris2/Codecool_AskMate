@@ -26,7 +26,7 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => question.Title)
-                <span class="badge badge-primary badge-pill">@question.Rate</span>
+                <span class="badge badge-primary badge-pill">@question.Vote</span>
             </td>
             <td>
                 @Html.ActionLink("Edit", "edit", new { id = question.Id }) |
