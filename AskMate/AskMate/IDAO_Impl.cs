@@ -9,7 +9,10 @@ namespace AskMate
 {
     public sealed class IDAO_Impl : IDAO
     {
-        const String FILENAME = "./Resources/Questions.csv"; 
+        const String FILENAME = "./Resources/Questions.csv";
+        const String ANSWER_SEP = "$$";
+        const char ANSWER_PROP_SEP = '.';
+
         List<QuestionModel> Questions = new List<QuestionModel>();
         static IDAO_Impl instance = null;
 
@@ -27,13 +30,7 @@ namespace AskMate
 
         private IDAO_Impl()
         {
-            string[] table = File.ReadAllLines(FILENAME);
-
-            for (int i = 0; i < table.Length; i++)
-            {
-                string[] temp = table[i].Split(";");
-                Questions.Add(new QuestionModel(int.Parse(temp[0]), temp[1], temp[2], Convert.ToInt64(temp[3]), temp[4], int.Parse(temp[5])));
-            }
+            LoadFiles();
         }
 
         public void EditLine(int id, string title, string content)
@@ -69,6 +66,7 @@ namespace AskMate
                     foreach (String line in lines)
                         writer.WriteLine(line);
                 }
+                LoadFiles();
             }
         }
 
@@ -99,19 +97,23 @@ namespace AskMate
 
         public void NewQuestion(string title, string content)
         {
-            
-            int id = Questions[Questions.Count - 1].Id + 1;
+            int id;
+            if (Questions.Count == 0)
+                id = 0;
+            else
+                id = Questions[Questions.Count - 1].Id + 1;
+
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            QuestionModel question = new QuestionModel(id, title, content, milisec, "N/A", 0);
+            QuestionModel question = new QuestionModel(id, title, content, milisec, "N/A", 0, new List<AnswerModel>());
             Questions.Add(question);
             File.AppendAllText(FILENAME, 
-                $"\n{id}," +
-                $"{title}," +
-                $"{content}," +
-                $"{milisec}," +
-                $"imglink," +
-                $"vote," +
-                $"answer");
+                $"\n{id};" +
+                $"{title};" +
+                $"{content};" +
+                $"{milisec};" +
+                $"N/A;" +
+                $"0;" +
+                $"{GetFormattedAnswers(question)}");
         }
 
         public void Refresh()
@@ -119,66 +121,74 @@ namespace AskMate
             string text = "";
             foreach (QuestionModel question in Questions)
             {
-                text += $"{question.ToString()}\n";
+                text += $"{question.ToString()}{GetFormattedAnswers(question)}";
             }
             File.WriteAllText(FILENAME, text);
         }
 
         public void DeleteQuestion(int id)
         {
-            
-
-            //Delete From .csv
-            QuestionModel questionToDelete = null;
-            string lineToDelete = "";
-
-            foreach (QuestionModel item in Questions)
+            foreach (QuestionModel question in Questions)
             {
-                if (id.Equals(item.Id))
+                if (id.Equals(question.Id))
                 {
-                    questionToDelete = item;
-                    
+                    Questions.Remove(question);
                     break;
                 }
             }
+            Refresh();
+        }
 
-            foreach (QuestionModel item in Questions)
+        private List<AnswerModel> SetAnswers(string table)
+        {
+            List<AnswerModel> answers = new List<AnswerModel>();
+            string[] data = table.Split(ANSWER_SEP);
+
+            if (data.Length >= 2)
             {
-                if (id.Equals(item.Id))
+                for (int i = 0; i < data.Length; i++)
                 {
-                    lineToDelete = Convert.ToString(item.Id);
+                    string[] temp = data[i].Split(ANSWER_PROP_SEP);
+                    answers.Add(new AnswerModel(int.Parse(temp[0]),
+                                                temp[1],
+                                                Convert.ToInt64(temp[2]),
+                                                int.Parse(temp[3])
+                                                ));
                 }
             }
+            return answers;
+        }
 
+        private String GetFormattedAnswers(QuestionModel question)
+        {
+            string[] props = new string[question.Answers.Count];
+            for (int i = 0; i < question.Answers.Count; i++)
+            {
+                props[i] = question.Answers[i].ToString();
+            }
+            return string.Join(ANSWER_SEP, props);
+        }
+
+        private void LoadFiles()
+        {
             if (File.Exists(FILENAME))
             {
-                string[] lines = File.ReadAllLines(FILENAME);
+                Questions.Clear();
+                string[] table = File.ReadAllLines(FILENAME);
 
-                using (StreamWriter sw = new StreamWriter(FILENAME, false))
+                for (int i = 0; i < table.Length; i++)
                 {
-                    foreach (var line in lines)
-                    {
-                        string[] parts = line.Split(',');
-                        if (parts[0] != lineToDelete)
-                        {
-                            sw.WriteLine(line);
-                        }
-                        else
-                        {
-                            //Deleted from csv
-
-                            //deleted from questions
-                            Questions.Remove(questionToDelete);
-                        }
-                    }
+                    string[] temp = table[i].Split(";");
+                    Questions.Add(new QuestionModel(int.Parse(temp[0]),
+                                                    temp[1],
+                                                    temp[2],
+                                                    Convert.ToInt64(temp[3]),
+                                                    temp[4],
+                                                    int.Parse(temp[5]),
+                                                    temp[6] != "" ? SetAnswers(temp[6]) : new List<AnswerModel>()
+                                                    ));
                 }
-
             }
-            else
-            {
-                //No FILENAME
-            }
-
         }
     }
 }
