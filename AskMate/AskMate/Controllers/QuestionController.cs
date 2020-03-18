@@ -17,14 +17,20 @@ namespace AskMate.Controllers
         [HttpPost]
         public ActionResult Index(EditQuestionModel newQuestion)
         {
-            
-            string Title =  newQuestion.Title;
+
+            string Title = newQuestion.Title;
             string Content = newQuestion.Content;
 
             var newQ = new IDAO_Impl();
-            newQ.NewQuestion(Title,Content);
+            newQ.NewQuestion(Title, Content);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public IActionResult Question()
+        {
+            return View();
         }
     }
 }

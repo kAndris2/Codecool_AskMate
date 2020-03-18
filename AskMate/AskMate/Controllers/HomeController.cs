@@ -33,7 +33,7 @@ namespace AskMate.Controllers
         {
             return View();
         }
-        
+
         [HttpPost]
         public ActionResult Index(EditQuestionModel editedQuestion)
         {
@@ -41,8 +41,8 @@ namespace AskMate.Controllers
             string Title = editedQuestion.Title;
             string Content = editedQuestion.Content;
 
-            Idao.EditLine(Id,Title,Content);
-            
+            Idao.EditLine(Id, Title, Content);
+
             return View();
         }
 

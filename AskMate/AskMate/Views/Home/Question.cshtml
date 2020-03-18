@@ -2,14 +2,19 @@
 @{
     ViewData["Title"] = "Details";
 }
-<link rel="stylesheet" href="~/css/Index.css">
 
+<link rel="stylesheet" href="~/css/Index.css">
+<script src="~/js/site.js"></script>
 
 <ul class="list-group">
     <li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">
         <h3>#@Model.Id - @Model.Title</h3>
         <a>@Model.Date</a>
-        <span class="badge badge-primary badge-pill">@Model.Rate</span>
+        <div>
+            <span id="rateDown" class="oi oi-chevron-bottom btn-rate" onclick="toggleRate(this)"></span>
+            <span class="badge badge-primary badge-pill">@Model.Rate</span>
+            <span id="rateUp" class="oi oi-chevron-top btn-rate" onclick="toggleRate(this)"></span>
+        </div>
     </li>
     <li class="list-group-item">Content: @Model.Content</li>
     <li class="list-group-item">Img: <img src=@Model.ImgLink style="width:142px;height:142px;" /></li>
