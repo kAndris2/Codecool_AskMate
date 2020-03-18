@@ -14,7 +14,7 @@ namespace AskMate.Models
         public String ImgLink { get; set; }
         public DateTime Date { get; set; }
         public float Rate { get; set; }
-        public List<AnswerModel> Answers { get; set; }
+        public List<AnswerModel> Answers { get; set; } = new List<AnswerModel>();
 
         public QuestionModel(int id, string title, string content, string link)
         {

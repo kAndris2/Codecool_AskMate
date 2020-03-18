@@ -6,22 +6,24 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AskMate.Models;
+using AskMate;
 
 namespace AskMate.Controllers
 {
     public class HomeController : Controller
     {
-        public IDAO_Impl Idao = new IDAO_Impl();
+        public IDAO_Impl Idao;
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            Idao = IDAO_Impl.Instance;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View(Idao);
         }
 
         public IActionResult Privacy()
@@ -86,16 +88,17 @@ namespace AskMate.Controllers
             return View("Index");
         }
 
-        public ActionResult NewAnswer([FromForm(Name = "answer")] string answer, int id)
+        public ActionResult NewAnswer([FromForm(Name = "answer")] string answer, [FromForm(Name = "id")] int id)
         {
-            /*
-            foreach (QuestionModel item in Idao.GetQuestions())
+            foreach (QuestionModel question in Idao.GetQuestions())
             {
-                if (id.Equals(item.Id))
-                    return View("NewAnswer", item);
+                if (id.Equals(question.Id))
+                {
+                    question.AddAnswer(new AnswerModel(question.GetAnswers().Count+1, answer));
+                    return View("Question", question);
+                }
             }
-            */
-            return View("NewAnswer", new AnswerModel(id, answer));
+            return null;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

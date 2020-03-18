@@ -19,13 +19,29 @@
     <li class="list-group-item">Content: @Model.Content</li>
     <li class="list-group-item">Img: <img src=@Model.ImgLink style="width:142px;height:142px;" /></li>
 
-    <li class="list-group-item">  
-        @using (Html.BeginForm("NewAnswer/"+Model.Id, "Home", FormMethod.Post))
+
+    <li class="list-group-item">
+        @using (Html.BeginForm("NewAnswer", "Home", FormMethod.Post))
         {
             <label>Add an answer:</label>
             <textarea name="answer" required></textarea>
+            <input name="id" type="hidden" value="@Model.Id" />
             <input type="submit" value="Submit">
         }
     </li>
+
+    <li class="list-group-item">
+        @if(Model.GetAnswers().Count >= 1)
+        {
+            foreach (AnswerModel answer in Model.GetAnswers())
+            {
+                <a>@answer.Date</a>
+                <br>
+                <a>@answer.Id - @answer.Content</a>
+                <br><br>
+            }
+        }
+    </li>
+
 </ul>
 <button class="btn btn-info" onclick="window.location.href='/Home'">Back to questions</button>

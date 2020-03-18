@@ -1,8 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@model AskMate.Controllers.HomeController
-<!--MAIN TABLE-->
+
+@model IDAO_Impl
+
 <table class="table table-hover table-dark" id="mainTable">
     <thead>
         <tr>
@@ -17,7 +18,7 @@
             </th>
         </tr>
     </thead>
-    @foreach (QuestionModel question in new IDAO_Impl().GetQuestions())
+    @foreach (QuestionModel question in Model.GetQuestions())
     {
         <tr>
             <td class="">
