@@ -94,7 +94,7 @@ namespace AskMate.Controllers
             {
                 if (id.Equals(question.Id))
                 {
-                    question.AddAnswer(new AnswerModel(question.Answers.Count+1, answer));
+                    question.AddAnswer(new AnswerModel(question.Answers.Count+1, answer, DateTimeOffset.Now.ToUnixTimeMilliseconds(), 0));
                     return View("Question", question);
                 }
             }

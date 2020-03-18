@@ -35,7 +35,7 @@
         {
             foreach (AnswerModel answer in Model.Answers)
             {
-                <a>@answer.Date</a>
+                <a>@answer.GetDate()</a>
                 <br>
                 <a>@answer.Id - @answer.Content</a>
                 <br><br>

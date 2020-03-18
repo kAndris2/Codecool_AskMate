@@ -7,16 +7,19 @@ namespace AskMate.Models
 {
     public class AnswerModel
     {
-        public int Id { get; set; }
-        public int Vote { get; set; }
-        public String Content { get; set; }
-        public DateTime Date;
+        public int Id { get; }
+        public int Vote { get; private set; }
+        public String Content { get; private set; }
+        public long Date { get; }
 
-        public AnswerModel(int id, string content)
+        public AnswerModel(int id, string content, long date, int vote)
         {
             Id = id;
             Content = content;
-            Date = DateTime.Now;
+            Date = date;
+            Vote = vote;
         }
+
+        public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
     }
 }
