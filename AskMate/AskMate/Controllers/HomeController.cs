@@ -48,6 +48,12 @@ namespace AskMate.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult Moddel(int Id)
+        {
+            Idao.DeleteQuestion(Id);
+            return View("Index");
+        }
         public IActionResult ModalId(int id)
         {
             foreach (QuestionModel item in Idao.GetQuestions())
