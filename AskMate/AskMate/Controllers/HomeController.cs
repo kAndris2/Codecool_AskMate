@@ -45,14 +45,14 @@ namespace AskMate.Controllers
 
             Idao.EditLine(Id, Title, Content);
 
-            return View();
+            return View(Idao);
         }
 
        
         public ActionResult Moddel([FromForm(Name = "id")] int delid)
         {
             Idao.DeleteQuestion(delid);
-            return View("Index");
+            return View("Index", Idao);
         }
         public IActionResult ModalId(int id)
         {
