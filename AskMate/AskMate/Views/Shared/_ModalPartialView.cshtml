@@ -1,3 +1,13 @@
 ﻿@model QuestionModel
 
+<div class="modal-header">
+    <h4>Delete</h4>
+    <button class="close" data-dismiss="modal">&times;</button>
+</div>
+<div class="modal-body">
     <p>Are you sure you want to delete the '@Model.Title'? With the id of '@Model.Id'</p>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger">Yes</button>
+    <button class="btn btn-primary" data-dismiss="modal">Close</button>
+</div>
