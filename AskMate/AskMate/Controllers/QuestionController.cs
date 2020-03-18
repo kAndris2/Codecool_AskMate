@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AskMate.Models;
+using AskMate;
 
 namespace AskMate.Controllers
 {
@@ -21,7 +22,7 @@ namespace AskMate.Controllers
             string Title = newQuestion.Title;
             string Content = newQuestion.Content;
 
-            var newQ = new IDAO_Impl();
+            var newQ = IDAO_Impl.Instance;
             newQ.NewQuestion(Title, Content);
 
             return RedirectToAction("Index", "Home");

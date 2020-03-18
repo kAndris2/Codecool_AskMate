@@ -28,5 +28,16 @@
             <input type="submit" value="Submit">
         }
     </li>
+
+    <li class="list-group-item">
+        @if(Model.GetAnswers().Count >= 1)
+        {
+            foreach (AnswerModel answer in Model.GetAnswers())
+            {
+                <a>@answer.Id - @answer.Content</a>
+            }
+        }
+    </li>
+
 </ul>
 <button class="btn btn-info" onclick="window.location.href='/Home'">Back to questions</button>

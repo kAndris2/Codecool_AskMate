@@ -6,22 +6,24 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AskMate.Models;
+using AskMate;
 
 namespace AskMate.Controllers
 {
     public class HomeController : Controller
     {
-        public IDAO_Impl Idao = new IDAO_Impl();
+        public IDAO_Impl Idao;
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            Idao = IDAO_Impl.Instance;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View(Idao);
         }
 
         public IActionResult Privacy()
@@ -64,7 +66,7 @@ namespace AskMate.Controllers
         [HttpGet("/Modal/{id}")]
         public ActionResult Modal(int id)
         {
-            foreach (QuestionModel item in new IDAO_Impl().GetQuestions())
+            foreach (QuestionModel item in Idao.GetQuestions())
             {
                 if (id.Equals(item.Id))
                     return View("Index", item);

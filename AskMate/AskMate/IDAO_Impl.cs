@@ -7,12 +7,25 @@ using AskMate.Models;
 
 namespace AskMate
 {
-    public class IDAO_Impl : IDAO
+    public sealed class IDAO_Impl : IDAO
     {
         const String FILENAME = "./Resources/Questions.csv"; 
         List<QuestionModel> Questions = new List<QuestionModel>();
+        static IDAO_Impl instance = null;
 
-        public IDAO_Impl()
+        public static IDAO_Impl Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new IDAO_Impl();
+                }
+                return instance;
+            }
+        }
+
+        private IDAO_Impl()
         {
             string[] table = File.ReadAllLines(FILENAME);
 
