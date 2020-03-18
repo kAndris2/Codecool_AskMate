@@ -11,9 +11,13 @@
         <h3>#@Model.Id - @Model.Title</h3>
         <a>@Model.GetDate()</a>
         <div>
-            <span id="rateDown" class="oi oi-chevron-bottom btn-rate" onclick="toggleRate(this)"></span>
+            <button id="downVote" class="btn-vote" onclick="location.href='@Url.Action("DownVote", "Home", new {id = @Model.Id})'" title="Downvote">
+                <span class="oi oi-chevron-bottom downvote"></span>
+            </button>
             <span class="badge badge-primary badge-pill">@Model.Vote</span>
-            <span id="rateUp" class="oi oi-chevron-top btn-rate" onclick="toggleRate(this)"></span>
+            <button id="upVote" class="btn-vote" onclick="location.href='@Url.Action("UpVote", "Home", new {id = @Model.Id})'" title="Upvote">
+                <span class="oi oi-chevron-top upvote"></span>
+            </button>
         </div>
     </li>
     <li class="list-group-item">Content: @Model.Content</li>

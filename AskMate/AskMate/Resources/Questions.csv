@@ -1,7 +1,7 @@
-0;This has Trump in it;Right down there;13988110600000;https://www.sportschannel8.com/wp-content/uploads/2016/06/maxresdefault-1024x576.jpg;10;answer
-1;Title;Content;13988110600000;ImgLink;7;answer
-2;What is the hex of blue?;Content;13988110600000;ImgLink;14;answer
-3;What is the title of this question?;Can u te me what is the title of .this question?;13988110600000;imglink;25;answer
-4;Valami;Na mi legyen a valami??;13988110600000;imglink;34;answer
-5;I've just added a new question;I think;13988110600000;imglink;71;answer
-6;I can edit now;I would like to know what is the hex code for the color blue. Help me pls. I really need to know this one and I can't use google;1584530844178;imglink;13;answer
+0;This has Trump in it;Right down there;13988110600000;https://www.sportschannel8.com/wp-content/uploads/2016/06/maxresdefault-1024x576.jpg;132;System.Collections.Generic.List`1[AskMate.Models.AnswerModel]
+1;Title;Content;13988110600000;ImgLink;14;System.Collections.Generic.List`1[AskMate.Models.AnswerModel]
+2;What is the hex of blue?;Content;13988110600000;ImgLink;14;System.Collections.Generic.List`1[AskMate.Models.AnswerModel]
+3;What is the title of this question?;Can u te me what is the title of .this question?;13988110600000;imglink;33;System.Collections.Generic.List`1[AskMate.Models.AnswerModel]
+4;Valami;Na mi legyen a valami??;13988110600000;imglink;37;System.Collections.Generic.List`1[AskMate.Models.AnswerModel]
+5;I've just added a new question;I think;13988110600000;imglink;71;System.Collections.Generic.List`1[AskMate.Models.AnswerModel]
+6;I can edit now;I would like to know what is the hex code for the color blue. Help me pls. I really need to know this one and I can't use google;1584530844178;imglink;13;System.Collections.Generic.List`1[AskMate.Models.AnswerModel]

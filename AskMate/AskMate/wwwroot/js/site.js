@@ -4,14 +4,6 @@
 // Write your JavaScript code.
 
 
-function toggleRate(element) {
-    if (element.id == "rateUp") {
-        console.log("toggled up! :)");
-        element.style.opacity = 1;
-    }
-    else {
-        console.log("toggled down");
-        element.style.opacity = 1;
-    }
+function upVote() {
     console.log(element);
 }
