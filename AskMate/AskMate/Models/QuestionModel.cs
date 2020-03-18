@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AskMate;
 
 namespace AskMate.Models
 {
@@ -21,27 +22,27 @@ namespace AskMate.Models
             Title = title;
             Content = content;
             Date = time;
-            //new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(time))
         }
-
-        public void AddImage(string link) { ImgLink = link; }
-        public void AddAnswer(AnswerModel answer) { Answers.Add(answer); }
-        public void VoteUp() { Vote++; }
-        public void VoteDown() { Vote--; }
-
         public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
 
-        public void SetTitle(string title) 
-        { 
-            Title = title; 
-        }
+        public void AddImage(string link) { ImgLink = link; Refr(); }
+        public void AddAnswer(AnswerModel answer) { Answers.Add(answer); Refr(); }
+        public void VoteUp() { Vote++; Refr(); }
+        public void VoteDown() { Vote--; Refr(); }
 
-        public void SetContent(string content) { Content = content; }
-        public void SetImgLink(string link) { ImgLink = link; }
+
+        public void SetTitle(string title) { Title = title; Refr(); }
+        public void SetContent(string content) { Content = content; Refr(); }
+        public void SetImgLink(string link) { ImgLink = link; Refr(); }
 
         public override string ToString()
         {
             return $"{Id};{Title};{Content};{Date};{ImgLink};{Vote};{Answers}";
+        }
+
+        private void Refr()
+        {
+            IDAO_Impl.Instance.Refresh();
         }
     }
 }
