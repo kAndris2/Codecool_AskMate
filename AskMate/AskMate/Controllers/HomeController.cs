@@ -102,16 +102,17 @@ namespace AskMate.Controllers
             return View("Index");
         }
 
-        public ActionResult NewAnswer([FromForm(Name = "answer")] string answer, int id)
+        public ActionResult NewAnswer([FromForm(Name = "answer")] string answer, [FromForm(Name = "id")] int id)
         {
-            /*
-            foreach (QuestionModel item in Idao.GetQuestions())
+            foreach (QuestionModel question in Idao.GetQuestions())
             {
-                if (id.Equals(item.Id))
-                    return View("NewAnswer", item);
+                if (id.Equals(question.Id))
+                {
+                    question.AddAnswer(new AnswerModel(id, answer));
+                    return View("Question", question);
+                }
             }
-            */
-            return View("NewAnswer", new AnswerModel(id, answer));
+            return null;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
