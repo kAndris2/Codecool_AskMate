@@ -17,7 +17,18 @@
         </div>
     </li>
     <li class="list-group-item">Content: @Model.Content</li>
-    <li class="list-group-item">Img: <img src=@Model.ImgLink style="width:142px;height:142px;" /></li>
+
+    <li class="list-group-item">
+        Img:
+        <img src=@Model.ImgLink style="width:142px;height:142px;" />
+
+        <form action="Home">
+            <label for="img">Select image:</label>
+            <input type="file" id="img" name="img" accept="image/*">
+            <input type="submit">
+        </form>
+
+    </li>
 
 
     <li class="list-group-item">
