@@ -32,7 +32,7 @@ namespace AskMate
             for (int i = 0; i < table.Length; i++)
             {
                 string[] temp = table[i].Split(";");
-                Questions.Add(new QuestionModel(int.Parse(temp[0]), temp[1], temp[2], Convert.ToInt64(temp[3])));
+                Questions.Add(new QuestionModel(int.Parse(temp[0]), temp[1], temp[2], Convert.ToInt64(temp[3]), temp[4], int.Parse(temp[5])));
             }
         }
 
@@ -102,7 +102,7 @@ namespace AskMate
             
             int id = Questions[Questions.Count - 1].Id + 1;
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            QuestionModel question = new QuestionModel(id, title, content, milisec);
+            QuestionModel question = new QuestionModel(id, title, content, milisec, "N/A", 0);
             Questions.Add(question);
             File.AppendAllText(FILENAME, 
                 $"\n{id}," +
@@ -111,9 +111,7 @@ namespace AskMate
                 $"{milisec}," +
                 $"imglink," +
                 $"vote," +
-                $"rate," +
                 $"answer");
-            //1,Title,Content,Date,ImgLink,Vote,Rate,Answer
         }
 
         public void Refresh()
