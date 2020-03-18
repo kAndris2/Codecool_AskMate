@@ -31,7 +31,7 @@ namespace AskMate
 
             for (int i = 0; i < table.Length; i++)
             {
-                string[] temp = table[i].Split(",");
+                string[] temp = table[i].Split(";");
                 Questions.Add(new QuestionModel(int.Parse(temp[0]), temp[1], temp[2], Convert.ToInt64(temp[3])));
             }
         }
@@ -48,15 +48,15 @@ namespace AskMate
 
                     while ((line = reader.ReadLine()) != null)
                     {
-                        if (line.Contains(","))
+                        if (line.Contains(";"))
                         {
-                            String[] split = line.Split(',');
+                            String[] split = line.Split(';');
 
                             if (split[0] == Convert.ToString(id))
                             {
                                 split[1] = title;
                                 split[2] = content;
-                                line = String.Join(",", split);
+                                line = String.Join(";", split);
                             }
                         }
 
