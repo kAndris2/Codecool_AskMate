@@ -46,32 +46,16 @@ namespace AskMate.Controllers
             return View();
         }
 
-
-        /*
-        [HttpGet("/question/{id}")]
-        public IActionResult Question(int id)
+        public IActionResult ModalId(int id)
         {
-            foreach (QuestionModel item in new IDAO_Impl().GetQuestions())
+            foreach (QuestionModel item in Idao.GetQuestions())
             {
                 if (id.Equals(item.Id))
-                    return View("QuestionResponse",item);
+                  return PartialView("_ModalPartialView", item);
             }
             return null;
         }
-        */
-
-        //Modal
-        [HttpGet("/Modal/{id}")]
-        public ActionResult Modal(int id)
-        {
-            foreach (QuestionModel item in new IDAO_Impl().GetQuestions())
-            {
-                if (id.Equals(item.Id))
-                    return View("Index", item);
-            }
-            return null;
-        }
-
+        
 
         [HttpGet("/edit/{id}")]
         public IActionResult Edit(int id)

@@ -9,7 +9,7 @@ namespace AskMate.Controllers
 {
     public class ModalController : Controller
     {
-        [HttpGet("/Modal/Index/{id}")]
+       /* [HttpGet("/Modal/Index/{id}")]
         public ActionResult Modal(int id)
         {
             foreach (QuestionModel item in new IDAO_Impl().GetQuestions())
@@ -18,6 +18,6 @@ namespace AskMate.Controllers
                     return View("Home/Index", item);
             }
             return null;
-        }
+        }*/
     }
 }

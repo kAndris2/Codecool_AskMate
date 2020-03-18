@@ -2,7 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 @model AskMate.Controllers.HomeController
-
+<!--MAIN TABLE-->
 <table class="table table-hover table-dark" id="mainTable">
     <thead>
         <tr>
@@ -20,7 +20,7 @@
     @foreach (QuestionModel question in new IDAO_Impl().GetQuestions())
     {
         <tr>
-            <td>
+            <td class="">
                 @Html.DisplayFor(modelItem => question.Id)
             </td>
             <td>
@@ -30,14 +30,15 @@
             <td>
                 @Html.ActionLink("Edit", "edit", new { id = question.Id }) |
                 @Html.ActionLink("Question", "question", new { id = question.Id }) |
-                @Html.ActionLink("Delete", "Modal", "Home", new { id = question.Id }, new { data_target = "#MyModal", data_toggle = "modal" }) |
+                @Html.ActionLink("Delete", "Modal", "Home", new { id = question.Id }, new { data_target = "#MyModal", data_toggle = "modal" })
+                <button id="ModalId" onclick="viewModal(@question.Id)">test</button>
             </td>
         </tr>
     }
 </table>
-
+<!--MAIN TABLE-->
+<!--DELETE MODAL-->
 <div class="container">
-    
     <div class="modal" id="MyModal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -46,13 +47,31 @@
                     <button class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete the item.Title? With the id of item.Id</p>
+                    <div id="showresults"></div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success">Yes</button>
+                    <button class="btn btn-danger">Yes</button>
                     <button class="btn btn-primary" data-dismiss="modal">Clsoe</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!--DELETE MODAL-->
+<!--DELETE MODAL AJAX-->
+@section Scripts{
+    <script>
+    function viewModal(id) {
+        $.ajax({
+            type: 'Get',
+            url: '/Home/ModalId/' + id,//urlem
+            success: function (result) {
+                $("#MyModal").modal();//open modal
+                $('#showresults').html(result);//put view to modal
+
+            }
+        })
+    }
+    </script>
+}
+<!--DELETE MODAL AJAX-->
