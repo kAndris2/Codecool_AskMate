@@ -70,7 +70,6 @@ namespace AskMate.Controllers
             }
             return null;
         }
-<<<<<<< HEAD
         //Image
         [HttpPost]
         public async Task<IActionResult> ImageUpload(IFormFile file, int id)
@@ -104,9 +103,6 @@ namespace AskMate.Controllers
             }
             return View("Index");
         }
-=======
-
->>>>>>> 91873582f08fe374780e1090edd12d24f39167e3
 
         [HttpGet("/edit/{id}")]
         public IActionResult Edit(int id)
