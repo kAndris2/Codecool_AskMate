@@ -153,6 +153,20 @@ namespace AskMate
             Refresh();
         }
 
+        public void AddLinkToAnswer(string filePath, int id)
+        {
+            
+            foreach (AnswerModel ans in GetAnswers(id))
+            {
+                if (ans.Id == id)
+                {
+                    ans.AddImage(filePath);
+                    break;
+                }
+            }
+            Refresh();
+        }
+
         public QuestionModel GetQuestionById(int id)
         {
             foreach (QuestionModel question in Questions)
@@ -197,7 +211,8 @@ namespace AskMate
                                                 temp[1],
                                                 Convert.ToInt64(temp[2]),
                                                 int.Parse(temp[3]),
-                                                int.Parse(temp[4])
+                                                temp[4],
+                                                int.Parse(temp[5])
                                                 ));
                 }
             }

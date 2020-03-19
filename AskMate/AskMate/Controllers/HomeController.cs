@@ -69,8 +69,10 @@ namespace AskMate.Controllers
 
         //Image
         [HttpPost]
-        public async Task<IActionResult> ImageUpload(IFormFile file, int id)
+        public async Task<IActionResult> ImageUpload(IFormFile file, int id, [FromForm(Name = "type")] string type, [FromForm(Name = "answer")] string answer)
         {
+
+            var filePath = "";
             if (file != null && file.Length > 0)
             {
                 var imagePath = @"\Upload\Images\";
@@ -88,7 +90,7 @@ namespace AskMate.Controllers
                 string fullPath = uploadPath + filename;
 
                 imagePath = imagePath + @"\";
-                var filePath = @".." + Path.Combine(imagePath, filename);
+                filePath = @".." + Path.Combine(imagePath, filename);
 
                 using (var fileStream = new FileStream(fullPath, FileMode.Create))
                 {
@@ -96,7 +98,25 @@ namespace AskMate.Controllers
                 }
 
                 ViewData["FileLocation"] = filePath;
-                Idao.AddLinkToQuestion(filePath, id);
+
+                if (type == "question")
+                {
+                    Idao.AddLinkToQuestion(filePath, id);
+                }
+                else if (type == "ans")
+                {
+                    Idao.AddLinkToAnswer(filePath, id);
+                }
+                else
+                {
+                    //na az szopó
+                }
+                
+            }
+            if (type == "ans")
+            {
+                QuestionModel question = Idao.GetQuestionById(id);
+                question.AddAnswer(new AnswerModel(question.Answers.Count + 1, answer, DateTimeOffset.Now.ToUnixTimeMilliseconds(), 0, filePath, question.Id));
             }
             return View("Question", Idao.GetQuestionById(id));
         }
@@ -132,12 +152,11 @@ namespace AskMate.Controllers
             return View("Question", Idao.GetQuestionById(id));
         }
 
-        public ActionResult NewAnswer([FromForm(Name = "answer")] string answer, [FromForm(Name = "id")] int id)
-        {
-            QuestionModel question = Idao.GetQuestionById(id);
-            question.AddAnswer(new AnswerModel(question.Answers.Count + 1, answer, DateTimeOffset.Now.ToUnixTimeMilliseconds(), 0, question.Id));
-            return View("Question", question);
-        }
+        //public ActionResult NewAnswer([FromForm(Name = "answer")] string answer, [FromForm(Name = "id")] int id)
+        //{
+            
+        //    return View("Question", question);
+        //}
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

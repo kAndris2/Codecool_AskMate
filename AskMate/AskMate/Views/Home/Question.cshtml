@@ -30,6 +30,7 @@
                 <label>pics</label>
                 <div class="col-sm-10">
                     <div class="custom-file">
+                        <input type="hidden" name="type" value="question" />
                         <input type="hidden" value="@Model.Id" name="id" />
                         <input class="form-control custom-file-input" type="file" name="file" />
                         <label class="custom-file-label">Browse</label>
@@ -41,14 +42,7 @@
             <!--<img src="ViewData["FileLocation"]" width="600" height="400"/>
         ToDo Hozzáfűzni a csv-hez a képet-->
         </form>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $(".custom-file-input").on("change", function () {
-                    var fileName = $(this).val().split("\\").pop();
-                    $(this).next(".custom-file-label").html(fileName);
-                })
-            });
-        </script>
+        
         @{
             if (Model.ImgLink.Length < 57)
             {
@@ -57,12 +51,12 @@
             else
             {
                 <a href="@Model.ImgLink" data-toggle="lightbox">
-                    <img src="@Model.ImgLink" height="100 px" width="200 px" class="img-fluid">
+                    <img src="@Model.ImgLink" height="100 px" width="100 px" class="img-fluid">
                 </a>
             }
         }
     </li>
-    <li class="list-group-item">
+    <li class="list-group-item list-group-item-info">
         <div class="">
             @Model.Content
         </div>
@@ -94,12 +88,13 @@
                     </div>
                     <div class="card-body">
                         @{
-                            if (answer.ImgLink != null)
+                            if (answer.ImgLink != "")
                             {
                                 <a class="float-right" data-toggle="lightbox" href="@answer.ImgLink">
-                                    <img class="img-answer" src="@answer.ImgLink">
+                                    <img height="100 px" width="100 px" class="img-fluid" src="@answer.ImgLink">
                                 </a>
                             }
+                            
                         }
                         <h6 class="card-title">@answer.Content</h6>
                         <a>@answer.GetDate()</a>
@@ -112,18 +107,26 @@
 </ul>
 <ul class="list-group">
     <li class="list-group-item">
-        @using (Html.BeginForm("NewAnswer", "Home", FormMethod.Post))
-        {
+        <form method="post" asp-controller="Home" asp-action="ImageUpload" enctype="multipart/form-data">
             <label>Add a new answer:</label>
             <textarea class="form-control-plaintext  bg-dark text-white" style="border-radius: 1rem;" name="answer" required></textarea>
             <label>Add image</label>
+            <input type="hidden" name="type" value="ans" />
             <div class="custom-file">
-                <input class="form-control custom-file-input" type="file" name="file"/>
+                <input class="form-control custom-file-input" type="file" name="file" />
                 <label class="custom-file-label">Browse</label>
             </div>
             <input name="id" type="hidden" value="@Model.Id" />
             <input type="submit" class="btn btn-success" value="Add Answer">
-        }
-    </li>
+        </form>
+</li>
 </ul>
 <button class="btn btn-info" onclick="window.location.href='/Home'">Back to questions</button>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).next(".custom-file-label").html(fileName);
+        })
+    });
+</script>

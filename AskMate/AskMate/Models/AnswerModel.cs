@@ -15,13 +15,13 @@ namespace AskMate.Models
         public String ImgLink { get; private set; }
         public long Date { get; }
 
-        public AnswerModel(int id, string content, long date, int vote, int qid)
+        public AnswerModel(int id, string content, long date, int vote,string link, int qid)
         {
             Id = id;
             Content = content;
             Date = date;
             Vote = vote;
-            ImgLink = @"\Upload\Images\5d7252f7-c2f6-4a7c-9b66-37dca3acafe5.png";   //HARDCODED
+            ImgLink = link;   //HARDCODED
             Question_Id = qid;
         }
 
