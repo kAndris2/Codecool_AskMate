@@ -61,15 +61,12 @@ namespace AskMate.Controllers
             Idao.DeleteQuestion(delid);
             return View("Index", Idao);
         }
+
         public IActionResult ModalId(int id)
         {
-            foreach (QuestionModel item in Idao.GetQuestions())
-            {
-                if (id.Equals(item.Id))
-                    return PartialView("_ModalPartialView", item);
-            }
-            return null;
+            return PartialView("_ModalPartialView", Idao.GetQuestionById(id));
         }
+
         //Image
         [HttpPost]
         public async Task<IActionResult> ImageUpload(IFormFile file, int id)
@@ -101,43 +98,26 @@ namespace AskMate.Controllers
                 ViewData["FileLocation"] = filePath;
                 Idao.AddLinkToQuestion(filePath, id);
             }
-            return View("Index");
+            return View("Question", Idao.GetQuestionById(id));
         }
 
         [HttpGet("/edit/{id}")]
         public IActionResult Edit(int id)
         {
-            foreach (QuestionModel item in Idao.GetQuestions())
-            {
-                if (id.Equals(item.Id))
-                    return View("Edit", item);
-            }
-            return null;
+            return View("Edit", Idao.GetQuestionById(id));
         }
 
         [HttpGet("/question/{id}")]
         public IActionResult Question(int id)
         {
-            foreach (QuestionModel item in Idao.GetQuestions())
-            {
-                if (id.Equals(item.Id))
-                    return View("Question", item);
-            }
-            return null;
+            return View("Question", Idao.GetQuestionById(id));
         }
 
         public ActionResult NewAnswer([FromForm(Name = "answer")] string answer, [FromForm(Name = "id")] int id)
         {
-            foreach (QuestionModel question in Idao.GetQuestions())
-            {
-                System.Console.WriteLine("QID: " + id);
-                if (id.Equals(question.Id))
-                {
-                    question.AddAnswer(new AnswerModel(question.Answers.Count + 1, answer, DateTimeOffset.Now.ToUnixTimeMilliseconds(), 0));
-                    return View("Question", question);
-                }
-            }
-            return null;
+            QuestionModel question = Idao.GetQuestionById(id);
+            question.AddAnswer(new AnswerModel(question.Answers.Count + 1, answer, DateTimeOffset.Now.ToUnixTimeMilliseconds(), 0));
+            return View("Question", question);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -148,28 +128,16 @@ namespace AskMate.Controllers
 
         public IActionResult UpVote([FromRoute(Name = "id")]int id)
         {
-            foreach (QuestionModel question in Idao.GetQuestions())
-            {
-                if (id.Equals(question.Id))
-                {
-                    question.VoteUp();
-                    return View("Question", question);
-                }
-            }
-            return null;
+            QuestionModel question = Idao.GetQuestionById(id);
+            question.VoteUp();
+            return View("Question", question);
         }
 
         public IActionResult DownVote([FromRoute(Name = "id")]int id)
         {
-            foreach (QuestionModel question in Idao.GetQuestions())
-            {
-                if (id.Equals(question.Id))
-                {
-                    question.VoteDown();
-                    return View("Question", question);
-                }
-            }
-            return null;
+            QuestionModel question = Idao.GetQuestionById(id);
+            question.VoteDown();
+            return View("Question", question);
         }
     }
 }
