@@ -11,28 +11,26 @@
         <h3>#@Model.Id - @Model.Title</h3>
         <a>@Model.GetDate()</a>
         <div>
-            <button id="downVote" class="btn-vote" onclick="location.href='@Url.Action("DownVote", "Home", new {id = @Model.Id})'" title="Downvote">
+            <button id="downVote" class="btn bg-transparent btn-vote text-danger" onclick="location.href='@Url.Action("DownVote", "Home", new {id = @Model.Id})'" title="Downvote">
                 <span class="oi oi-chevron-bottom downvote"></span>
             </button>
             <span class="badge badge-primary badge-pill">@Model.Vote</span>
-            <button id="upVote" class="btn-vote" onclick="location.href='@Url.Action("UpVote", "Home", new {id = @Model.Id})'" title="Upvote">
+            <button id="upVote" class="btn bg-transparent btn-vote text-success" onclick="location.href='@Url.Action("UpVote", "Home", new {id = @Model.Id})'" title="Upvote">
                 <span class="oi oi-chevron-top upvote"></span>
             </button>
         </div>
     </li>
-    <li class="list-group-item">Content: @Model.Content</li>
-
     <li class="list-group-item">
-        Img:
-        <img src=@Model.ImgLink style="width:142px;height:142px;" />
+
+
         <script src="~/js/jquery-3.4.1.min.js"></script>
         <form method="post" asp-controller="Home" asp-action="ImageUpload" enctype="multipart/form-data">
             <div class="form-group row">
                 <label>pics</label>
                 <div class="col-sm-10">
                     <div class="custom-file">
-                        <input type="hidden" value="@Model.Id" name="id"/>
-                        <input class="form-control custom-file-input" type="file" name="file"/>
+                        <input type="hidden" value="@Model.Id" name="id" />
+                        <input class="form-control custom-file-input" type="file" name="file" />
                         <label class="custom-file-label">Browse</label>
                     </div>
                 </div>
@@ -40,7 +38,7 @@
 
             </div>
             <!--<img src="ViewData["FileLocation"]" width="600" height="400"/>
-                ToDo Hozzáfűzni a csv-hez a képet-->
+        ToDo Hozzáfűzni a csv-hez a képet-->
         </form>
         <script type="text/javascript">
             $(document).ready(function () {
@@ -50,18 +48,25 @@
                 })
             });
         </script>
-    </li>
-
-
-    <li class="list-group-item">
-        @using (Html.BeginForm("NewAnswer", "Home", FormMethod.Post))
-        {
-            <label>Add an answer:</label>
-            <textarea name="answer" required></textarea>
-            <input name="id" type="hidden" value="@Model.Id" />
-            <input type="submit" value="Submit">
+        @{
+            if (Model.ImgLink.Length < 57)
+            {
+                <p>No image uploaded</p>
+            }
+            else
+            {
+                <a href="@Model.ImgLink" data-toggle="lightbox">
+                    <img src="@Model.ImgLink" height="100 px" width="200 px" class="img-fluid">
+                </a>
+            }
         }
     </li>
+    <li class="list-group-item">
+        <div class="">
+            @Model.Content
+        </div>
+    </li>
+    
 
     <li class="list-group-item">
         @if (Model.Answers.Count >= 1)
@@ -69,15 +74,38 @@
             foreach (AnswerModel answer in Model.Answers)
             {
                 <div class="card text-white bg-dark mb-3" style="max-width: 68rem;">
-                    <div class="card-header">#@answer.Id</div>
+
+                    <div class="card-header">
+                        #@answer.Id
+                        <span class="float-right">
+                            <button id="downVote" class="btn bg-transparent btn-vote text-danger" onclick="location.href='@Url.Action("DownVote", "Home", new {id = @Model.Id})'" title="Downvote">
+                                <span class="oi oi-chevron-bottom downvote"></span>
+                            </button>
+                            <span class="badge badge-primary badge-pill">@Model.Vote</span>
+                            <button id="upVote" class="btn bg-transparent btn-vote text-success" onclick="location.href='@Url.Action("UpVote", "Home", new {id = @Model.Id})'" title="Upvote">
+                                <span class="oi oi-chevron-top upvote"></span>
+                            </button>
+                        </span>
+                    </div>
                     <div class="card-body">
                         <h6 class="card-title">@answer.Content</h6>
                         <a>@answer.GetDate()</a>
                     </div>
                 </div>
             }
-         }
+        }
     </li>
 
+</ul>
+<ul class="list-group">
+    <li class="list-group-item">
+        @using (Html.BeginForm("NewAnswer", "Home", FormMethod.Post))
+        {
+            <label>Add a new answer:</label>
+            <textarea class="form-control-plaintext  bg-dark text-white" style="border-radius: 1rem;" name="answer" required></textarea>
+            <input name="id" type="hidden" value="@Model.Id" />
+            <input type="submit" class="btn btn-success" value="Add Answer">
+        }
+    </li>
 </ul>
 <button class="btn btn-info" onclick="window.location.href='/Home'">Back to questions</button>
