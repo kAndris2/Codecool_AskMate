@@ -28,14 +28,13 @@
                 @Html.DisplayFor(modelItem => question.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => question.Title)
+                @Html.ActionLink(question.Title, "question", new { id = question.Id })
             </td>
             <td>
                 <span class="badge badge-primary badge-pill">@question.Vote</span>
             </td>
             <td>
                 @Html.ActionLink("Edit", "edit", new { id = question.Id }) |
-                @Html.ActionLink("Question", "question", new { id = question.Id }) |
                 <a href="#" class="text-danger" id="ModalId" onclick="viewModal(@question.Id)">Delete</a>
             </td>
         </tr>
