@@ -1,6 +1,7 @@
 ﻿@model AskMate.Models.QuestionModel
 @{
     ViewData["Title"] = "Details";
+    Model.IncreaseView();
 }
 
 <link rel="stylesheet" href="~/css/Index.css">
@@ -82,11 +83,11 @@
                             <!----
                             <a asp-controller="Home" asp-action="DeleteAnswer" href="#" class="text-danger">Delete</a>
                             -->
-                            <button id="downVote" class="btn bg-transparent btn-vote text-danger" onclick="location.href='@Url.Action("DownVote", "Home", new {id = @Model.Id})'" title="Downvote">
+                            <button id="downVote" class="btn bg-transparent btn-vote text-danger" onclick="location.href='@Url.Action("A_DownVote", "Home", new {id = answer.GetUnique()})'" title="Downvote">
                                 <span class="oi oi-chevron-bottom downvote"></span>
                             </button>
-                            <span class="badge badge-primary badge-pill">@Model.Vote</span>
-                            <button id="upVote" class="btn bg-transparent btn-vote text-success" onclick="location.href='@Url.Action("UpVote", "Home", new {id = @Model.Id})'" title="Upvote">
+                            <span class="badge badge-primary badge-pill">@answer.Vote</span>
+                            <button id="upVote" class="btn bg-transparent btn-vote text-success" onclick="location.href='@Url.Action("A_UpVote", "Home", new {id = answer.GetUnique()})'" title="Upvote">
                                 <span class="oi oi-chevron-top upvote"></span>
                             </button>
                         </span>

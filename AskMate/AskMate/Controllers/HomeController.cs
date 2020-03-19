@@ -135,8 +135,7 @@ namespace AskMate.Controllers
         public ActionResult NewAnswer([FromForm(Name = "answer")] string answer, [FromForm(Name = "id")] int id)
         {
             QuestionModel question = Idao.GetQuestionById(id);
-            AnswerModel answerModel = new AnswerModel(question.Answers.Count + 1, answer, DateTimeOffset.Now.ToUnixTimeMilliseconds(), 0);
-            question.AddAnswer(answerModel);
+            question.AddAnswer(new AnswerModel(question.Answers.Count + 1, answer, DateTimeOffset.Now.ToUnixTimeMilliseconds(), 0, question.Id));
             return View("Question", question);
         }
 
@@ -158,6 +157,20 @@ namespace AskMate.Controllers
             QuestionModel question = Idao.GetQuestionById(id);
             question.VoteDown();
             return View("Question", question);
+        }
+
+        public IActionResult A_UpVote([FromRoute(Name = "id")]long id)
+        {
+            AnswerModel answer = Idao.GetAnswerByUnique(id);
+            answer.VoteUp();
+            return View("Question", Idao.GetQuestionById(answer.Question_Id));
+        }
+
+        public IActionResult A_DownVote([FromRoute(Name = "id")]long id)
+        {
+            AnswerModel answer = Idao.GetAnswerByUnique(id);
+            answer.VoteDown();
+            return View("Question", Idao.GetQuestionById(answer.Question_Id));
         }
     }
 }
