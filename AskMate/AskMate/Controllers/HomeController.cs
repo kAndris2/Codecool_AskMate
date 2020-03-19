@@ -52,24 +52,25 @@ namespace AskMate.Controllers
 
             Idao.EditLine(Id, Title, Content);
 
-            return View();
+            return View(Idao);
         }
 
        
         public ActionResult Moddel([FromForm(Name = "id")] int delid)
         {
             Idao.DeleteQuestion(delid);
-            return View("Index");
+            return View("Index", Idao);
         }
         public IActionResult ModalId(int id)
         {
             foreach (QuestionModel item in Idao.GetQuestions())
             {
                 if (id.Equals(item.Id))
-                  return PartialView("_ModalPartialView", item);
+                    return PartialView("_ModalPartialView", item);
             }
             return null;
         }
+<<<<<<< HEAD
         //Image
         [HttpPost]
         public async Task<IActionResult> ImageUpload(IFormFile file, int id)
@@ -103,6 +104,9 @@ namespace AskMate.Controllers
             }
             return View("Index");
         }
+=======
+
+>>>>>>> 91873582f08fe374780e1090edd12d24f39167e3
 
         [HttpGet("/edit/{id}")]
         public IActionResult Edit(int id)
@@ -130,9 +134,10 @@ namespace AskMate.Controllers
         {
             foreach (QuestionModel question in Idao.GetQuestions())
             {
+                System.Console.WriteLine("QID: " + id);
                 if (id.Equals(question.Id))
                 {
-                    question.AddAnswer(new AnswerModel(question.Answers.Count+1, answer, DateTimeOffset.Now.ToUnixTimeMilliseconds(), 0));
+                    question.AddAnswer(new AnswerModel(question.Answers.Count + 1, answer, DateTimeOffset.Now.ToUnixTimeMilliseconds(), 0));
                     return View("Question", question);
                 }
             }
@@ -143,6 +148,32 @@ namespace AskMate.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult UpVote([FromRoute(Name = "id")]int id)
+        {
+            foreach (QuestionModel question in Idao.GetQuestions())
+            {
+                if (id.Equals(question.Id))
+                {
+                    question.VoteUp();
+                    return View("Question", question);
+                }
+            }
+            return null;
+        }
+
+        public IActionResult DownVote([FromRoute(Name = "id")]int id)
+        {
+            foreach (QuestionModel question in Idao.GetQuestions())
+            {
+                if (id.Equals(question.Id))
+                {
+                    question.VoteDown();
+                    return View("Question", question);
+                }
+            }
+            return null;
         }
     }
 }
