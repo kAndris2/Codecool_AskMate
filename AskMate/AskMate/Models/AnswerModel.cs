@@ -26,5 +26,10 @@ namespace AskMate.Models
         {
             return $"{Id}.{Content}.{Date}.{Vote}";
         }
+
+        public long GetUnique()
+        {
+            return Convert.ToInt64($"{Id}{Date}");
+        }
     }
 }

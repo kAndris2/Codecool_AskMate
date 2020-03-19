@@ -101,6 +101,25 @@ namespace AskMate.Controllers
             return View("Question", Idao.GetQuestionById(id));
         }
 
+        [HttpGet("/delete/{id}")]
+        public IActionResult Delete(long id)
+        {
+            QuestionModel instance = null;
+            foreach (QuestionModel question in Idao.GetQuestions())
+            {
+                foreach (AnswerModel answer in question.Answers)
+                {
+                    if (id.Equals(answer.GetUnique()))
+                    {
+                        question.DeleteAnswer(answer);
+                        instance = question;
+                        break;
+                    }
+                }
+            }
+            return View("Question", instance);
+        }
+
         [HttpGet("/edit/{id}")]
         public IActionResult Edit(int id)
         {

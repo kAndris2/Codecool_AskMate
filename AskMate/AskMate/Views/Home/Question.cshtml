@@ -78,7 +78,10 @@
                     <div class="card-header">
                         #@answer.Id
                         <span class="float-right">
-                            <a href="#" class="text-danger">Delete</a>
+                            @Html.ActionLink("Delete", "delete", new { id = answer.GetUnique() }, new { @class = "text-danger" })
+                            <!----
+                            <a asp-controller="Home" asp-action="DeleteAnswer" href="#" class="text-danger">Delete</a>
+                            -->
                             <button id="downVote" class="btn bg-transparent btn-vote text-danger" onclick="location.href='@Url.Action("DownVote", "Home", new {id = @Model.Id})'" title="Downvote">
                                 <span class="oi oi-chevron-bottom downvote"></span>
                             </button>
