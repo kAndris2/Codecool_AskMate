@@ -34,7 +34,7 @@ namespace AskMate.Models
         public void AddAnswer(AnswerModel answer) { Answers.Add(answer); Refr(); }
         public void VoteUp() { Vote++; Refr(); }
         public void VoteDown() { Vote--; Refr(); }
-        public void IncreaseView() { Views++; }
+        public void IncreaseView() { Views++; Refr(); }
 
 
         public void SetTitle(string title) { Title = title; Refr(); }
