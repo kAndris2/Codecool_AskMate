@@ -107,7 +107,7 @@ namespace AskMate
             QuestionModel question = new QuestionModel(id, title, content, milisec, "N/A", 0, new List<AnswerModel>());
             Questions.Add(question);
             File.AppendAllText(FILENAME, 
-                $"\n{id};" +
+                $"{id};" +
                 $"{title};" +
                 $"{content};" +
                 $"{milisec};" +
@@ -161,12 +161,16 @@ namespace AskMate
 
         private String GetFormattedAnswers(QuestionModel question)
         {
+            if (question.Answers.Count == 0)
+                return "\n";
+
             string[] props = new string[question.Answers.Count];
+
             for (int i = 0; i < question.Answers.Count; i++)
             {
                 props[i] = question.Answers[i].ToString();
             }
-            return string.Join(ANSWER_SEP, props);
+            return string.Join(ANSWER_SEP, props) + "\n";
         }
 
         private void LoadFiles()
