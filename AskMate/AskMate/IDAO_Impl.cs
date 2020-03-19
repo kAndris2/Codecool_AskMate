@@ -152,6 +152,18 @@ namespace AskMate
             Refresh();
         }
 
+        public QuestionModel GetQuestionById(int id)
+        {
+            foreach (QuestionModel question in Questions)
+            {
+                if (id.Equals(question.Id))
+                {
+                    return question;
+                }
+            }
+            throw new ArgumentException($"Invalid Question ID! ('{id}')");
+        }
+
         private List<AnswerModel> SetAnswers(string table)
         {
             List<AnswerModel> answers = new List<AnswerModel>();
