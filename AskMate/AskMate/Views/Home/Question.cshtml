@@ -54,7 +54,7 @@
 
 
     <li class="list-group-item">
-        @using (Html.BeginForm("NewAnswer", "Home", FormMethod.Post))
+        @using (Html.BeginForm("NewAnswer", "Home", FormMethod.Post)) 
         {
             <label>Add an answer:</label>
             <textarea name="answer" required></textarea>
@@ -69,6 +69,15 @@
             foreach (AnswerModel answer in Model.Answers)
             {
                 <div class="card text-white bg-dark mb-3" style="max-width: 68rem;">
+                    <span class="float-lg-left">
+                        <button id="downVote" class="btn-vote" onclick="location.href='@Url.Action("DownVote", "Home", new {id = @Model.Id})'" title="Downvote">
+                            <span class="oi oi-chevron-bottom downvote"></span>
+                        </button>
+                        <span class="badge badge-primary badge-pill">@Model.Vote</span>
+                        <button id="upVote" class="btn-vote" onclick="location.href='@Url.Action("UpVote", "Home", new {id = @Model.Id})'" title="Upvote">
+                            <span class="oi oi-chevron-top upvote"></span>
+                        </button>
+                    </span>
                     <div class="card-header">#@answer.Id</div>
                     <div class="card-body">
                         <h6 class="card-title">@answer.Content</h6>
