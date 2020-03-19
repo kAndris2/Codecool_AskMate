@@ -165,6 +165,24 @@ namespace AskMate
             throw new ArgumentException($"Invalid Question ID! ('{id}')");
         }
 
+        public AnswerModel GetAnswerByUnique(long id)
+        {
+            AnswerModel instance = null;
+
+            foreach (QuestionModel question in Questions)
+            {
+                foreach (AnswerModel answer in question.Answers)
+                {
+                    if (id.Equals(answer.GetUnique()))
+                    {
+                        instance = answer;
+                        break;
+                    }
+                }
+            }
+            return instance;
+        }
+
         private List<AnswerModel> SetAnswers(string table)
         {
             List<AnswerModel> answers = new List<AnswerModel>();
@@ -178,7 +196,8 @@ namespace AskMate
                     answers.Add(new AnswerModel(int.Parse(temp[0]),
                                                 temp[1],
                                                 Convert.ToInt64(temp[2]),
-                                                int.Parse(temp[3])
+                                                int.Parse(temp[3]),
+                                                int.Parse(temp[4])
                                                 ));
                 }
             }
@@ -188,7 +207,7 @@ namespace AskMate
         private String GetFormattedAnswers(QuestionModel question)
         {
             if (question.Answers.Count == 0)
-                return "\n";
+                return "\n"; 
 
             string[] props = new string[question.Answers.Count];
 

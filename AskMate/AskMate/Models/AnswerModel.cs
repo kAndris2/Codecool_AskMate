@@ -10,20 +10,24 @@ namespace AskMate.Models
     {
         public int Id { get; }
         public int Vote { get; private set; }
+        public int Question_Id { get; private set; }
         public String Content { get; private set; }
         public String ImgLink { get; private set; }
         public long Date { get; }
 
-        public AnswerModel(int id, string content, long date, int vote)
+        public AnswerModel(int id, string content, long date, int vote, int qid)
         {
             Id = id;
             Content = content;
             Date = date;
             Vote = vote;
+            Question_Id = qid;
         }
 
         public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
         public void AddImage(string link) { ImgLink = link; Refr(); }
+        public void VoteUp() { Vote++; Refr(); }
+        public void VoteDown() { Vote--; Refr(); }
 
         public long GetUnique()
         {
@@ -37,7 +41,7 @@ namespace AskMate.Models
 
         public override string ToString()
         {
-            return $"{Id}.{Content}.{Date}.{Vote}";
+            return $"{Id}.{Content}.{Date}.{Vote}.{Question_Id}"; 
         }
     }
 }
