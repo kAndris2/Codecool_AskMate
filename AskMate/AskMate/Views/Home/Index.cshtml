@@ -34,7 +34,7 @@
                 <span class="badge badge-primary badge-pill">@question.Vote</span>
             </td>
             <td>
-                @Html.ActionLink("Edit", "edit", new { id = question.Id }) |
+                @Html.ActionLink("Edit", "edit", new { id = question.Id }, new { @class = "text-success" }) |
                 <a href="#" class="text-danger" id="ModalId" onclick="viewModal(@question.Id)">Delete</a>
             </td>
         </tr>
