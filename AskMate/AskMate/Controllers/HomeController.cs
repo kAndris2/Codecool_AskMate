@@ -18,7 +18,7 @@ namespace AskMate.Controllers
     {
         public IDAO_Impl Idao;
         private readonly ILogger<HomeController> _logger;
-        
+
         IHostingEnvironment _env;
 
         public HomeController(ILogger<HomeController> logger, IHostingEnvironment environment)
@@ -55,7 +55,7 @@ namespace AskMate.Controllers
             return View(Idao);
         }
 
-       
+
         public ActionResult Moddel([FromForm(Name = "id")] int delid)
         {
             Idao.DeleteQuestion(delid);
@@ -71,7 +71,7 @@ namespace AskMate.Controllers
         [HttpPost]
         public async Task<IActionResult> ImageUpload(IFormFile file, int id)
         {
-            if(file != null && file.Length > 0)
+            if (file != null && file.Length > 0)
             {
                 var imagePath = @"\Upload\Images\";
                 var uploadPath = _env.WebRootPath + imagePath;
@@ -135,7 +135,8 @@ namespace AskMate.Controllers
         public ActionResult NewAnswer([FromForm(Name = "answer")] string answer, [FromForm(Name = "id")] int id)
         {
             QuestionModel question = Idao.GetQuestionById(id);
-            question.AddAnswer(new AnswerModel(question.Answers.Count + 1, answer, DateTimeOffset.Now.ToUnixTimeMilliseconds(), 0));
+            AnswerModel answerModel = new AnswerModel(question.Answers.Count + 1, answer, DateTimeOffset.Now.ToUnixTimeMilliseconds(), 0);
+            question.AddAnswer(answerModel);
             return View("Question", question);
         }
 

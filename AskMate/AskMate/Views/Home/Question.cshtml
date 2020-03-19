@@ -92,6 +92,14 @@
                         </span>
                     </div>
                     <div class="card-body">
+                        @{
+                            if (answer.ImgLink != null)
+                            {
+                                <a class="float-right" data-toggle="lightbox" href="@answer.ImgLink">
+                                    <img class="img-answer" src="@answer.ImgLink">
+                                </a>
+                            }
+                        }
                         <h6 class="card-title">@answer.Content</h6>
                         <a>@answer.GetDate()</a>
                     </div>
@@ -107,6 +115,11 @@
         {
             <label>Add a new answer:</label>
             <textarea class="form-control-plaintext  bg-dark text-white" style="border-radius: 1rem;" name="answer" required></textarea>
+            <label>Add image</label>
+            <div class="custom-file">
+                <input class="form-control custom-file-input" type="file" name="file"/>
+                <label class="custom-file-label">Browse</label>
+            </div>
             <input name="id" type="hidden" value="@Model.Id" />
             <input type="submit" class="btn btn-success" value="Add Answer">
         }

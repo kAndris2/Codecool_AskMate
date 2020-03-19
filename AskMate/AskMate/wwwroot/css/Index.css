@@ -79,3 +79,11 @@
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+.img-answer
+{
+  object-fit: cover;
+  width: 256px;
+  height: 192px;
+  border-radius: 4px;
+}
