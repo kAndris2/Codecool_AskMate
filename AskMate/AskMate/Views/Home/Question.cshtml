@@ -64,16 +64,19 @@
     </li>
 
     <li class="list-group-item">
-        @if(Model.Answers.Count >= 1)
+        @if (Model.Answers.Count >= 1)
         {
             foreach (AnswerModel answer in Model.Answers)
             {
-                <a>@answer.GetDate()</a>
-                <br>
-                <a>@answer.Id - @answer.Content</a>
-                <br><br>
+                <div class="card text-white bg-dark mb-3" style="max-width: 68rem;">
+                    <div class="card-header">#@answer.Id</div>
+                    <div class="card-body">
+                        <h6 class="card-title">@answer.Content</h6>
+                        <a>@answer.GetDate()</a>
+                    </div>
+                </div>
             }
-        }
+         }
     </li>
 
 </ul>
