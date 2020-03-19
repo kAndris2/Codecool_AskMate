@@ -195,6 +195,48 @@ namespace AskMate
 
         }
 
+        public void AddLinkToQuestion(string filePath, int id)
+        {
+            foreach (QuestionModel q in Questions)
+            {
+                if (q.Id == id)
+                {
+                    q.AddImage(filePath);
+                    List<String> lines = new List<String>();
+
+                    if (File.Exists(FILENAME))
+                    {
+                        using (StreamReader reader = new StreamReader(FILENAME))
+                        {
+                            String line;
+
+                            while ((line = reader.ReadLine()) != null)
+                            {
+                                if (line.Contains(";"))
+                                {
+                                    String[] split = line.Split(';');
+
+                                    if (split[4] != filePath)
+                                    {
+                                        split[4] = filePath;
+                                        line = String.Join(";", split);
+                                    }
+                                }
+
+                                lines.Add(line);
+                            }
+                        }
+
+                        using (StreamWriter writer = new StreamWriter(FILENAME, false))
+                        {
+                            foreach (String line in lines)
+                                writer.WriteLine(line);
+                        }
+                    }
+                }
+            }
+        }
+
         private List<AnswerModel> SetAnswers(string table)
         {
             List<AnswerModel> answers = new List<AnswerModel>();

@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AskMate.Models;
 using AskMate;
+using System.IO;
+using System.Web;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 
 namespace AskMate.Controllers
 {
@@ -14,11 +18,14 @@ namespace AskMate.Controllers
     {
         public IDAO_Impl Idao;
         private readonly ILogger<HomeController> _logger;
+        
+        IHostingEnvironment _env;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IHostingEnvironment environment)
         {
             _logger = logger;
             Idao = IDAO_Impl.Instance;
+            _env = environment;
         }
 
         public IActionResult Index()
@@ -63,7 +70,39 @@ namespace AskMate.Controllers
             }
             return null;
         }
-        
+        //Image
+        [HttpPost]
+        public async Task<IActionResult> ImageUpload(IFormFile file, int id)
+        {
+            if(file != null && file.Length > 0)
+            {
+                var imagePath = @"\Upload\Images\";
+                var uploadPath = _env.WebRootPath + imagePath;
+
+                //create dir
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+
+                //uniq file name
+                var uniqFileName = Guid.NewGuid().ToString();
+                var filename = Path.GetFileName(uniqFileName + "." + file.FileName.Split(".")[1].ToLower());
+                string fullPath = uploadPath + filename;
+
+                imagePath = imagePath + @"\";
+                var filePath = @".." + Path.Combine(imagePath, filename);
+
+                using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
+                ViewData["FileLocation"] = filePath;
+                Idao.AddLinkToQuestion(filePath, id);
+            }
+            return View("Index");
+        }
 
         [HttpGet("/edit/{id}")]
         public IActionResult Edit(int id)

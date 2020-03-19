@@ -21,13 +21,31 @@
     <li class="list-group-item">
         Img:
         <img src=@Model.ImgLink style="width:142px;height:142px;" />
+        <script src="~/js/jquery-3.4.1.min.js"></script>
+        <form method="post" asp-controller="Home" asp-action="ImageUpload" enctype="multipart/form-data">
+            <div class="form-group row">
+                <label>pics</label>
+                <div class="col-sm-10">
+                    <div class="custom-file">
+                        <input type="hidden" value="@Model.Id" name="id"/>
+                        <input class="form-control custom-file-input" type="file" name="file"/>
+                        <label class="custom-file-label">Browse</label>
+                    </div>
+                </div>
+                <button type="submit">Upload</button>
 
-        <form action="Home">
-            <label for="img">Select image:</label>
-            <input type="file" id="img" name="img" accept="image/*">
-            <input type="submit">
+            </div>
+            <!--<img src="ViewData["FileLocation"]" width="600" height="400"/>
+                ToDo Hozzáfűzni a csv-hez a képet-->
         </form>
-
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".custom-file-input").on("change", function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).next(".custom-file-label").html(fileName);
+                })
+            });
+        </script>
     </li>
 
 
