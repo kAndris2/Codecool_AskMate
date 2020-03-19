@@ -104,7 +104,7 @@ namespace AskMate
                 id = Questions[Questions.Count - 1].Id + 1;
 
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            QuestionModel question = new QuestionModel(id, title, content, milisec, "N/A", 0, new List<AnswerModel>());
+            QuestionModel question = new QuestionModel(id, title, content, milisec, "N/A", 0, 0, new List<AnswerModel>());
             Questions.Add(question);
             File.AppendAllText(FILENAME, 
                 $"{id};" +
@@ -113,6 +113,7 @@ namespace AskMate
                 $"{milisec};" +
                 $"N/A;" +
                 $"0;" +
+                $"0" +
                 $"{GetFormattedAnswers(question)}");
         }
 
@@ -214,7 +215,8 @@ namespace AskMate
                                                     Convert.ToInt64(temp[3]),
                                                     temp[4],
                                                     int.Parse(temp[5]),
-                                                    temp[6] != "" ? SetAnswers(temp[6]) : new List<AnswerModel>()
+                                                    int.Parse(temp[6]),
+                                                    temp[6] != "" ? SetAnswers(temp[7]) : new List<AnswerModel>()
                                                     ));
                 }
             }

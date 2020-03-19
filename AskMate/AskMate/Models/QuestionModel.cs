@@ -10,13 +10,14 @@ namespace AskMate.Models
     {
         public int Id { get; }
         public int Vote { get; private set; }
+        public int Views { get; private set;}
         public String Title { get; private set; }
         public String Content { get; private set; }
         public String ImgLink { get; private set; }
         public long Date { get; }
         public List<AnswerModel> Answers { get; } = new List<AnswerModel>();
 
-        public QuestionModel(int id, string title, string content, long date, string link, int vote, List<AnswerModel> answers)
+        public QuestionModel(int id, string title, string content, long date, string link, int vote, int views, List<AnswerModel> answers)
         {
             Id = id;
             Title = title;
@@ -24,6 +25,7 @@ namespace AskMate.Models
             Date = date;
             ImgLink = link;
             Vote = vote;
+            Views = views;
             Answers = answers;
         }
         public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
@@ -32,6 +34,7 @@ namespace AskMate.Models
         public void AddAnswer(AnswerModel answer) { Answers.Add(answer); Refr(); }
         public void VoteUp() { Vote++; Refr(); }
         public void VoteDown() { Vote--; Refr(); }
+        public void IncreaseView() { Views++; }
 
 
         public void SetTitle(string title) { Title = title; Refr(); }
@@ -42,7 +45,7 @@ namespace AskMate.Models
         public override string ToString()
         {
 
-            return $"{Id};{Title};{Content};{Date};{ImgLink};{Vote};";
+            return $"{Id};{Title};{Content};{Date};{ImgLink};{Vote};{Views};";
         }
 
         private void Refr()
