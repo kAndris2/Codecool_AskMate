@@ -15,7 +15,7 @@ namespace AskMate.Models
         public String ImgLink { get; private set; }
         public long Date { get; }
 
-        public AnswerModel(int id, string content, long date, int vote,string link, int qid)
+        public AnswerModel(int id, string content, long date, int vote, int qid, string link)
         {
             Id = id;
             Content = content;
@@ -42,7 +42,12 @@ namespace AskMate.Models
 
         public override string ToString()
         {
-            return $"{Id}.{Content}.{Date}.{Vote}.{Question_Id}";
+            return $"{Id}," +
+                   $"{Content}," +
+                   $"{Date}," +
+                   $"{Vote}," +
+                   $"{Question_Id}," +
+                   $"{(ImgLink == "" ? "N/A" : ImgLink)}";
         }
     }
 }

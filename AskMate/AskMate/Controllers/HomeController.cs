@@ -116,7 +116,7 @@ namespace AskMate.Controllers
             if (type == "ans")
             {
                 QuestionModel question = Idao.GetQuestionById(id);
-                question.AddAnswer(new AnswerModel(question.Answers.Count + 1, answer, DateTimeOffset.Now.ToUnixTimeMilliseconds(), 0, filePath, question.Id));
+                question.AddAnswer(new AnswerModel(question.Answers.Count + 1, answer, DateTimeOffset.Now.ToUnixTimeMilliseconds(), 0, question.Id, filePath));
             }
             return View("Question", Idao.GetQuestionById(id));
         }

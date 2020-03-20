@@ -11,7 +11,7 @@ namespace AskMate
     {
         const String FILENAME = "./Resources/Questions.csv";
         const String ANSWER_SEP = "$$";
-        const char ANSWER_PROP_SEP = '.';
+        const char ANSWER_PROP_SEP = ',';
 
         List<QuestionModel> Questions = new List<QuestionModel>();
         static IDAO_Impl instance = null;
@@ -106,14 +106,14 @@ namespace AskMate
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             QuestionModel question = new QuestionModel(id, title, content, milisec, "N/A", 0, 0, new List<AnswerModel>());
             Questions.Add(question);
-            File.AppendAllText(FILENAME, 
+            File.AppendAllText(FILENAME,
                 $"{id};" +
                 $"{title};" +
                 $"{content};" +
                 $"{milisec};" +
                 $"N/A;" +
                 $"0;" +
-                $"0" +
+                $"0;" +
                 $"{GetFormattedAnswers(question)}");
         }
 
@@ -202,24 +202,21 @@ namespace AskMate
             List<AnswerModel> answers = new List<AnswerModel>();
             string[] data = table.Split(ANSWER_SEP);
 
-            if (data.Length >= 2)
+            for (int i = 0; i < data.Length; i++)
             {
-                for (int i = 0; i < data.Length; i++)
-                {
-                    string[] temp = data[i].Split(ANSWER_PROP_SEP);
-                    answers.Add(new AnswerModel(int.Parse(temp[0]),
-                                                temp[1],
-                                                Convert.ToInt64(temp[2]),
-                                                int.Parse(temp[3]),
-                                                temp[4],
-                                                int.Parse(temp[5])
-                                                ));
-                }
+                string[] temp = data[i].Split(ANSWER_PROP_SEP);
+                answers.Add(new AnswerModel(int.Parse(temp[0]),
+                                            temp[1],
+                                            Convert.ToInt64(temp[2]),
+                                            int.Parse(temp[3]),
+                                            int.Parse(temp[4]),
+                                            temp[5]
+                                            )); 
             }
             return answers;
         }
 
-        private String GetFormattedAnswers(QuestionModel question)
+        private String GetFormattedAnswers(QuestionModel question) 
         {
             if (question.Answers.Count == 0)
                 return "\n"; 
