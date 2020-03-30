@@ -117,6 +117,9 @@ namespace AskMate
                 $"{GetFormattedAnswers(question)}");
         }
 
+        /// <summary>
+        /// Reload the file with fresh datas.
+        /// </summary>
         public void Refresh()
         {
             string text = "";
@@ -179,6 +182,11 @@ namespace AskMate
             throw new ArgumentException($"Invalid Question ID! ('{id}')");
         }
 
+        /// <summary>
+        /// Get answer by it's unique code.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public AnswerModel GetAnswerByUnique(long id)
         {
             AnswerModel instance = null;
@@ -230,6 +238,9 @@ namespace AskMate
             return string.Join(ANSWER_SEP, props) + "\n";
         }
 
+        /// <summary>
+        /// Loads the files from .csv
+        /// </summary>
         private void LoadFiles()
         {
             if (File.Exists(FILENAME))
