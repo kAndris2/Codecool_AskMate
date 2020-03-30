@@ -14,8 +14,17 @@ namespace AskMate.Models
         public String Content { get; private set; }
         public String ImgLink { get; private set; }
         public long Date { get; }
+        public List<CommentModel> Comments { get; } = new List<CommentModel>();
 
-        public AnswerModel(int id, string content, long date, int vote, int qid, string link)
+        public AnswerModel(int id, int qid, string content, long data)
+        {
+            Id = id;
+            Question_Id = qid;
+            Content = content;
+            Date = data;
+        }
+        
+        public AnswerModel(int id, string content, long date, int vote, int qid, string link, List<CommentModel> comments)
         {
             Id = id;
             Content = content;
@@ -23,12 +32,14 @@ namespace AskMate.Models
             Vote = vote;
             ImgLink = link;   //HARDCODED
             Question_Id = qid;
+            Comments = comments;
         }
 
         public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
         public void AddImage(string link) { ImgLink = link; Refr(); }
         public void VoteUp() { Vote++; Refr(); }
         public void VoteDown() { Vote--; Refr(); }
+        public void DeleteComment(CommentModel comment) { Comments.Remove(comment); Refr(); }
 
         public long GetUnique()
         {

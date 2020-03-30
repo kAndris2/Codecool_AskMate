@@ -235,6 +235,7 @@ namespace AskMate
         private List<AnswerModel> SetAnswers(string table)
         {
             List<AnswerModel> answers = new List<AnswerModel>();
+            /*
             string[] data = table.Split(ANSWER_SEP);
 
             for (int i = 0; i < data.Length; i++)
@@ -248,6 +249,7 @@ namespace AskMate
                                             temp[5]
                                             )); 
             }
+            */
             return answers;
         }
 
@@ -291,27 +293,6 @@ namespace AskMate
                     }
                 }
             }
-            /*
-            if (File.Exists(FILENAME))
-            {
-                Questions.Clear();
-                string[] table = File.ReadAllLines(FILENAME);
-
-                for (int i = 0; i < table.Length; i++)
-                {
-                    string[] temp = table[i].Split(";");
-                    Questions.Add(new QuestionModel(int.Parse(temp[0]),
-                                                    temp[1],
-                                                    temp[2],
-                                                    Convert.ToInt64(temp[3]),
-                                                    temp[4],
-                                                    int.Parse(temp[5]),
-                                                    int.Parse(temp[6]),
-                                                    temp[6] != "" ? SetAnswers(temp[7]) : new List<AnswerModel>()
-                                                    ));
-                }
-            }
-            */
         }
     }
 }

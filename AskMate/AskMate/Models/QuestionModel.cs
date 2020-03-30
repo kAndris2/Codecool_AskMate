@@ -16,6 +16,7 @@ namespace AskMate.Models
         public String ImgLink { get; private set; }
         public long Date { get; }
         public List<AnswerModel> Answers { get; } = new List<AnswerModel>();
+        public List<CommentModel> Comments { get; } = new List<CommentModel>();
 
         public QuestionModel(int id, string title, string content, long date)
         {
@@ -25,10 +26,24 @@ namespace AskMate.Models
             Date = date;
         }
 
+        public QuestionModel(int id, string title, string content, long date, string img, int vote, int views, List<AnswerModel> answers, List<CommentModel> comments)
+        {
+            Id = id;
+            Title = title;
+            Content = content;
+            Date = date;
+            ImgLink = img;
+            Vote = vote;
+            Views = views;
+            Answers = answers;
+            Comments = comments;
+        }
+
         public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
 
         public void AddImage(string link) { ImgLink = link; Refr(); }
         public void AddAnswer(AnswerModel answer) { Answers.Add(answer); Refr(); }
+        public void AddComment(CommentModel comment) { Comments.Add(comment); Refr(); }
         public void VoteUp() { Vote++; Refr(); }
         public void VoteDown() { Vote--; Refr(); }
         public void IncreaseView() { Views++; Refr(); }
@@ -38,6 +53,7 @@ namespace AskMate.Models
         public void SetContent(string content) { Content = content; Refr(); }
         public void SetImgLink(string link) { ImgLink = link; Refr(); }
         public void DeleteAnswer(AnswerModel answer) { Answers.Remove(answer); Refr(); }
+        public void DeleteComment(CommentModel comment) { Comments.Remove(comment); Refr(); }
 
         public override string ToString()
         {
