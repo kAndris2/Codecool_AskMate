@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using AskMate.Models;
+using Npgsql;
 
 namespace AskMate
 {
@@ -243,6 +244,34 @@ namespace AskMate
         /// </summary>
         private void LoadFiles()
         {
+            var connString = "Host=localhost;Username=postgres;Password=admin;Database=askmate";
+            using (var conn = new NpgsqlConnection(connString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand("SELECT * FROM question", conn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Questions.Add
+                            (
+                                new QuestionModel
+                                (
+                                reader.GetInt32(0),
+                                reader.GetString(1),
+                                reader.GetString(2),
+                                reader.GetInt64(3),
+                                reader.GetString(4),
+                                reader.GetInt32(5),
+                                reader.GetInt32(6)
+                                )
+                            );
+                        }
+                    }
+                }
+            }
+            /*
             if (File.Exists(FILENAME))
             {
                 Questions.Clear();
@@ -262,6 +291,7 @@ namespace AskMate
                                                     ));
                 }
             }
+            */
         }
     }
 }

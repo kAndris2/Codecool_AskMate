@@ -17,7 +17,7 @@ namespace AskMate.Models
         public long Date { get; }
         public List<AnswerModel> Answers { get; } = new List<AnswerModel>();
 
-        public QuestionModel(int id, string title, string content, long date, string link, int vote, int views, List<AnswerModel> answers)
+        public QuestionModel(int id, string title, string content, long date, string link, int vote, int views)//, List<AnswerModel> answers)
         {
             Id = id;
             Title = title;
@@ -26,7 +26,7 @@ namespace AskMate.Models
             ImgLink = link;
             Vote = vote;
             Views = views;
-            Answers = answers;
+            //Answers = answers;
         }
         public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
 
