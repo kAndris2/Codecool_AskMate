@@ -86,7 +86,7 @@ namespace AskMate.Controllers
 
                 //uniq file name
                 var uniqFileName = Guid.NewGuid().ToString();
-                var filename = Path.GetFileName(uniqFileName + "." + file.FileName.Split(".")[1].ToLower());
+                var filename = Path.GetFileName(uniqFileName + "." + file.FileName.Split(".").Last().ToLower());
                 string fullPath = uploadPath + filename;
 
                 imagePath = imagePath + @"\";
