@@ -38,7 +38,7 @@ namespace AskMate
         {
             List<String> lines = new List<String>();
 
-            if (File.Exists(FILENAME)) 
+            if (File.Exists(FILENAME))
             {
                 using (StreamReader reader = new StreamReader(FILENAME))
                 {
@@ -105,7 +105,7 @@ namespace AskMate
                 id = Questions[Questions.Count - 1].Id + 1;
 
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            QuestionModel question = new QuestionModel(id, title, content, milisec, "N/A", 0, 0, new List<AnswerModel>());
+            QuestionModel question = new QuestionModel(id, title, content, milisec, "N/A", 0, 0);
             Questions.Add(question);
             File.AppendAllText(FILENAME,
                 $"{id};" +
@@ -244,7 +244,7 @@ namespace AskMate
         /// </summary>
         private void LoadFiles()
         {
-            var connString = "Host=localhost;Username=postgres;Password=admin;Database=askmate";
+            var connString = "Host=localhost;Username=AskMateUser;Password=123qweAsD;Database=askmate";
             using (var conn = new NpgsqlConnection(connString))
             {
                 conn.Open();
@@ -252,24 +252,33 @@ namespace AskMate
                 {
                     using (var reader = cmd.ExecuteReader())
                     {
+                        
                         while (reader.Read())
                         {
+                            string link;
+                            
+                            if (reader.IsDBNull(6))
+                            {
+                                link = "n/a";
+                            }
+                            else { link = reader.GetString(6); }
                             Questions.Add
                             (
                                 new QuestionModel
                                 (
                                 reader.GetInt32(0),
-                                reader.GetString(1),
-                                reader.GetString(2),
-                                reader.GetInt64(3),
                                 reader.GetString(4),
-                                reader.GetInt32(5),
-                                reader.GetInt32(6)
+                                reader.GetString(5),
+                                reader.GetInt64(1),
+                                link,
+                                reader.GetInt32(3),
+                                reader.GetInt32(2)
                                 )
                             );
                         }
                     }
                 }
+                
             }
             /*
             if (File.Exists(FILENAME))
