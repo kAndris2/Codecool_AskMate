@@ -105,7 +105,7 @@ namespace AskMate
                 id = Questions[Questions.Count - 1].Id + 1;
 
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            QuestionModel question = new QuestionModel(id, title, content, milisec, "N/A", 0, 0);
+            QuestionModel question = new QuestionModel(id, title, content, milisec);
             Questions.Add(question);
             File.AppendAllText(FILENAME,
                 $"{id};" +
@@ -256,13 +256,6 @@ namespace AskMate
                         
                         while (reader.Read())
                         {
-                            string link;
-                            
-                            if (reader.IsDBNull(6))
-                            {
-                                link = "n/a";
-                            }
-                            else { link = reader.GetString(6); }
                             Questions.Add
                             (
                                 new QuestionModel
@@ -270,10 +263,7 @@ namespace AskMate
                                 reader.GetInt32(0),
                                 reader.GetString(4),
                                 reader.GetString(5),
-                                reader.GetInt64(1),
-                                link,
-                                reader.GetInt32(3),
-                                reader.GetInt32(2)
+                                reader.GetInt64(1)
                                 )
                             );
                         }

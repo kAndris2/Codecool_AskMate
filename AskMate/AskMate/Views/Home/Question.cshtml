@@ -44,7 +44,7 @@
         </form>
         
         @{
-            if (Model.ImgLink.Length < 57)
+            if (Model.ImgLink == null)
             {
                 <p>No image uploaded</p>
             }

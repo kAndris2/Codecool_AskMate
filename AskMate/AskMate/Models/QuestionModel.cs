@@ -17,18 +17,6 @@ namespace AskMate.Models
         public long Date { get; }
         public List<AnswerModel> Answers { get; } = new List<AnswerModel>();
 
-        public QuestionModel(int id, string title, string content, long date, string link, int vote, int views)//, List<AnswerModel> answers)
-        {
-            Id = id;
-            Title = title;
-            Content = content;
-            Date = date;
-            ImgLink = link;
-            Vote = vote;
-            Views = views;
-            //Answers = answers;
-        }
-
         public QuestionModel(int id, string title, string content, long date)
         {
             Id = id;
