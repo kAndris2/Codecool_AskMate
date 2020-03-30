@@ -62,39 +62,6 @@ namespace AskMate
                     throw new Exception("No id ");
                 }
             }
-            //List<String> lines = new List<String>();
-
-            //if (File.Exists(FILENAME))
-            //{
-            //    using (StreamReader reader = new StreamReader(FILENAME))
-            //    {
-            //        String line;
-
-            //        while ((line = reader.ReadLine()) != null)
-            //        {
-            //            if (line.Contains(";"))
-            //            {
-            //                String[] split = line.Split(';');
-
-            //                if (split[0] == Convert.ToString(id))
-            //                {
-            //                    split[1] = title;
-            //                    split[2] = content;
-            //                    line = String.Join(";", split);
-            //                }
-            //            }
-
-            //            lines.Add(line);
-            //        }
-            //    }
-
-            //    using (StreamWriter writer = new StreamWriter(FILENAME, false))
-            //    {
-            //        foreach (String line in lines)
-            //            writer.WriteLine(line);
-            //    }
-            //    LoadFiles();
-            //}
         }
 
         public List<AnswerModel> GetAnswers(int questionId)
@@ -124,24 +91,33 @@ namespace AskMate
 
         public void NewQuestion(string title, string content)
         {
-            int id;
-            if (Questions.Count == 0)
-                id = 0;
-            else
-                id = Questions[Questions.Count - 1].Id + 1;
-
+            
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            int id=0;
+            string sqlstr = "INSERT INTO question (submission_time,view_number,vote_number,title,message) VALUES (@time,@views,@votes,@title,@message)";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("time", milisec);
+                    cmd.Parameters.AddWithValue("views", 0);
+                    cmd.Parameters.AddWithValue("votes", 0);
+                    cmd.Parameters.AddWithValue("title", title);
+                    cmd.Parameters.AddWithValue("message", content);
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = new NpgsqlCommand("SELECT * FROM question", conn))
+                {
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                       id = int.Parse(reader["id"].ToString());
+                    }
+                }
+            }
             QuestionModel question = new QuestionModel(id, title, content, milisec);
             Questions.Add(question);
-            File.AppendAllText(FILENAME,
-                $"{id};" +
-                $"{title};" +
-                $"{content};" +
-                $"{milisec};" +
-                $"N/A;" +
-                $"0;" +
-                $"0;" +
-                $"{GetFormattedAnswers(question)}");
         }
 
         /// <summary>
@@ -159,6 +135,18 @@ namespace AskMate
 
         public void DeleteQuestion(int id)
         {
+            string sqlstr = "DELETE FROM question WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
             foreach (QuestionModel question in Questions)
             {
                 if (id.Equals(question.Id))
@@ -167,7 +155,7 @@ namespace AskMate
                     break;
                 }
             }
-            Refresh();
+            
         }
 
         public void AddLinkToQuestion(string filePath, int id)
