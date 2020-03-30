@@ -36,18 +36,18 @@ namespace AskMate
 
         public void EditLine(int id, string title, string content)
         {
-            var connString = "Host=localhost;Username=AskMateUser;Password=admin;Database=askmate";
-
-            using var conn = new NpgsqlConnection(connString);
-            conn.Open();
             string sqlstr = "UPDATE question SET title = @title, message = @message WHERE id = @id";
-            using (var cmd = new NpgsqlCommand(sqlstr, conn))
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
-                cmd.Parameters.AddWithValue("title", title);
-                cmd.Parameters.AddWithValue("message", content);
-                cmd.Parameters.AddWithValue("id", id);
-                
-                cmd.ExecuteNonQuery();
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("title", title);
+                    cmd.Parameters.AddWithValue("message", content);
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
             }
             foreach(QuestionModel question in Questions)
             {
