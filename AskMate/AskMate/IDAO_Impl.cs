@@ -244,7 +244,8 @@ namespace AskMate
         /// </summary>
         private void LoadFiles()
         {
-            var connString = "Host=localhost;Username=AskMateUser;Password=123qweAsD;Database=askmate";
+            var connString = "Host=localhost;Username=AskMateUser;Password=admin;Database=askmate";
+
             using (var conn = new NpgsqlConnection(connString))
             {
                 conn.Open();
