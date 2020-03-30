@@ -160,6 +160,17 @@ namespace AskMate
 
         public void AddLinkToQuestion(string filePath, int id)
         {
+            string sqlstr = "UPDATE question SET image = @image WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("image", filePath);
+                    cmd.Parameters.AddWithValue("id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
             foreach (QuestionModel q in Questions)
             {
                 if (id.Equals(q.Id))
@@ -283,6 +294,10 @@ namespace AskMate
                         );
                     }
                 }
+            }
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
 
                 using (var cmd = new NpgsqlCommand("SELECT * FROM answer", conn))
                 {
@@ -309,6 +324,10 @@ namespace AskMate
                         }
                     }
                 }
+            }
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
 
                 using (var cmd = new NpgsqlCommand("SELECT * FROM comment", conn))
                 {
@@ -346,6 +365,7 @@ namespace AskMate
                         }
                     }
                 }
+            
             }
         }
     }
