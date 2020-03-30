@@ -36,39 +36,65 @@ namespace AskMate
 
         public void EditLine(int id, string title, string content)
         {
-            List<String> lines = new List<String>();
+            var connString = "Host=localhost;Username=AskMateUser;Password=admin;Database=askmate";
 
-            if (File.Exists(FILENAME))
+            using var conn = new NpgsqlConnection(connString);
+            conn.Open();
+            string sqlstr = "UPDATE question SET title = @title, message = @message WHERE id = @id";
+            using (var cmd = new NpgsqlCommand(sqlstr, conn))
             {
-                using (StreamReader reader = new StreamReader(FILENAME))
-                {
-                    String line;
-
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        if (line.Contains(";"))
-                        {
-                            String[] split = line.Split(';');
-
-                            if (split[0] == Convert.ToString(id))
-                            {
-                                split[1] = title;
-                                split[2] = content;
-                                line = String.Join(";", split);
-                            }
-                        }
-
-                        lines.Add(line);
-                    }
-                }
-
-                using (StreamWriter writer = new StreamWriter(FILENAME, false))
-                {
-                    foreach (String line in lines)
-                        writer.WriteLine(line);
-                }
-                LoadFiles();
+                cmd.Parameters.AddWithValue("title", title);
+                cmd.Parameters.AddWithValue("message", content);
+                cmd.Parameters.AddWithValue("id", id);
+                
+                cmd.ExecuteNonQuery();
             }
+            foreach(QuestionModel question in Questions)
+            {
+                if (question.Id == id)
+                {
+                    question.SetTitle(title);
+                    question.SetContent(content);
+
+                }
+                else
+                {
+                    throw new Exception("No id ");
+                }
+            }
+            //List<String> lines = new List<String>();
+
+            //if (File.Exists(FILENAME))
+            //{
+            //    using (StreamReader reader = new StreamReader(FILENAME))
+            //    {
+            //        String line;
+
+            //        while ((line = reader.ReadLine()) != null)
+            //        {
+            //            if (line.Contains(";"))
+            //            {
+            //                String[] split = line.Split(';');
+
+            //                if (split[0] == Convert.ToString(id))
+            //                {
+            //                    split[1] = title;
+            //                    split[2] = content;
+            //                    line = String.Join(";", split);
+            //                }
+            //            }
+
+            //            lines.Add(line);
+            //        }
+            //    }
+
+            //    using (StreamWriter writer = new StreamWriter(FILENAME, false))
+            //    {
+            //        foreach (String line in lines)
+            //            writer.WriteLine(line);
+            //    }
+            //    LoadFiles();
+            //}
         }
 
         public List<AnswerModel> GetAnswers(int questionId)
