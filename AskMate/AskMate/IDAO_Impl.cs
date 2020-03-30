@@ -275,9 +275,75 @@ namespace AskMate
                             int.Parse(reader["id"].ToString()),
                             reader["title"].ToString(),
                             reader["message"].ToString(),
-                            Convert.ToInt64(reader["submission_time"].ToString())
+                            Convert.ToInt64(reader["submission_time"].ToString()),
+                            reader["image"].ToString(),
+                            int.Parse(reader["vote_number"].ToString()),
+                            int.Parse(reader["view_number"].ToString())
                             )
                         );
+                    }
+                }
+
+                using (var cmd = new NpgsqlCommand("SELECT * FROM answer", conn))
+                {
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        AnswerModel answer = new AnswerModel
+                        (
+                            int.Parse(reader["id"].ToString()),
+                            reader["message"].ToString(),
+                            Convert.ToInt64(reader["submission_time"].ToString()),
+                            int.Parse(reader["vote_number"].ToString()),
+                            int.Parse(reader["question_id"].ToString()),
+                            reader["image"].ToString()
+                        );
+
+                        foreach (QuestionModel question in Questions)
+                        {
+                            if (question.Id.Equals(answer.Question_Id))
+                            {
+                                question.AddAnswer(answer);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                using (var cmd = new NpgsqlCommand("SELECT * FROM comment", conn))
+                {
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        CommentModel comment = new CommentModel
+                        (
+                            int.Parse(reader["id"].ToString()),
+                            int.Parse(reader["question_id"].ToString()),
+                            int.Parse(reader["answer_id"].ToString()),
+                            reader["messafe"].ToString(),
+                            Convert.ToInt64(reader["submission_time"].ToString()),
+                            int.Parse(reader["edited_number"].ToString())
+                        );
+
+                        foreach (QuestionModel question in Questions)
+                        {
+                            if (question.Id.Equals(comment.QuestionID))
+                            {
+                                question.AddComment(comment);
+                                break;
+                            }
+                            else
+                            {
+                                foreach (AnswerModel answer in question.Answers)
+                                {
+                                    if (answer.Id.Equals(comment.AnswerID))
+                                    {
+                                        answer.AddComment(comment);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

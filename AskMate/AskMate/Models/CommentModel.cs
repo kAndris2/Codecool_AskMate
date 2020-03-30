@@ -23,6 +23,16 @@ namespace AskMate.Models
             Date = date;
         }
 
+        public CommentModel(int id, int qid, int aid, string message, long date, int edited)
+        {
+            ID = id;
+            QuestionID = qid;
+            AnswerID = aid;
+            Message = message;
+            Date = date;
+            Edited = edited;
+        }
+
         public void IncreaseEditNumber() { Edited++; }
     }
 }
