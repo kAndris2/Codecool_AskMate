@@ -105,7 +105,7 @@ namespace AskMate
                 id = Questions[Questions.Count - 1].Id + 1;
 
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            QuestionModel question = new QuestionModel(id, title, content, milisec, "N/A", 0, 0, new List<AnswerModel>());
+            QuestionModel question = new QuestionModel(id, title, content, milisec, "N/A", 0, 0);
             Questions.Add(question);
             File.AppendAllText(FILENAME,
                 $"{id};" +
@@ -244,7 +244,7 @@ namespace AskMate
         /// </summary>
         private void LoadFiles()
         {
-            var connString = "Host=localhost;Username=postgres;Password=admin;Database=askmate";
+            var connString = "Host=localhost;Username=AskMateUser;Password=admin;Database=askmate";
             using (var conn = new NpgsqlConnection(connString))
             {
                 conn.Open();

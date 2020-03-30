@@ -28,6 +28,15 @@ namespace AskMate.Models
             Views = views;
             //Answers = answers;
         }
+
+        public QuestionModel(int id, string title, string content, long date)
+        {
+            Id = id;
+            Title = title;
+            Content = content;
+            Date = date;
+        }
+
         public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
 
         public void AddImage(string link) { ImgLink = link; Refr(); }
