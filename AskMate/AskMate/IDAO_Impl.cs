@@ -270,32 +270,26 @@ namespace AskMate
         /// </summary>
         private void LoadFiles()
         {
-            var connString = "Host=localhost;Username=AskMateUser;Password=admin;Database=askmate";
-
-            using (var conn = new NpgsqlConnection(connString))
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
                 using (var cmd = new NpgsqlCommand("SELECT * FROM question", conn))
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
                     {
-                        
-                        while (reader.Read())
-                        {
-                            Questions.Add
+                        Questions.Add
+                        (
+                            new QuestionModel
                             (
-                                new QuestionModel
-                                (
-                                reader.GetInt32(0),
-                                reader.GetString(4),
-                                reader.GetString(5),
-                                reader.GetInt64(1)
-                                )
-                            );
-                        }
+                            int.Parse(reader["id"].ToString()),
+                            reader["title"].ToString(),
+                            reader["message"].ToString(),
+                            Convert.ToInt64(reader["submission_time"].ToString())
+                            )
+                        );
                     }
                 }
-                
             }
             /*
             if (File.Exists(FILENAME))

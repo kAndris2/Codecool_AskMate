@@ -11,6 +11,12 @@ namespace AskMate
 {
     public class Program
     {
+        static readonly string dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+        static readonly string dbUser = Environment.GetEnvironmentVariable("DB_USER");
+        static readonly string dbPass = Environment.GetEnvironmentVariable("DB_PASS");
+        static readonly string dbName = Environment.GetEnvironmentVariable("DB_NAME");
+        public static readonly string ConnectionString = $"Host={dbHost};Username={dbUser};Password={dbPass};Database={dbName}";
+
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
