@@ -34,6 +34,7 @@ namespace AskMate.Models
         }
 
         public void IncreaseEditNumber() { Edited++; Refr(); }
+        public void EditMessage(string message) { Message = message; Refr(); }
 
         private void Refr()
         {
