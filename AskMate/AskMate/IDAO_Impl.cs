@@ -149,19 +149,19 @@ namespace AskMate
                                 "message = @message," +
                                 "image = @image," +
                                 "vote_number = @vote_number," +
-                                "view_number = @view_number," +
+                                "view_number = @view_number" +
                             " WHERE id = @id";
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(sqlstr, conn))
                 {
-                    cmd.Parameters.AddWithValue("id", question.Id);
                     cmd.Parameters.AddWithValue("title", question.Title);
                     cmd.Parameters.AddWithValue("message", question.Content);
                     cmd.Parameters.AddWithValue("image", question.ImgLink);
                     cmd.Parameters.AddWithValue("vote_number", question.Vote);
                     cmd.Parameters.AddWithValue("view_number", question.Views);
+                    cmd.Parameters.AddWithValue("id", question.Id);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -174,18 +174,18 @@ namespace AskMate
                                 "vote_number = @vote_number," +
                                 "question_id = @question_id," +
                                 "message = @message," +
-                                "image = @image," +
+                                "image = @image" +
                             " WHERE id = @id";
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(sqlstr, conn))
                 {
-                    cmd.Parameters.AddWithValue("id", answer.Id);
                     cmd.Parameters.AddWithValue("vote_number", answer.Vote);
                     cmd.Parameters.AddWithValue("question_id", answer.Question_Id);
                     cmd.Parameters.AddWithValue("message", answer.Content);
                     cmd.Parameters.AddWithValue("image", answer.ImgLink);
+                    cmd.Parameters.AddWithValue("id", answer.Id);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -198,18 +198,18 @@ namespace AskMate
                                 "question_id = @question_id," +
                                 "answer_id = @answer_id," +
                                 "message = @message," +
-                                "edited_number = @edited_number," +
+                                "edited_number = @edited_number" +
                             " WHERE id = @id";
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(sqlstr, conn))
                 {
-                    cmd.Parameters.AddWithValue("id", comment.ID);
                     cmd.Parameters.AddWithValue("question_id", comment.QuestionID);
                     cmd.Parameters.AddWithValue("answer_id", comment.AnswerID);
                     cmd.Parameters.AddWithValue("message", comment.Message);
                     cmd.Parameters.AddWithValue("edited_number", comment.Edited);
+                    cmd.Parameters.AddWithValue("id", comment.ID);
                     cmd.ExecuteNonQuery();
                 }
             }
