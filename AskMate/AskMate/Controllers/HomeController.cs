@@ -178,6 +178,8 @@ namespace AskMate.Controllers
             return View("Question", question);
         }
 
+        //-ANSWER--------------------------------------------------------------------------------------------------------
+
         public IActionResult A_UpVote([FromRoute(Name = "id")]long id)
         {
             AnswerModel answer = Idao.GetAnswerByUnique(id);
@@ -198,6 +200,26 @@ namespace AskMate.Controllers
             AnswerModel answer = Idao.GetAnswerByUnique(id);
             CommentModel cm = new CommentModel(answer.Comments.Count + 1, answer.Question_Id, answer.Id, comment, DateTimeOffset.Now.ToUnixTimeMilliseconds());
             answer.Comments.Add(cm);
+
+            return View("Question", Idao.GetQuestionById(answer.Question_Id));
+        }
+        [HttpGet("/edit_answer/{id}")]
+        public IActionResult Edit_Answer(long id)
+        {
+            return View("Answer_Edit", Idao.GetAnswerByUnique(id));
+        }
+
+        [HttpPost]
+        public IActionResult AnswerEdit([FromForm(Name = "content")] string content, [FromForm(Name = "img")] string img, [FromForm(Name = "id")] long id)
+        {
+            AnswerModel answer = Idao.GetAnswerByUnique(id);
+
+            if (!answer.Content.Equals(content))
+                answer.SetContent(content);
+
+            if (!answer.ImgLink.Equals(img))
+                answer.SetImgLink(img);
+
             return View("Question", Idao.GetQuestionById(answer.Question_Id));
         }
     }

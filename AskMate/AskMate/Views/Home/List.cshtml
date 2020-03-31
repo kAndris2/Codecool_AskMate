@@ -1,4 +1,71 @@
-﻿
-@{
-    ViewData["Title"] = "List";
+﻿@{
+    ViewData["Title"] = "Home Page";
 }
+
+@model IDAO_Impl
+
+<table class="table table-hover table-dark" id="mainTable">
+    <thead>
+        <tr>
+            <th class="th-sm">
+                #ID
+            </th>
+            <th class="th-sm text-center">
+                Question
+            </th>
+            <th class="text-center">
+                Points
+            </th>
+            <th class="text-center">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    @foreach (QuestionModel question in Model.GetQuestions())
+    {
+        <tr>
+            <td class="">
+                @Html.DisplayFor(modelItem => question.Id)
+            </td>
+            <td class="text-center">
+                @Html.ActionLink(question.Title, "question", new { id = question.Id })
+            </td>
+            <td class="text-center">
+                <span class="badge badge-primary badge-pill">@question.Vote</span>
+            </td>
+            <td class="text-center">
+                @Html.ActionLink("Edit", "edit", new { id = question.Id }, new { @class = "text-success" }) |
+                <a href="#" class="text-danger" id="ModalId" onclick="viewModal(@question.Id)">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
+<!--MAIN TABLE-->
+<!--DELETE MODAL-->
+<div class="container">
+    <div class="modal" id="MyModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content" id="showresults">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--DELETE MODAL-->
+<!--DELETE MODAL AJAX-->
+@section Scripts{
+    <script>
+    function viewModal(id) {
+        $.ajax({
+            type: 'Get',
+            url: '/Home/ModalId/' + id,//urlem
+            success: function (result) {
+                $("#MyModal").modal();//open modal
+                $('#showresults').html(result);//put view to modal
+
+            }
+        })
+    }
+    </script>
+}
+<!--DELETE MODAL AJAX-->

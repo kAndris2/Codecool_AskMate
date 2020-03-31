@@ -40,6 +40,9 @@ namespace AskMate.Models
         public void VoteDown() { Vote--; Refr(); }
         public void AddComment(CommentModel comment) { Comments.Add(comment); Refr(); }
         public void DeleteComment(CommentModel comment) { Comments.Remove(comment); Refr(); }
+        public List<CommentModel> GetComments() { return Comments; }
+        public void SetContent(string content) { Content = content; }
+        public void SetImgLink(string imglink) { ImgLink = imglink; }
 
         public long GetUnique()
         {
@@ -48,7 +51,7 @@ namespace AskMate.Models
 
         private void Refr()
         {
-            IDAO_Impl.Instance.Refresh();
+            IDAO_Impl.Instance.AnswerRefresh(this);
         }
 
         public override string ToString()

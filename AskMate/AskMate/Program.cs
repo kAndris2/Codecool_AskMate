@@ -15,7 +15,8 @@ namespace AskMate
         static readonly string dbUser = Environment.GetEnvironmentVariable("DB_USER");
         static readonly string dbPass = Environment.GetEnvironmentVariable("DB_PASS");
         static readonly string dbName = Environment.GetEnvironmentVariable("DB_NAME");
-        public static readonly string ConnectionString = $"Host={dbHost};Username={dbUser};Password={dbPass};Database={dbName}";
+        //public static readonly string ConnectionString = $"Host={dbHost};Username={dbUser};Password={dbPass};Database={dbName}";
+        public static readonly string ConnectionString = $"Host=localhost;Username=AskMateUser;Password=admin;Database=askmate";
 
         public static void Main(string[] args)
         {

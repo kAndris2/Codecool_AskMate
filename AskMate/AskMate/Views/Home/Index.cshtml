@@ -21,7 +21,7 @@
             </th>
         </tr>
     </thead>
-    @foreach (QuestionModel question in Model.GetQuestions())
+    @foreach (QuestionModel question in Model.GetLatestFiveQuestion())
     {
         <tr>
             <td class="">

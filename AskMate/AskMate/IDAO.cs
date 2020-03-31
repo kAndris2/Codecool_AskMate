@@ -6,12 +6,21 @@ using System.Threading.Tasks;
 
 namespace AskMate
 {
-    public interface IDAO
+    interface IDAO
     {
         List<QuestionModel> GetQuestions();
-        QuestionModel GetQuestion(int id);
-        void NewQuestion(string title, string content);
-        public List<AnswerModel> GetAnswers(int questionId);
+        QuestionModel GetQuestionById(int id);
+        AnswerModel GetAnswerByUnique(long id);
+        List<AnswerModel> GetAnswers(int questionId);
+
         void EditLine(int id, string title, string Content);
+        void NewQuestion(string title, string content);
+        void QuestionRefresh(QuestionModel question);
+        void AnswerRefresh(AnswerModel answer);
+        void CommentRefresh(CommentModel comment);
+        void DeleteQuestion(int id);
+        void AddLinkToQuestion(string filePath, int id);
+        void AddLinkToAnswer(string filePath, int id);
+        void LoadFiles();
     }
 }

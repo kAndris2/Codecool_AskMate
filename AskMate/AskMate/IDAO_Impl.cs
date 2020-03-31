@@ -10,12 +10,8 @@ namespace AskMate
 {
     public sealed class IDAO_Impl : IDAO
     {
-        const String FILENAME = "./Resources/Questions.csv";
-        const String ANSWER_SEP = "$$";
-        const char ANSWER_PROP_SEP = ',';
-
-        List<QuestionModel> Questions = new List<QuestionModel>();
         static IDAO_Impl instance = null;
+        List<QuestionModel> Questions = new List<QuestionModel>();
 
         public static IDAO_Impl Instance
         {
@@ -34,36 +30,6 @@ namespace AskMate
             LoadFiles();
         }
 
-        public void EditLine(int id, string title, string content)
-        {
-            string sqlstr = "UPDATE question SET title = @title, message = @message WHERE id = @id";
-            using (var conn = new NpgsqlConnection(Program.ConnectionString))
-            {
-                conn.Open();
-                using (var cmd = new NpgsqlCommand(sqlstr, conn))
-                {
-                    cmd.Parameters.AddWithValue("title", title);
-                    cmd.Parameters.AddWithValue("message", content);
-                    cmd.Parameters.AddWithValue("id", id);
-
-                    cmd.ExecuteNonQuery();
-                }
-            }
-            foreach(QuestionModel question in Questions)
-            {
-                if (question.Id == id)
-                {
-                    question.SetTitle(title);
-                    question.SetContent(content);
-
-                }
-                else
-                {
-                    throw new Exception("No id ");
-                }
-            }
-        }
-
         public List<AnswerModel> GetAnswers(int questionId)
         {
             foreach (QuestionModel item in Questions)
@@ -74,126 +40,9 @@ namespace AskMate
             throw new ArgumentException($"Invalid Question ID! ('{questionId}')");
         }
 
-        public QuestionModel GetQuestion(int id)
-        {
-            foreach (QuestionModel item in Questions)
-            {
-                if (id.Equals(item.Id))
-                    return item;
-            }
-            throw new ArgumentException($"Invalid Question ID! ('{id}')");
-        }
-
         public List<QuestionModel> GetQuestions()
         {
             return Questions;
-        }
-
-        public void NewQuestion(string title, string content)
-        {
-            
-            long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            int id=0;
-            string sqlstr = "INSERT INTO question (submission_time,view_number,vote_number,title,message) VALUES (@time,@views,@votes,@title,@message)";
-            using (var conn = new NpgsqlConnection(Program.ConnectionString))
-            {
-                conn.Open();
-                using (var cmd = new NpgsqlCommand(sqlstr, conn))
-                {
-                    cmd.Parameters.AddWithValue("time", milisec);
-                    cmd.Parameters.AddWithValue("views", 0);
-                    cmd.Parameters.AddWithValue("votes", 0);
-                    cmd.Parameters.AddWithValue("title", title);
-                    cmd.Parameters.AddWithValue("message", content);
-                    cmd.ExecuteNonQuery();
-                }
-                using (var cmd = new NpgsqlCommand("SELECT * FROM question", conn))
-                {
-                    var reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                       id = int.Parse(reader["id"].ToString());
-                    }
-                }
-            }
-            QuestionModel question = new QuestionModel(id, title, content, milisec);
-            Questions.Add(question);
-        }
-
-        /// <summary>
-        /// Reload the file with fresh datas.
-        /// </summary>
-        public void Refresh()
-        {
-            string text = "";
-            foreach (QuestionModel question in Questions)
-            {
-                text += $"{question.ToString()}{GetFormattedAnswers(question)}";
-            }
-            File.WriteAllText(FILENAME, text);
-        }
-
-        public void DeleteQuestion(int id)
-        {
-            string sqlstr = "DELETE FROM question WHERE id = @id";
-            using (var conn = new NpgsqlConnection(Program.ConnectionString))
-            {
-                conn.Open();
-                using (var cmd = new NpgsqlCommand(sqlstr, conn))
-                {
-                    cmd.Parameters.AddWithValue("id", id);
-
-                    cmd.ExecuteNonQuery();
-                }
-            }
-
-            foreach (QuestionModel question in Questions)
-            {
-                if (id.Equals(question.Id))
-                {
-                    Questions.Remove(question);
-                    break;
-                }
-            }
-            
-        }
-
-        public void AddLinkToQuestion(string filePath, int id)
-        {
-            string sqlstr = "UPDATE question SET image = @image WHERE id = @id";
-            using (var conn = new NpgsqlConnection(Program.ConnectionString))
-            {
-                conn.Open();
-                using (var cmd = new NpgsqlCommand(sqlstr, conn))
-                {
-                    cmd.Parameters.AddWithValue("image", filePath);
-                    cmd.Parameters.AddWithValue("id", id);
-                    cmd.ExecuteNonQuery();
-                }
-            }
-            foreach (QuestionModel q in Questions)
-            {
-                if (id.Equals(q.Id))
-                {
-                    q.AddImage(filePath);
-                    break;
-                }
-            }
-            Refresh();
-        }
-
-        public void AddLinkToAnswer(string filePath, int id)
-        {
-            
-            foreach (AnswerModel ans in GetAnswers(id))
-            {
-                if (ans.Id == id)
-                {
-                    ans.AddImage(filePath);
-                    break;
-                }
-            }
-            Refresh();
         }
 
         public QuestionModel GetQuestionById(int id)
@@ -201,9 +50,7 @@ namespace AskMate
             foreach (QuestionModel question in Questions)
             {
                 if (id.Equals(question.Id))
-                {
                     return question;
-                }
             }
             throw new ArgumentException($"Invalid Question ID! ('{id}')");
         }
@@ -231,45 +78,226 @@ namespace AskMate
             return instance;
         }
 
-        private List<AnswerModel> SetAnswers(string table)
+        public List<QuestionModel> GetLatestFiveQuestion()
         {
-            List<AnswerModel> answers = new List<AnswerModel>();
-            /*
-            string[] data = table.Split(ANSWER_SEP);
+            List<QuestionModel> questions = new List<QuestionModel>();
+            int count = 0;
 
-            for (int i = 0; i < data.Length; i++)
+            for (int i = Questions.Count - 1; i >= 0; i--)
             {
-                string[] temp = data[i].Split(ANSWER_PROP_SEP);
-                answers.Add(new AnswerModel(int.Parse(temp[0]),
-                                            temp[1],
-                                            Convert.ToInt64(temp[2]),
-                                            int.Parse(temp[3]),
-                                            int.Parse(temp[4]),
-                                            temp[5]
-                                            )); 
+                questions.Add(Questions[i]);
+                count++;
+                if (count == 5)
+                    break;
             }
-            */
-            return answers;
+            return questions;
         }
 
-        private String GetFormattedAnswers(QuestionModel question) 
+        //-SQL_METHODS---------------------------------------------------------------------------------------------------
+
+        public void EditLine(int id, string title, string content)
         {
-            if (question.Answers.Count == 0)
-                return "\n"; 
-
-            string[] props = new string[question.Answers.Count];
-
-            for (int i = 0; i < question.Answers.Count; i++)
+            string sqlstr = "UPDATE question SET title = @title, message = @message WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
-                props[i] = question.Answers[i].ToString();
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("title", title);
+                    cmd.Parameters.AddWithValue("message", content);
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
             }
-            return string.Join(ANSWER_SEP, props) + "\n";
+            foreach (QuestionModel question in Questions)
+            {
+                if (question.Id == id)
+                {
+                    question.SetTitle(title);
+                    question.SetContent(content);
+
+                }
+                else
+                {
+                    throw new Exception("No id ");
+                }
+            }
+        }
+
+        public void NewQuestion(string title, string content)
+        {
+
+            long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            int id = 0;
+            string sqlstr = "INSERT INTO question (submission_time,view_number,vote_number,title,message) VALUES (@time,@views,@votes,@title,@message)";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("time", milisec);
+                    cmd.Parameters.AddWithValue("views", 0);
+                    cmd.Parameters.AddWithValue("votes", 0);
+                    cmd.Parameters.AddWithValue("title", title);
+                    cmd.Parameters.AddWithValue("message", content);
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = new NpgsqlCommand("SELECT * FROM question", conn))
+                {
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        id = int.Parse(reader["id"].ToString());
+                    }
+                }
+            }
+            QuestionModel question = new QuestionModel(id, title, content, milisec);
+            Questions.Add(question);
+        }
+
+        public void QuestionRefresh(QuestionModel question)
+        {
+            string sqlstr = "UPDATE question " +
+                            "SET " +
+                                "title = @title," +
+                                "message = @message," +
+                                "image = @image," +
+                                "vote_number = @vote_number," +
+                                "view_number = @view_number" +
+                            " WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("title", question.Title);
+                    cmd.Parameters.AddWithValue("message", question.Content);
+                    cmd.Parameters.AddWithValue("image", question.ImgLink);
+                    cmd.Parameters.AddWithValue("vote_number", question.Vote);
+                    cmd.Parameters.AddWithValue("view_number", question.Views);
+                    cmd.Parameters.AddWithValue("id", question.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void AnswerRefresh(AnswerModel answer)
+        {
+            string sqlstr = "UPDATE answer " +
+                            "SET " +
+                                "vote_number = @vote_number," +
+                                "question_id = @question_id," +
+                                "message = @message," +
+                                "image = @image" +
+                            " WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("vote_number", answer.Vote);
+                    cmd.Parameters.AddWithValue("question_id", answer.Question_Id);
+                    cmd.Parameters.AddWithValue("message", answer.Content);
+                    cmd.Parameters.AddWithValue("image", answer.ImgLink);
+                    cmd.Parameters.AddWithValue("id", answer.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void CommentRefresh(CommentModel comment)
+        {
+            string sqlstr = "UPDATE comment " +
+                            "SET " +
+                                "question_id = @question_id," +
+                                "answer_id = @answer_id," +
+                                "message = @message," +
+                                "edited_number = @edited_number" +
+                            " WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("question_id", comment.QuestionID);
+                    cmd.Parameters.AddWithValue("answer_id", comment.AnswerID);
+                    cmd.Parameters.AddWithValue("message", comment.Message);
+                    cmd.Parameters.AddWithValue("edited_number", comment.Edited);
+                    cmd.Parameters.AddWithValue("id", comment.ID);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void DeleteQuestion(int id)
+        {
+            string sqlstr = "DELETE FROM question WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            foreach (QuestionModel question in Questions)
+            {
+                if (id.Equals(question.Id))
+                {
+                    Questions.Remove(question);
+                    break;
+                }
+            }
+
+        }
+
+        public void AddLinkToQuestion(string filePath, int id)
+        {
+            string sqlstr = "UPDATE question SET image = @image WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("image", filePath);
+                    cmd.Parameters.AddWithValue("id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            foreach (QuestionModel q in Questions)
+            {
+                if (id.Equals(q.Id))
+                {
+                    q.AddImage(filePath);
+                    QuestionRefresh(q);
+                    break;
+                }
+            }
+        }
+
+        public void AddLinkToAnswer(string filePath, int id)
+        {
+
+            foreach (AnswerModel ans in GetAnswers(id))
+            {
+                if (ans.Id == id)
+                {
+                    ans.AddImage(filePath);
+                    AnswerRefresh(ans);
+                    break;
+                }
+            }
         }
 
         /// <summary>
-        /// Loads the files from .csv
+        /// Loads the files from db
         /// </summary>
-        private void LoadFiles()
+        public void LoadFiles()
         {
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
@@ -365,7 +393,6 @@ namespace AskMate
                         }
                     }
                 }
-            
             }
         }
     }
