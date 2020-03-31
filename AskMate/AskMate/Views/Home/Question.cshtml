@@ -94,10 +94,31 @@
                                     <img height="100 px" width="100 px" class="img-fluid" src="@answer.ImgLink">
                                 </a>
                             }
-                            
                         }
                         <h6 class="card-title">@answer.Content</h6>
-                        <a>@answer.GetDate()</a>
+                        <p class="text-date">@answer.GetDate()</p>
+                        @* COMMENTS BELOW *@
+                        @foreach (var comment in answer.Comments)
+                        {
+                            <hr>
+                            <div class="container-fluid">
+                                <p>@comment.Message –&nbsp;<span class="text-date">@comment.GetDate()</span></p>
+                            </div>
+                            if(comment.Equals(answer.Comments.Last()))
+                            {
+                                <hr>
+                            }
+                        }
+                        <form method="POST" asp-controller="Home" asp-action="AddComment" enctype="multipart/form-data">
+                            <div class="justify-content-between pt-4">
+                                <p>Add a comment</p>
+                                <textarea class="form-control-plaintext bg-light text-black-50" style="border-radius: 1rem;" name="comment" required></textarea>
+                                <input name="id" type="hidden" value="@answer.GetUnique()" />
+                                <div class="pt-2 float-right">
+                                    <button class="btn btn-success"type="submit">Add Comment</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             }

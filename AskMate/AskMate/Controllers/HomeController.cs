@@ -111,7 +111,7 @@ namespace AskMate.Controllers
                 {
                     //na az szopó
                 }
-                
+
             }
             if (type == "ans")
             {
@@ -154,7 +154,7 @@ namespace AskMate.Controllers
 
         //public ActionResult NewAnswer([FromForm(Name = "answer")] string answer, [FromForm(Name = "id")] int id)
         //{
-            
+
         //    return View("Question", question);
         //}
 
@@ -189,6 +189,15 @@ namespace AskMate.Controllers
         {
             AnswerModel answer = Idao.GetAnswerByUnique(id);
             answer.VoteDown();
+            return View("Question", Idao.GetQuestionById(answer.Question_Id));
+        }
+
+        [HttpPost]
+        public IActionResult AddComment(long id, [FromForm(Name = "comment")] string comment)
+        {
+            AnswerModel answer = Idao.GetAnswerByUnique(id);
+            CommentModel cm = new CommentModel(answer.Comments.Count + 1, answer.Question_Id, answer.Id, comment, DateTimeOffset.Now.ToUnixTimeMilliseconds());
+            answer.Comments.Add(cm);
             return View("Question", Idao.GetQuestionById(answer.Question_Id));
         }
     }

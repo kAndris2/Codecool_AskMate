@@ -23,7 +23,7 @@ namespace AskMate.Models
             Content = content;
             Date = data;
         }
-        
+
         public AnswerModel(int id, string content, long date, int vote, int qid, string link)
         {
             Id = id;
