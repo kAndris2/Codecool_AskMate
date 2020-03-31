@@ -41,6 +41,8 @@ namespace AskMate.Models
         public void AddComment(CommentModel comment) { Comments.Add(comment); Refr(); }
         public void DeleteComment(CommentModel comment) { Comments.Remove(comment); Refr(); }
         public List<CommentModel> GetComments() { return Comments; }
+        public void SetContent(string content) { Content = content; }
+        public void SetImgLink(string imglink) { ImgLink = imglink; }
 
         public long GetUnique()
         {

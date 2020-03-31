@@ -199,5 +199,19 @@ namespace AskMate.Controllers
         {
             return View("Answer_Edit", Idao.GetAnswerByUnique(id));
         }
+
+        [HttpPost]
+        public IActionResult AnswerEdit([FromForm(Name = "content")] string content, [FromForm(Name = "img")] string img, [FromForm(Name = "id")] long id)
+        {
+            AnswerModel answer = Idao.GetAnswerByUnique(id);
+
+            if (!answer.Content.Equals(content))
+                answer.SetContent(content);
+
+            if(!answer.ImgLink.Equals(img))
+                answer.SetImgLink(img);
+
+            return View("Question", Idao.GetQuestionById(answer.Question_Id));
+        }
     }
 }
