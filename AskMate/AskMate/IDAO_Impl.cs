@@ -10,12 +10,8 @@ namespace AskMate
 {
     public sealed class IDAO_Impl : IDAO
     {
-        const String FILENAME = "./Resources/Questions.csv";
-        const String ANSWER_SEP = "$$";
-        const char ANSWER_PROP_SEP = ',';
-
-        List<QuestionModel> Questions = new List<QuestionModel>();
         static IDAO_Impl instance = null;
+        List<QuestionModel> Questions = new List<QuestionModel>();
 
         public static IDAO_Impl Instance
         {
@@ -34,6 +30,56 @@ namespace AskMate
             LoadFiles();
         }
 
+        public List<AnswerModel> GetAnswers(int questionId)
+        {
+            foreach (QuestionModel item in Questions)
+            {
+                if (questionId.Equals(item.Id))
+                    return item.Answers;
+            }
+            throw new ArgumentException($"Invalid Question ID! ('{questionId}')");
+        }
+
+        public List<QuestionModel> GetQuestions()
+        {
+            return Questions;
+        }
+
+        public QuestionModel GetQuestionById(int id)
+        {
+            foreach (QuestionModel question in Questions)
+            {
+                if (id.Equals(question.Id))
+                    return question;
+            }
+            throw new ArgumentException($"Invalid Question ID! ('{id}')");
+        }
+
+        /// <summary>
+        /// Get answer by it's unique code.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public AnswerModel GetAnswerByUnique(long id)
+        {
+            AnswerModel instance = null;
+
+            foreach (QuestionModel question in Questions)
+            {
+                foreach (AnswerModel answer in question.Answers)
+                {
+                    if (id.Equals(answer.GetUnique()))
+                    {
+                        instance = answer;
+                        break;
+                    }
+                }
+            }
+            return instance;
+        }
+
+        //-SQL_METHODS---------------------------------------------------------------------------------------------------
+
         public void EditLine(int id, string title, string content)
         {
             string sqlstr = "UPDATE question SET title = @title, message = @message WHERE id = @id";
@@ -49,7 +95,7 @@ namespace AskMate
                     cmd.ExecuteNonQuery();
                 }
             }
-            foreach(QuestionModel question in Questions)
+            foreach (QuestionModel question in Questions)
             {
                 if (question.Id == id)
                 {
@@ -64,36 +110,11 @@ namespace AskMate
             }
         }
 
-        public List<AnswerModel> GetAnswers(int questionId)
-        {
-            foreach (QuestionModel item in Questions)
-            {
-                if (questionId.Equals(item.Id))
-                    return item.Answers;
-            }
-            throw new ArgumentException($"Invalid Question ID! ('{questionId}')");
-        }
-
-        public QuestionModel GetQuestion(int id)
-        {
-            foreach (QuestionModel item in Questions)
-            {
-                if (id.Equals(item.Id))
-                    return item;
-            }
-            throw new ArgumentException($"Invalid Question ID! ('{id}')");
-        }
-
-        public List<QuestionModel> GetQuestions()
-        {
-            return Questions;
-        }
-
         public void NewQuestion(string title, string content)
         {
-            
+
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            int id=0;
+            int id = 0;
             string sqlstr = "INSERT INTO question (submission_time,view_number,vote_number,title,message) VALUES (@time,@views,@votes,@title,@message)";
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
@@ -112,7 +133,7 @@ namespace AskMate
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                       id = int.Parse(reader["id"].ToString());
+                        id = int.Parse(reader["id"].ToString());
                     }
                 }
             }
@@ -216,7 +237,7 @@ namespace AskMate
                     break;
                 }
             }
-            
+
         }
 
         public void AddLinkToQuestion(string filePath, int id)
@@ -246,7 +267,7 @@ namespace AskMate
 
         public void AddLinkToAnswer(string filePath, int id)
         {
-            
+
             foreach (AnswerModel ans in GetAnswers(id))
             {
                 if (ans.Id == id)
@@ -258,59 +279,10 @@ namespace AskMate
             }
         }
 
-        public QuestionModel GetQuestionById(int id)
-        {
-            foreach (QuestionModel question in Questions)
-            {
-                if (id.Equals(question.Id))
-                {
-                    return question;
-                }
-            }
-            throw new ArgumentException($"Invalid Question ID! ('{id}')");
-        }
-
-        /// <summary>
-        /// Get answer by it's unique code.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public AnswerModel GetAnswerByUnique(long id)
-        {
-            AnswerModel instance = null;
-
-            foreach (QuestionModel question in Questions)
-            {
-                foreach (AnswerModel answer in question.Answers)
-                {
-                    if (id.Equals(answer.GetUnique()))
-                    {
-                        instance = answer;
-                        break;
-                    }
-                }
-            }
-            return instance;
-        }
-
-        private String GetFormattedAnswers(QuestionModel question) 
-        {
-            if (question.Answers.Count == 0)
-                return "\n"; 
-
-            string[] props = new string[question.Answers.Count];
-
-            for (int i = 0; i < question.Answers.Count; i++)
-            {
-                props[i] = question.Answers[i].ToString();
-            }
-            return string.Join(ANSWER_SEP, props) + "\n";
-        }
-
         /// <summary>
         /// Loads the files from db
         /// </summary>
-        private void LoadFiles()
+        public void LoadFiles()
         {
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
@@ -406,7 +378,6 @@ namespace AskMate
                         }
                     }
                 }
-            
             }
         }
     }
