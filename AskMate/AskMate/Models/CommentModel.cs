@@ -33,6 +33,11 @@ namespace AskMate.Models
             Edited = edited;
         }
 
-        public void IncreaseEditNumber() { Edited++; }
+        public void IncreaseEditNumber() { Edited++; Refr(); }
+
+        private void Refr()
+        {
+            IDAO_Impl.Instance.CommentRefresh(this);
+        }
     }
 }

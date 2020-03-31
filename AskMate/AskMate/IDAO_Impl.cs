@@ -120,17 +120,78 @@ namespace AskMate
             Questions.Add(question);
         }
 
-        /// <summary>
-        /// Reload the file with fresh datas.
-        /// </summary>
-        public void Refresh()
+        public void QuestionRefresh(QuestionModel question)
         {
-            string text = "";
-            foreach (QuestionModel question in Questions)
+            string sqlstr = "UPDATE question " +
+                            "SET " +
+                                "title = @title," +
+                                "message = @message," +
+                                "image = @image," +
+                                "vote_number = @vote_number," +
+                                "view_number = @view_number," +
+                            " WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
-                text += $"{question.ToString()}{GetFormattedAnswers(question)}";
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("id", question.Id);
+                    cmd.Parameters.AddWithValue("title", question.Title);
+                    cmd.Parameters.AddWithValue("message", question.Content);
+                    cmd.Parameters.AddWithValue("image", question.ImgLink);
+                    cmd.Parameters.AddWithValue("vote_number", question.Vote);
+                    cmd.Parameters.AddWithValue("view_number", question.Views);
+                    cmd.ExecuteNonQuery();
+                }
             }
-            File.WriteAllText(FILENAME, text);
+        }
+
+        public void AnswerRefresh(AnswerModel answer)
+        {
+            string sqlstr = "UPDATE answer " +
+                            "SET " +
+                                "vote_number = @vote_number," +
+                                "question_id = @question_id," +
+                                "message = @message," +
+                                "image = @image," +
+                            " WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("id", answer.Id);
+                    cmd.Parameters.AddWithValue("vote_number", answer.Vote);
+                    cmd.Parameters.AddWithValue("question_id", answer.Question_Id);
+                    cmd.Parameters.AddWithValue("message", answer.Content);
+                    cmd.Parameters.AddWithValue("image", answer.ImgLink);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void CommentRefresh(CommentModel comment)
+        {
+            string sqlstr = "UPDATE comment " +
+                            "SET " +
+                                "question_id = @question_id," +
+                                "answer_id = @answer_id," +
+                                "message = @message," +
+                                "edited_number = @edited_number," +
+                            " WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("id", comment.ID);
+                    cmd.Parameters.AddWithValue("question_id", comment.QuestionID);
+                    cmd.Parameters.AddWithValue("answer_id", comment.AnswerID);
+                    cmd.Parameters.AddWithValue("message", comment.Message);
+                    cmd.Parameters.AddWithValue("edited_number", comment.Edited);
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         public void DeleteQuestion(int id)
@@ -171,15 +232,16 @@ namespace AskMate
                     cmd.ExecuteNonQuery();
                 }
             }
+
             foreach (QuestionModel q in Questions)
             {
                 if (id.Equals(q.Id))
                 {
                     q.AddImage(filePath);
+                    QuestionRefresh(q);
                     break;
                 }
             }
-            Refresh();
         }
 
         public void AddLinkToAnswer(string filePath, int id)
@@ -190,10 +252,10 @@ namespace AskMate
                 if (ans.Id == id)
                 {
                     ans.AddImage(filePath);
+                    AnswerRefresh(ans);
                     break;
                 }
             }
-            Refresh();
         }
 
         public QuestionModel GetQuestionById(int id)
@@ -231,27 +293,6 @@ namespace AskMate
             return instance;
         }
 
-        private List<AnswerModel> SetAnswers(string table)
-        {
-            List<AnswerModel> answers = new List<AnswerModel>();
-            /*
-            string[] data = table.Split(ANSWER_SEP);
-
-            for (int i = 0; i < data.Length; i++)
-            {
-                string[] temp = data[i].Split(ANSWER_PROP_SEP);
-                answers.Add(new AnswerModel(int.Parse(temp[0]),
-                                            temp[1],
-                                            Convert.ToInt64(temp[2]),
-                                            int.Parse(temp[3]),
-                                            int.Parse(temp[4]),
-                                            temp[5]
-                                            )); 
-            }
-            */
-            return answers;
-        }
-
         private String GetFormattedAnswers(QuestionModel question) 
         {
             if (question.Answers.Count == 0)
@@ -267,7 +308,7 @@ namespace AskMate
         }
 
         /// <summary>
-        /// Loads the files from .csv
+        /// Loads the files from db
         /// </summary>
         private void LoadFiles()
         {

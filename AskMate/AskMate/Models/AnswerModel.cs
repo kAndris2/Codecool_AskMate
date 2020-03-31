@@ -48,7 +48,7 @@ namespace AskMate.Models
 
         private void Refr()
         {
-            IDAO_Impl.Instance.Refresh();
+            IDAO_Impl.Instance.AnswerRefresh(this);
         }
 
         public override string ToString()
