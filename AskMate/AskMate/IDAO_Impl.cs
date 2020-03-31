@@ -78,6 +78,21 @@ namespace AskMate
             return instance;
         }
 
+        public List<QuestionModel> GetLatestFiveQuestion()
+        {
+            List<QuestionModel> questions = new List<QuestionModel>();
+            int count = 0;
+
+            for (int i = Questions.Count - 1; i >= 0; i--)
+            {
+                questions.Add(Questions[i]);
+                count++;
+                if (count == 5)
+                    break;
+            }
+            return questions;
+        }
+
         //-SQL_METHODS---------------------------------------------------------------------------------------------------
 
         public void EditLine(int id, string title, string content)
