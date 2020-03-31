@@ -178,6 +178,8 @@ namespace AskMate.Controllers
             return View("Question", question);
         }
 
+        //-ANSWER--------------------------------------------------------------------------------------------------------
+
         public IActionResult A_UpVote([FromRoute(Name = "id")]long id)
         {
             AnswerModel answer = Idao.GetAnswerByUnique(id);
@@ -190,6 +192,12 @@ namespace AskMate.Controllers
             AnswerModel answer = Idao.GetAnswerByUnique(id);
             answer.VoteDown();
             return View("Question", Idao.GetQuestionById(answer.Question_Id));
+        }
+
+        [HttpGet("/edit_answer/{id}")]
+        public IActionResult Edit_Answer(long id)
+        {
+            return View("Answer_Edit", Idao.GetAnswerByUnique(id));
         }
     }
 }

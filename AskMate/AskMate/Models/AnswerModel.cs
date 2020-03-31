@@ -40,6 +40,7 @@ namespace AskMate.Models
         public void VoteDown() { Vote--; Refr(); }
         public void AddComment(CommentModel comment) { Comments.Add(comment); Refr(); }
         public void DeleteComment(CommentModel comment) { Comments.Remove(comment); Refr(); }
+        public List<CommentModel> GetComments() { return Comments; }
 
         public long GetUnique()
         {

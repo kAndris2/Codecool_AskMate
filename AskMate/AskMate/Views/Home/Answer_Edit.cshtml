@@ -1,0 +1,42 @@
+﻿@model AskMate.Models.AnswerModel
+@{
+    ViewData["Title"] = "Answer_Edit";
+}
+
+<h1>ID: #@Model.Id Edit</h1>
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+
+<div class="form-group">
+    <label for="">Content:</label>
+    @Html.TextBoxFor(m => m.Content, new { @class = "form-control", @required = "required" })
+</div>
+
+<div class="form-group">
+    <label for="">Image link:</label>
+    @Html.TextBoxFor(m => m.ImgLink, new { @class = "form-control" })
+</div>
+
+@foreach (CommentModel comment in Model.GetComments())
+{
+<div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">@comment.GetDate()</h5>
+            <small>ID: #@comment.ID</small>
+        </div>
+        <p class="mb-1">@comment.Message</p>
+        <small>(Edited: @comment.Edited times.)</small>
+    </a>
+</div>
+}
+
+    <button type="submit" class="btn btn-success">Edit</button>
+
+    <div class="float-right">
+        <span>
+            @Html.ActionLink("Back", "Index", "Home", null, new { @class = "btn btn-danger ml-auto mr-1" })
+        </span>
+    </div>
+    }
