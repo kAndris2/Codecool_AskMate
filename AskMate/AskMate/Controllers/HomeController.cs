@@ -44,6 +44,13 @@ namespace AskMate.Controllers
         }
 
         [HttpPost]
+        public IActionResult Sorting([FromForm(Name = "order")] string order)
+        {
+            Idao.SortQuestion(order);
+            return View("Index", Idao);
+        }
+
+        [HttpPost]
         public IActionResult ShowEntries([FromForm(Name = "entry")] string entry)
         {
             if (!int.TryParse(entry, out int x))

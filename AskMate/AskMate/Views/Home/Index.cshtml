@@ -20,18 +20,27 @@
 <table class="table table-striped">
     <thead class="table-dark">
         <tr>
-            <th class="th-sm">
-                #ID
-            </th>
-            <th class="th-sm text-center">
-                Question
-            </th>
-            <th class="text-center">
-                Points
-            </th>
-            <th class="text-center">
-                Actions
-            </th>
+            @using (Html.BeginForm("Sorting", "Home", FormMethod.Post))
+            {
+                <th class="th-sm">
+                    <button class="btn btn-outline-warning" type="submit" name="order" value="id">#ID</button>
+                </th>
+                <th class="th-sm text-center">
+                    <button class="btn btn-outline-warning" type="submit" name="order" value="title">Title</button>
+                </th>
+                <th class="th-sm text-center">
+                    <button class="btn btn-outline-warning" type="submit" name="order" value="submission_time">Submission time</button>
+                </th>
+                <th class="th-sm text-center">
+                    <button class="btn btn-outline-warning" type="submit" name="order" value="view_number">Views</button>
+                </th>
+                <th class="text-center">
+                    <button class="btn btn-outline-warning" type="submit" name="order" value="vote_number">Votes</button>
+                </th>
+                <th class="text-center">
+                    <button class="btn btn-outline-warning" disabled>Actions</button>
+                </th>
+            }
         </tr>
     </thead>
     @foreach (QuestionModel question in Model.GetEntries())
@@ -40,12 +49,23 @@
             <td class="">
                 @Html.DisplayFor(modelItem => question.Id)
             </td>
+
             <td class="text-center">
                 @Html.ActionLink(question.Title, "question", new { id = question.Id })
             </td>
+
+            <td class="text-center">
+                <a>@question.GetDate()</a>
+            </td>
+
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => question.Views)
+            </td>
+
             <td class="text-center">
                 <span class="badge badge-primary badge-pill">@question.Vote</span>
             </td>
+
             <td class="text-center">
                 @Html.ActionLink("Edit", "edit", new { id = question.Id }, new { @class = "text-success" }) |
                 <a href="#" class="text-danger" id="ModalId" onclick="viewModal(@question.Id)">Delete</a>

@@ -13,6 +13,15 @@ namespace AskMate
         static IDAO_Impl instance = null;
         List<QuestionModel> Questions = new List<QuestionModel>();
         public int Entry { get; set; } = 5;
+        private Dictionary<string, bool> Sort = new Dictionary<string, bool>
+        {
+            { "id", true },
+            { "title", true },
+            { "submission_time", true },
+            { "message", true },
+            { "view_number", true },
+            { "vote_number", true }
+        };
 
         public static IDAO_Impl Instance
         {
@@ -96,6 +105,42 @@ namespace AskMate
         }
 
         //-SQL_METHODS---------------------------------------------------------------------------------------------------
+
+        public void SortQuestion(string order)
+        {
+            List<QuestionModel> questions = new List<QuestionModel>();
+            Sort[order] = !Sort[order];
+
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                string sqlstr = "SELECT * FROM question " +
+                                $"ORDER BY {order} " +
+                                $"{(Sort[order] == true ? "ASC" : "DESC")}";
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        questions.Add
+                        (
+                            new QuestionModel
+                            (
+                            int.Parse(reader["id"].ToString()),
+                            reader["title"].ToString(),
+                            reader["message"].ToString(),
+                            Convert.ToInt64(reader["submission_time"].ToString()),
+                            reader["image"].ToString(),
+                            int.Parse(reader["vote_number"].ToString()),
+                            int.Parse(reader["view_number"].ToString())
+                            )
+                        );
+                    }
+                }
+            }
+            Questions.Clear();
+            Questions = questions;
+        }
 
         public void EditLine(int id, string title, string content)
         {
