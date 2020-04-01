@@ -172,6 +172,36 @@ namespace AskMate
             }
         }
 
+        public void NewAnswer(string content, int question_id)
+        {
+            long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            int id = 0;
+            string sqlstr = "INSERT INTO answer " +
+                                "(submission_time,question_id,message) " +
+                            "VALUES " +
+                                "(@time,@question_id,@message)";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("time", milisec);
+                    cmd.Parameters.AddWithValue("question_id", question_id);
+                    cmd.Parameters.AddWithValue("message", content);
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = new NpgsqlCommand("SELECT * FROM answer", conn)) 
+                {
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        id = int.Parse(reader["id"].ToString());
+                    }
+                }
+            }
+            GetQuestionById(question_id).AddAnswer(new AnswerModel(id, question_id, content, milisec));
+        }
+
         public void NewQuestion(string title, string content)
         {
 

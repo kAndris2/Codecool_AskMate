@@ -16,12 +16,12 @@ namespace AskMate.Models
         public long Date { get; }
         public List<CommentModel> Comments { get; } = new List<CommentModel>();
 
-        public AnswerModel(int id, int qid, string content, long data)
+        public AnswerModel(int id, int qid, string content, long date)
         {
             Id = id;
             Question_Id = qid;
             Content = content;
-            Date = data;
+            Date = date;
         }
 
         public AnswerModel(int id, string content, long date, int vote, int qid, string link)
