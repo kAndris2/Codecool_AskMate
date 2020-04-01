@@ -22,7 +22,7 @@
         <tr>
             @using (Html.BeginForm("Sorting", "Home", FormMethod.Post))
             {
-                <th class="th-sm">
+                <th class="th-sm text-center">
                     <button class="btn btn-outline-warning" type="submit" name="order" value="id">#ID</button>
                 </th>
                 <th class="th-sm text-center">
@@ -46,7 +46,7 @@
     @foreach (QuestionModel question in Model.GetEntries())
     {
         <tr>
-            <td class="">
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => question.Id)
             </td>
 
