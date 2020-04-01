@@ -44,6 +44,17 @@ namespace AskMate.Controllers
         }
 
         [HttpPost]
+        public IActionResult ShowEntries([FromForm(Name = "entry")] string entry)
+        {
+            if (!int.TryParse(entry, out int x))
+                Idao.Entry = -1;
+            else
+                Idao.Entry = int.Parse(entry);
+
+            return View("Index", Idao);
+        }
+
+        [HttpPost]
         public ActionResult Index(EditQuestionModel editedQuestion)
         {
             int Id = editedQuestion.Id;

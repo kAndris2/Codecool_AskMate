@@ -12,6 +12,7 @@ namespace AskMate
     {
         static IDAO_Impl instance = null;
         List<QuestionModel> Questions = new List<QuestionModel>();
+        public int Entry { get; set; } = 5;
 
         public static IDAO_Impl Instance
         {
@@ -78,16 +79,17 @@ namespace AskMate
             return instance;
         }
 
-        public List<QuestionModel> GetLatestFiveQuestion()
+        public List<QuestionModel> GetEntries()
         {
+            if (Entry == -1)
+                return Questions;
+
             List<QuestionModel> questions = new List<QuestionModel>();
-            int count = 0;
 
             for (int i = Questions.Count - 1; i >= 0; i--)
             {
                 questions.Add(Questions[i]);
-                count++;
-                if (count == 5)
+                if (questions.Count == Entry)
                     break;
             }
             return questions;

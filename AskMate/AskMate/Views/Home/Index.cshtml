@@ -4,7 +4,19 @@
 
 @model IDAO_Impl
 
-<table class="table table-hover table-dark" id="mainTable">
+@using (Html.BeginForm("ShowEntries", "Home", FormMethod.Post))
+{
+  <input list="entries" name="entry" placeholder="Show entries">
+  <datalist id="entries">
+    <option value="5"/>
+    <option value="10"/>
+    <option value="20"/>
+    <option value="Show all!"/>
+  </datalist>
+  <input type="submit" value="Show!">
+}
+
+<table class="table table-hover table-dark">
     <thead>
         <tr>
             <th class="th-sm">
@@ -21,7 +33,7 @@
             </th>
         </tr>
     </thead>
-    @foreach (QuestionModel question in Model.GetLatestFiveQuestion())
+    @foreach (QuestionModel question in Model.GetEntries())
     {
         <tr>
             <td class="">
