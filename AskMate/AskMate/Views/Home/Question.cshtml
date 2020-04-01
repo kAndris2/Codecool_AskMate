@@ -115,8 +115,9 @@
                                 <p>Add a comment</p>
                                 <textarea class="form-control-plaintext bg-light text-black-50" style="border-radius: 1rem;" name="comment" required></textarea>
                                 <input name="id" type="hidden" value="@answer.GetUnique()" />
+                                <input name="type" type="hidden" value="answer" />
                                 <div class="pt-2 float-right">
-                                    <button class="btn btn-success"type="submit">Add Comment</button>
+                                    <button class="btn btn-success" type="submit">Add Comment</button>
                                 </div>
                             </div>
                         </form>

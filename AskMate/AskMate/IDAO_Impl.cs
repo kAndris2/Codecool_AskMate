@@ -104,6 +104,29 @@ namespace AskMate
             return questions;
         }
 
+        private void AddCommentTo(CommentModel comment)
+        {
+            foreach (QuestionModel question in Questions)
+            {
+                if (question.Id.Equals(comment.QuestionID))
+                {
+                    question.AddComment(comment);
+                    break;
+                }
+                else
+                {
+                    foreach (AnswerModel answer in question.Answers)
+                    {
+                        if (answer.Id.Equals(comment.AnswerID))
+                        {
+                            answer.AddComment(comment);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         //-SQL_METHODS---------------------------------------------------------------------------------------------------
 
         public void SortQuestion(string order)
@@ -170,6 +193,37 @@ namespace AskMate
                     throw new Exception("No id ");
                 }
             }
+        }
+
+        public void NewComment(int qid, int aid, string content)
+        {
+            long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            int id = 0;
+            string sqlstr = "INSERT INTO comment " +
+                                "(question_id,answer_id,message,submission_time) " +
+                            "VALUES " +
+                                "(@question_id,@answer_id,@message,@time)";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("question_id", qid);
+                    cmd.Parameters.AddWithValue("answer_id", aid);
+                    cmd.Parameters.AddWithValue("message", content);
+                    cmd.Parameters.AddWithValue("time", milisec);
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = new NpgsqlCommand("SELECT * FROM comment", conn))
+                {
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        id = int.Parse(reader["id"].ToString());
+                    }
+                }
+            }
+            AddCommentTo(new CommentModel(id,qid,aid,content,milisec));
         }
 
         public void NewAnswer(string content, int question_id)
@@ -420,14 +474,7 @@ namespace AskMate
                             reader["image"].ToString()
                         );
 
-                        foreach (QuestionModel question in Questions)
-                        {
-                            if (question.Id.Equals(answer.Question_Id))
-                            { 
-                                question.AddAnswer(answer);
-                                break;
-                            }
-                        }
+                        GetQuestionById(answer.Question_Id).AddAnswer(answer);
                     }
                 }
             }
@@ -450,26 +497,7 @@ namespace AskMate
                             Convert.ToInt64(reader["submission_time"].ToString()),
                             int.Parse(reader["edited_number"].ToString())
                         );
-
-                        foreach (QuestionModel question in Questions)
-                        {
-                            if (question.Id.Equals(comment.QuestionID))
-                            {
-                                question.AddComment(comment);
-                                break;
-                            }
-                            else
-                            {
-                                foreach (AnswerModel answer in question.Answers)
-                                {
-                                    if (answer.Id.Equals(comment.AnswerID))
-                                    {
-                                        answer.AddComment(comment);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
+                        AddCommentTo(comment);
                     }
                 }
             }

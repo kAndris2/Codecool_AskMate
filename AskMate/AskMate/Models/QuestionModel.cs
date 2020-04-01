@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AskMate;
 
 namespace AskMate.Models
 {
@@ -39,29 +38,24 @@ namespace AskMate.Models
 
         public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
 
-        public void AddImage(string link) { ImgLink = link; Refr(); }
-        public void AddAnswer(AnswerModel answer) { Answers.Add(answer); Refr(); }
-        public void AddComment(CommentModel comment) { Comments.Add(comment); Refr(); }
-        public void VoteUp() { Vote++; Refr(); }
-        public void VoteDown() { Vote--; Refr(); }
-        public void IncreaseView() { Views++; Refr(); }
+        public void AddImage(string link) { ImgLink = link; }
+        public void AddAnswer(AnswerModel answer) { Answers.Add(answer); }
+        public void AddComment(CommentModel comment) { Comments.Add(comment); }
+        public void VoteUp() { Vote++; }
+        public void VoteDown() { Vote--; }
+        public void IncreaseView() { Views++; }
 
 
-        public void SetTitle(string title) { Title = title; Refr(); }
-        public void SetContent(string content) { Content = content; Refr(); }
-        public void SetImgLink(string link) { ImgLink = link; Refr(); }
-        public void DeleteAnswer(AnswerModel answer) { Answers.Remove(answer); Refr(); }
-        public void DeleteComment(CommentModel comment) { Comments.Remove(comment); Refr(); }
+        public void SetTitle(string title) { Title = title; }
+        public void SetContent(string content) { Content = content; }
+        public void SetImgLink(string link) { ImgLink = link; }
+        public void DeleteAnswer(AnswerModel answer) { Answers.Remove(answer); }
+        public void DeleteComment(CommentModel comment) { Comments.Remove(comment); }
 
         public override string ToString()
         {
 
             return $"{Id};{Title};{Content};{Date};{ImgLink};{Vote};{Views};";
-        }
-
-        private void Refr()
-        {
-            IDAO_Impl.Instance.QuestionRefresh(this);
         }
     }
 }
