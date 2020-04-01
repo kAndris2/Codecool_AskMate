@@ -129,6 +129,19 @@ namespace AskMate
 
         //-SQL_METHODS---------------------------------------------------------------------------------------------------
 
+        public void DeleteAnswer(AnswerModel answer)
+        {
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                string sqlstr = "DELETE FROM answer " +
+                                $"WHERE id = {answer.Id};";
+                var cmd = new NpgsqlCommand(sqlstr, conn);
+                cmd.ExecuteNonQuery();
+            }
+            GetQuestionById(answer.Question_Id).DeleteAnswer(answer);
+        }
+
         public void SortQuestion(string order)
         {
             List<QuestionModel> questions = new List<QuestionModel>();
