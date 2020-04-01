@@ -400,6 +400,7 @@ namespace AskMate
                     }
                 }
             }
+
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
@@ -422,7 +423,7 @@ namespace AskMate
                         foreach (QuestionModel question in Questions)
                         {
                             if (question.Id.Equals(answer.Question_Id))
-                            {
+                            { 
                                 question.AddAnswer(answer);
                                 break;
                             }
@@ -430,6 +431,7 @@ namespace AskMate
                     }
                 }
             }
+
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
