@@ -24,7 +24,8 @@
     </li>
     <li class="list-group-item">
         <div class="float-left">
-            <span class="float-left badge badge-pill badge-info">@Model.tagNames[0] <button type="button" class="close btn-danger" aria-label="Delete"><span aria-hidden="true">&times;</span></button></span>
+            @foreach (string name in Model.tagNames)
+            {<span class="float-left badge badge-pill badge-info">@name<button type="button" class="close btn-danger" aria-label="Delete"><span aria-hidden="true">&times;</span></button></span>}
         </div>
     </li>
     <li class="list-group-item">

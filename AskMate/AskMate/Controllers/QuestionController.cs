@@ -25,7 +25,7 @@ namespace AskMate.Controllers
             string Content = newQuestion.Content;
             string ownTags = newQuestion.ownTags;
             List<string> tags;
-            tags = ownTags.Split(',').ToList();
+            tags = ownTags.Split(',').ToList(); 
             List<TagModel> newTags = new List<TagModel>();
             foreach (string tag in tags)
             {
