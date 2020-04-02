@@ -141,20 +141,10 @@ namespace AskMate.Controllers
         [HttpGet("/delete/{id}")]
         public IActionResult Delete(long id)
         {
-            QuestionModel instance = null;
-            foreach (QuestionModel question in Idao.GetQuestions())
-            {
-                foreach (AnswerModel answer in question.Answers)
-                {
-                    if (id.Equals(answer.GetUnique()))
-                    {
-                        question.DeleteAnswer(answer);
-                        instance = question;
-                        break;
-                    }
-                }
-            }
-            return View("Question", instance);
+            AnswerModel answer = Idao.GetAnswerByUnique(id);
+            QuestionModel question = Idao.GetQuestionById(answer.Question_Id);
+            Idao.DeleteAnswer(answer);
+            return View("Question", question);
         }
 
         [HttpGet("/edit/{id}")]
@@ -212,16 +202,23 @@ namespace AskMate.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddComment(long id, [FromForm(Name = "comment")] string comment)
+        public IActionResult AddComment(long id, [FromForm(Name = "comment")] string comment, [FromForm(Name = "type")] string type)
         {
-            AnswerModel answer = Idao.GetAnswerByUnique(id);
-            CommentModel cm = new CommentModel(answer.Comments.Count + 1, answer.Question_Id, answer.Id, comment, DateTimeOffset.Now.ToUnixTimeMilliseconds());
-            answer.Comments.Add(cm);
-
-            return View("Question", Idao.GetQuestionById(answer.Question_Id));
+            if (type == "answer")
+            {
+                Idao.NewComment(-1, Idao.GetAnswerByUnique(id).Id, comment);
+                return View("Question", Idao.GetQuestionById(Idao.GetAnswerByUnique(id).Id));
+            }
+            else
+            {
+                int newid = Convert.ToInt32(id);
+                Idao.NewComment(newid, -1, comment);
+                return View("Question", Idao.GetQuestionById(newid));
+            }
         }
+
         [HttpGet("/edit_answer/{id}")]
-        public IActionResult Edit_Answer(long id)
+        public IActionResult Edit_Answer(long id) 
         {
             return View("Answer_Edit", Idao.GetAnswerByUnique(id));
         }

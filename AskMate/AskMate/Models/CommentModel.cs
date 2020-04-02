@@ -33,13 +33,8 @@ namespace AskMate.Models
             Edited = edited;
         }
 
-        public void IncreaseEditNumber() { Edited++; Refr(); }
-        public void EditMessage(string message) { Message = message; Refr(); }
+        public void IncreaseEditNumber() { Edited++; }
+        public void EditMessage(string message) { Message = message; }
         public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
-
-        private void Refr()
-        {
-            IDAO_Impl.Instance.CommentRefresh(this);
-        }
     }
 }

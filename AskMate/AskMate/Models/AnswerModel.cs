@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AskMate;
 
 namespace AskMate.Models
 {
@@ -35,11 +34,11 @@ namespace AskMate.Models
         }
 
         public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
-        public void AddImage(string link) { ImgLink = link; Refr(); }
-        public void VoteUp() { Vote++; Refr(); }
-        public void VoteDown() { Vote--; Refr(); }
-        public void AddComment(CommentModel comment) { Comments.Add(comment); Refr(); }
-        public void DeleteComment(CommentModel comment) { Comments.Remove(comment); Refr(); }
+        public void AddImage(string link) { ImgLink = link; }
+        public void VoteUp() { Vote++; }
+        public void VoteDown() { Vote--; }
+        public void AddComment(CommentModel comment) { Comments.Add(comment); }
+        public void DeleteComment(CommentModel comment) { Comments.Remove(comment); }
         public List<CommentModel> GetComments() { return Comments; }
         public void SetContent(string content) { Content = content; }
         public void SetImgLink(string imglink) { ImgLink = imglink; }
@@ -47,11 +46,6 @@ namespace AskMate.Models
         public long GetUnique()
         {
             return Convert.ToInt64($"{Id}{Date}");
-        }
-
-        private void Refr()
-        {
-            IDAO_Impl.Instance.AnswerRefresh(this);
         }
 
         public override string ToString()
