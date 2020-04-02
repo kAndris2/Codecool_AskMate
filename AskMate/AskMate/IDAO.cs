@@ -10,7 +10,6 @@ namespace AskMate
     {
         List<QuestionModel> GetQuestions();
         QuestionModel GetQuestionById(int id);
-        AnswerModel GetAnswerByUnique(long id);
         List<AnswerModel> GetAnswers(int questionId);
 
         void EditLine(int id, string title, string Content);

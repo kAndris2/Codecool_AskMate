@@ -53,7 +53,6 @@ namespace AskMate.Models
 
         public void SetTitle(string title) { Title = title; }
         public void SetContent(string content) { Content = content; }
-        public void SetImgLink(string link) { ImgLink = link; }
         public void DeleteAnswer(AnswerModel answer) { Answers.Remove(answer); }
         public void DeleteComment(CommentModel comment) { Comments.Remove(comment); }
 

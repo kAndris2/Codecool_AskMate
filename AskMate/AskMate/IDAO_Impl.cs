@@ -65,29 +65,6 @@ namespace AskMate
             throw new ArgumentException($"Invalid Question ID! ('{id}')");
         }
 
-        /// <summary>
-        /// Get answer by it's unique code.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public AnswerModel GetAnswerByUnique(long id)
-        {
-            AnswerModel instance = null;
-
-            foreach (QuestionModel question in Questions)
-            {
-                foreach (AnswerModel answer in question.Answers)
-                {
-                    if (id.Equals(answer.GetUnique()))
-                    {
-                        instance = answer;
-                        break;
-                    }
-                }
-            }
-            return instance;
-        }
-
         public AnswerModel GetAnswerById(int id)
         {
             AnswerModel instance = null;
@@ -230,6 +207,28 @@ namespace AskMate
             }
             Questions.Clear();
             Questions = questions;
+        }
+
+        public void UpdateAnswer(int id, string content, string img)
+        {
+            AnswerModel answer = GetAnswerById(id);
+            answer.SetContent(content);
+            answer.SetImgLink(img);
+
+            string sqlstr = "UPDATE answer " +
+                            "SET message = @message, image = @image " +
+                            "WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("message", answer.Content);
+                    cmd.Parameters.AddWithValue("image", answer.ImgLink);
+                    cmd.Parameters.AddWithValue("id", answer.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         public void UpdateQuestionView(QuestionModel question)

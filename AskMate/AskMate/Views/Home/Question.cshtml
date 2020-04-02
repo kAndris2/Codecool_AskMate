@@ -73,16 +73,16 @@
                     <div class="card-header">
                         #@answer.Id
                         <span class="float-right">
-                            @Html.ActionLink("Edit", "edit_answer", new { id = answer.GetUnique() })
-                            @Html.ActionLink("Delete", "delete", new { id = answer.GetUnique() }, new { @class = "text-danger" })
+                            @Html.ActionLink("Edit", "edit_answer", new { id = answer.Id })
+                            @Html.ActionLink("Delete", "delete", new { id = answer.Id }, new { @class = "text-danger" })
                             <!----
                             <a asp-controller="Home" asp-action="DeleteAnswer" href="#" class="text-danger">Delete</a>
                             -->
-                            <button id="downVote" class="btn bg-transparent btn-vote text-danger" onclick="location.href='@Url.Action("A_DownVote", "Home", new {id = answer.GetUnique()})'" title="Downvote">
+                            <button id="downVote" class="btn bg-transparent btn-vote text-danger" onclick="location.href='@Url.Action("A_DownVote", "Home", new {id = answer.Id })'" title="Downvote">
                                 <span class="oi oi-chevron-bottom downvote"></span>
                             </button>
                             <span class="badge badge-primary badge-pill">@answer.Vote</span>
-                            <button id="upVote" class="btn bg-transparent btn-vote text-success" onclick="location.href='@Url.Action("A_UpVote", "Home", new {id = answer.GetUnique()})'" title="Upvote">
+                            <button id="upVote" class="btn bg-transparent btn-vote text-success" onclick="location.href='@Url.Action("A_UpVote", "Home", new {id = answer.Id })'" title="Upvote">
                                 <span class="oi oi-chevron-top upvote"></span>
                             </button>
                         </span>
@@ -114,7 +114,7 @@
                             <div class="justify-content-between pt-4">
                                 <p>Add a comment</p>
                                 <textarea class="form-control-plaintext bg-light text-black-50" style="border-radius: 1rem;" name="comment" required></textarea>
-                                <input name="id" type="hidden" value="@answer.GetUnique()" />
+                                <input name="id" type="hidden" value="@answer.Id" />
                                 <input name="type" type="hidden" value="answer" />
                                 <div class="pt-2 float-right">
                                     <button class="btn btn-success" type="submit">Add Comment</button>

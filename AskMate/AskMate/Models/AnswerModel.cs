@@ -57,11 +57,6 @@ namespace AskMate.Models
             return instance;
         }
 
-        public long GetUnique()
-        {
-            return Convert.ToInt64($"{Id}{Date}");
-        }
-
         public override string ToString()
         {
             return $"{Id}," +
