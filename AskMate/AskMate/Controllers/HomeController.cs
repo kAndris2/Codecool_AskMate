@@ -126,6 +126,9 @@ namespace AskMate.Controllers
                 }
 
             }
+            else if (type == "answer")
+                Idao.NewAnswer(answer, id);
+
             return View("Question", Idao.GetQuestionById(id));
         }
 
