@@ -47,7 +47,6 @@ namespace AskMate.Models
         public void AddComment(CommentModel comment) { Comments.Add(comment); }
         public void VoteUp() { Vote++; }
         public void VoteDown() { Vote--; }
-        public void IncreaseView() { Views++; }
         public void AddNewTag(QuestionTagModel newtag) { ownTags.Add(newtag); } //set tag to question
         public void GetTag()
         {
@@ -73,16 +72,34 @@ namespace AskMate.Models
             }
         }//get the name of the tag(s)
 
+        public void IncreaseView() 
+        { 
+            Views++;
+            IDAO_Impl.Instance.UpdateQuestionView(this);
+        }
+
 
         public void SetTitle(string title) { Title = title; }
         public void SetContent(string content) { Content = content; }
-        public void SetImgLink(string link) { ImgLink = link; }
         public void DeleteAnswer(AnswerModel answer) { Answers.Remove(answer); }
         public void DeleteComment(CommentModel comment) { Comments.Remove(comment); }
 
+        public CommentModel GetCommentById(int id)
+        {
+            CommentModel instance = null;
+            foreach (CommentModel comment in Comments)
+            {
+                if (id.Equals(comment.ID))
+                {
+                    instance = comment;
+                    break;
+                }
+            }
+            return instance;
+        }
+
         public override string ToString()
         {
-
             return $"{Id};{Title};{Content};{Date};{ImgLink};{Vote};{Views};";
         }
     }

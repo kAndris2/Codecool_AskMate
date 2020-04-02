@@ -43,9 +43,18 @@ namespace AskMate.Models
         public void SetContent(string content) { Content = content; }
         public void SetImgLink(string imglink) { ImgLink = imglink; }
 
-        public long GetUnique()
+        public CommentModel GetCommentById(int id)
         {
-            return Convert.ToInt64($"{Id}{Date}");
+            CommentModel instance = null;
+            foreach (CommentModel comment in Comments)
+            {
+                if (id.Equals(comment.ID))
+                {
+                    instance = comment;
+                    break;
+                }
+            }
+            return instance;
         }
 
         public override string ToString()

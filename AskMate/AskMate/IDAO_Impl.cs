@@ -67,20 +67,14 @@ namespace AskMate
             throw new ArgumentException($"Invalid Question ID! ('{id}')");
         }
 
-        /// <summary>
-        /// Get answer by it's unique code.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public AnswerModel GetAnswerByUnique(long id)
+        public AnswerModel GetAnswerById(int id)
         {
             AnswerModel instance = null;
-
             foreach (QuestionModel question in Questions)
             {
                 foreach (AnswerModel answer in question.Answers)
                 {
-                    if (id.Equals(answer.GetUnique()))
+                    if (id.Equals(answer.Id))
                     {
                         instance = answer;
                         break;
@@ -104,6 +98,30 @@ namespace AskMate
                     break;
             }
             return questions;
+        }
+
+        private void RemoveCommentFrom(int id)
+        {
+            CommentModel instance = null;
+            foreach (QuestionModel question in Questions)
+            {
+                if (question.GetCommentById(id) != null)
+                {
+                    instance = question.GetCommentById(id);
+                    question.DeleteComment(instance);
+                    break;
+                }
+
+                foreach (AnswerModel answer in question.Answers)
+                {
+                    if (answer.GetCommentById(id) != null)
+                    {
+                        instance = answer.GetCommentById(id);
+                        answer.DeleteComment(instance);
+                        break;
+                    }
+                }
+            }
         }
 
         private void AddCommentTo(CommentModel comment)
@@ -131,7 +149,6 @@ namespace AskMate
 
         //-SQL_METHODS---------------------------------------------------------------------------------------------------
 
-
         public TagModel CreateTag(string tag)
         {
             string sqlstr = "INSERT INTO tag (name) VALUES (@tag)";
@@ -158,17 +175,31 @@ namespace AskMate
             return nTag;
         }
 
-        public void DeleteAnswer(AnswerModel answer)
+        
+        public void Delete(int id, string table)
         {
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
-                string sqlstr = "DELETE FROM answer " +
-                                $"WHERE id = {answer.Id};";
+                string sqlstr = $"DELETE FROM {table} " +
+                                $"WHERE id = {id};";
                 var cmd = new NpgsqlCommand(sqlstr, conn);
                 cmd.ExecuteNonQuery();
             }
-            GetQuestionById(answer.Question_Id).DeleteAnswer(answer);
+
+            if (table == "answer")
+            {
+                AnswerModel answer = GetAnswerById(id);
+                GetQuestionById(answer.Question_Id).DeleteAnswer(answer);
+            }
+            else if (table == "question")
+            {
+                Questions.Remove(GetQuestionById(id));
+            }
+            else if (table == "comment")
+            {
+                RemoveCommentFrom(id);
+            }
         }
 
         public void SortQuestion(string order)
@@ -205,6 +236,62 @@ namespace AskMate
             }
             Questions.Clear();
             Questions = questions;
+        }
+
+        public void UpdateAnswer(int id, string content, string img)
+        {
+            AnswerModel answer = GetAnswerById(id);
+            answer.SetContent(content);
+            answer.SetImgLink(img);
+
+            string sqlstr = "UPDATE answer " +
+                            "SET message = @message, image = @image " +
+                            "WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("message", answer.Content);
+                    cmd.Parameters.AddWithValue("image", answer.ImgLink);
+                    cmd.Parameters.AddWithValue("id", answer.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void UpdateQuestionView(QuestionModel question)
+        {
+            string sqlstr = "UPDATE question " +
+                            "SET view_number = @view " +
+                            "WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("view", question.Views);
+                    cmd.Parameters.AddWithValue("id", question.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void UpdateVoteNumber(int id, int number, string table)
+        {
+            string sqlstr = $"UPDATE {table} " +
+                            "SET vote_number = @vote " +
+                            "WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("vote", number);
+                    cmd.Parameters.AddWithValue("id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         public void EditLine(int id, string title, string content)
@@ -268,7 +355,7 @@ namespace AskMate
             AddCommentTo(new CommentModel(id,qid,aid,content,milisec));
         }
 
-        public void NewAnswer(string content, int question_id)
+        public AnswerModel NewAnswer(string content, int question_id)
         {
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             int id = 0;
@@ -295,7 +382,9 @@ namespace AskMate
                     }
                 }
             }
-            GetQuestionById(question_id).AddAnswer(new AnswerModel(id, question_id, content, milisec));
+            AnswerModel answer = new AnswerModel(id, question_id, content, milisec);
+            GetQuestionById(question_id).AddAnswer(answer);
+            return answer;
         }
 
         public void NewQuestion(string title, string content, List<TagModel> newTags)
@@ -442,9 +531,11 @@ namespace AskMate
 
         }
 
-        public void AddLinkToQuestion(string filePath, int id)
+        public void AddLinkToTable(string filePath, string table, int id)
         {
-            string sqlstr = "UPDATE question SET image = @image WHERE id = @id";
+            string sqlstr = $"UPDATE {table}" +
+                            " SET image = @image " +
+                            "WHERE id = @id";
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
@@ -456,27 +547,29 @@ namespace AskMate
                 }
             }
 
-            foreach (QuestionModel q in Questions)
+            if (table == "question")
             {
-                if (id.Equals(q.Id))
+                foreach (QuestionModel question in Questions)
                 {
-                    q.AddImage(filePath);
-                    QuestionRefresh(q);
-                    break;
+                    if (id.Equals(question.Id))
+                    {
+                        question.AddImage(filePath);
+                        break;
+                    }
                 }
             }
-        }
-
-        public void AddLinkToAnswer(string filePath, int id)
-        {
-
-            foreach (AnswerModel ans in GetAnswers(id))
+            else if (table == "answer")
             {
-                if (ans.Id == id)
+                foreach (QuestionModel question in Questions)
                 {
-                    ans.AddImage(filePath);
-                    AnswerRefresh(ans);
-                    break;
+                    foreach (AnswerModel answer in question.Answers)
+                    {
+                        if (id.Equals(answer.Id))
+                        {
+                            answer.AddImage(filePath);
+                            break;
+                        }
+                    }
                 }
             }
         }

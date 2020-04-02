@@ -10,7 +10,6 @@ namespace AskMate
     {
         List<QuestionModel> GetQuestions();
         QuestionModel GetQuestionById(int id);
-        AnswerModel GetAnswerByUnique(long id);
         List<AnswerModel> GetAnswers(int questionId);
 
         void EditLine(int id, string title, string Content);
@@ -19,8 +18,7 @@ namespace AskMate
         void AnswerRefresh(AnswerModel answer);
         void CommentRefresh(CommentModel comment);
         void DeleteQuestion(int id);
-        void AddLinkToQuestion(string filePath, int id);
-        void AddLinkToAnswer(string filePath, int id);
+        void AddLinkToTable(string filePath, string table, int id);
         void LoadFiles();
     }
 }

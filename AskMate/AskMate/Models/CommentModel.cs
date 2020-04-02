@@ -36,5 +36,10 @@ namespace AskMate.Models
         public void IncreaseEditNumber() { Edited++; }
         public void EditMessage(string message) { Message = message; }
         public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
+
+        public long GetUnique()
+        {
+            return Convert.ToInt64($"{ID}{Date}");
+        }
     }
 }

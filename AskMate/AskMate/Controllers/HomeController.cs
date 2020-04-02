@@ -118,32 +118,26 @@ namespace AskMate.Controllers
                 ViewData["FileLocation"] = filePath;
 
                 if (type == "question")
+                    Idao.AddLinkToTable(filePath, type, id);
+                else if (type == "answer")
                 {
-                    Idao.AddLinkToQuestion(filePath, id);
-                }
-                else if (type == "ans")
-                {
-                    Idao.AddLinkToAnswer(filePath, id);
-                }
-                else
-                {
-                    //na az szopó
+                    AnswerModel ans = Idao.NewAnswer(answer, id);
+                    Idao.AddLinkToTable(filePath, type, ans.Id);
                 }
 
             }
-            if (type == "ans")
-            {
+            else if (type == "answer")
                 Idao.NewAnswer(answer, id);
-            }
+
             return View("Question", Idao.GetQuestionById(id));
         }
 
         [HttpGet("/delete/{id}")]
-        public IActionResult Delete(long id)
+        public IActionResult Delete(int id)
         {
-            AnswerModel answer = Idao.GetAnswerByUnique(id);
+            AnswerModel answer = Idao.GetAnswerById(id);
             QuestionModel question = Idao.GetQuestionById(answer.Question_Id);
-            Idao.DeleteAnswer(answer);
+            Idao.Delete(answer.Id, "answer");
             return View("Question", question);
         }
 
@@ -175,6 +169,7 @@ namespace AskMate.Controllers
         {
             QuestionModel question = Idao.GetQuestionById(id);
             question.VoteUp();
+            Idao.UpdateVoteNumber(question.Id, question.Vote, "question");
             return View("Question", question);
         }
 
@@ -182,59 +177,55 @@ namespace AskMate.Controllers
         {
             QuestionModel question = Idao.GetQuestionById(id);
             question.VoteDown();
+            Idao.UpdateVoteNumber(question.Id, question.Vote, "question");
             return View("Question", question);
         }
 
         //-ANSWER--------------------------------------------------------------------------------------------------------
 
-        public IActionResult A_UpVote([FromRoute(Name = "id")]long id)
+        public IActionResult A_UpVote([FromRoute(Name = "id")]int id)
         {
-            AnswerModel answer = Idao.GetAnswerByUnique(id);
+            AnswerModel answer = Idao.GetAnswerById(id);
             answer.VoteUp();
+            Idao.UpdateVoteNumber(answer.Id, answer.Vote, "answer");
             return View("Question", Idao.GetQuestionById(answer.Question_Id));
         }
 
-        public IActionResult A_DownVote([FromRoute(Name = "id")]long id)
+        public IActionResult A_DownVote([FromRoute(Name = "id")]int id)
         {
-            AnswerModel answer = Idao.GetAnswerByUnique(id);
+            AnswerModel answer = Idao.GetAnswerById(id);
             answer.VoteDown();
+            Idao.UpdateVoteNumber(answer.Id, answer.Vote, "answer");
             return View("Question", Idao.GetQuestionById(answer.Question_Id));
         }
 
         [HttpPost]
-        public IActionResult AddComment(long id, [FromForm(Name = "comment")] string comment, [FromForm(Name = "type")] string type)
+        public IActionResult AddComment(int id, [FromForm(Name = "comment")] string comment, [FromForm(Name = "type")] string type)
         {
             if (type == "answer")
             {
-                Idao.NewComment(-1, Idao.GetAnswerByUnique(id).Id, comment);
-                return View("Question", Idao.GetQuestionById(Idao.GetAnswerByUnique(id).Id));
+                Idao.NewComment(-1, id, comment);
+                return View("Question", Idao.GetQuestionById(Idao.GetAnswerById(id).Question_Id));
             }
             else
             {
-                int newid = Convert.ToInt32(id);
-                Idao.NewComment(newid, -1, comment);
-                return View("Question", Idao.GetQuestionById(newid));
+                Idao.NewComment(id, -1, comment);
+                return View("Question", Idao.GetQuestionById(id));
             }
         }
 
         [HttpGet("/edit_answer/{id}")]
-        public IActionResult Edit_Answer(long id) 
+        public IActionResult Edit_Answer(int id) 
         {
-            return View("Answer_Edit", Idao.GetAnswerByUnique(id));
+            return View("Answer_Edit", Idao.GetAnswerById(id));
         }
 
         [HttpPost]
-        public IActionResult AnswerEdit([FromForm(Name = "content")] string content, [FromForm(Name = "img")] string img, [FromForm(Name = "id")] long id)
+        public IActionResult AnswerEdit([FromForm(Name = "content")] string content, [FromForm(Name = "img")] string img, [FromForm(Name = "id")] int id)
         {
-            AnswerModel answer = Idao.GetAnswerByUnique(id);
-
-            if (!answer.Content.Equals(content))
-                answer.SetContent(content);
-
-            if (!answer.ImgLink.Equals(img))
-                answer.SetImgLink(img);
-
-            return View("Question", Idao.GetQuestionById(answer.Question_Id));
+            string link = img == null ? Idao.GetAnswerById(id).ImgLink : img;
+            Idao.UpdateAnswer(id, content, link);
+            return View("Question", Idao.GetQuestionById(Idao.GetAnswerById(id).Question_Id));
         }
     }
 }
