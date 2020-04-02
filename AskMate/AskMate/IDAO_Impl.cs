@@ -232,6 +232,23 @@ namespace AskMate
             Questions = questions;
         }
 
+        public void UpdateQuestionView(QuestionModel question)
+        {
+            string sqlstr = "UPDATE question " +
+                            "SET view_number = @view " +
+                            "WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("view", question.Views);
+                    cmd.Parameters.AddWithValue("id", question.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public void UpdateVoteNumber(int id, int number, string table)
         {
             string sqlstr = $"UPDATE {table} " +

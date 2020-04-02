@@ -43,7 +43,12 @@ namespace AskMate.Models
         public void AddComment(CommentModel comment) { Comments.Add(comment); }
         public void VoteUp() { Vote++; }
         public void VoteDown() { Vote--; }
-        public void IncreaseView() { Views++; }
+
+        public void IncreaseView() 
+        { 
+            Views++;
+            IDAO_Impl.Instance.UpdateQuestionView(this);
+        }
 
 
         public void SetTitle(string title) { Title = title; }
