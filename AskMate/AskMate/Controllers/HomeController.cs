@@ -169,6 +169,7 @@ namespace AskMate.Controllers
         {
             QuestionModel question = Idao.GetQuestionById(id);
             question.VoteUp();
+            Idao.UpdateVoteNumber(question.Id, question.Vote, "question");
             return View("Question", question);
         }
 
@@ -176,6 +177,7 @@ namespace AskMate.Controllers
         {
             QuestionModel question = Idao.GetQuestionById(id);
             question.VoteDown();
+            Idao.UpdateVoteNumber(question.Id, question.Vote, "question");
             return View("Question", question);
         }
 
@@ -185,6 +187,7 @@ namespace AskMate.Controllers
         {
             AnswerModel answer = Idao.GetAnswerByUnique(id);
             answer.VoteUp();
+            Idao.UpdateVoteNumber(answer.Id, answer.Vote, "answer");
             return View("Question", Idao.GetQuestionById(answer.Question_Id));
         }
 
@@ -192,6 +195,7 @@ namespace AskMate.Controllers
         {
             AnswerModel answer = Idao.GetAnswerByUnique(id);
             answer.VoteDown();
+            Idao.UpdateVoteNumber(answer.Id, answer.Vote, "answer");
             return View("Question", Idao.GetQuestionById(answer.Question_Id));
         }
 

@@ -232,6 +232,23 @@ namespace AskMate
             Questions = questions;
         }
 
+        public void UpdateVoteNumber(int id, int number, string table)
+        {
+            string sqlstr = $"UPDATE {table} " +
+                            "SET vote_number = @vote " +
+                            "WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("vote", number);
+                    cmd.Parameters.AddWithValue("id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public void EditLine(int id, string title, string content)
         {
             string sqlstr = "UPDATE question SET title = @title, message = @message WHERE id = @id";
