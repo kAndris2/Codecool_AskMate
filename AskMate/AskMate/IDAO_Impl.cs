@@ -698,12 +698,24 @@ namespace AskMate
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
+                        int? aid, qid;
+
+                        if (!int.TryParse(reader["question_id"].ToString(), out int x))
+                            qid = null;
+                        else
+                            qid = int.Parse(reader["question_id"].ToString());
+
+                        if (!int.TryParse(reader["answer_id"].ToString(), out int y))
+                            aid = null;
+                        else
+                            aid = int.Parse(reader["answer_id"].ToString());
+
                         CommentModel comment = new CommentModel
                         (
                             int.Parse(reader["id"].ToString()),
-                            int.Parse(reader["question_id"].ToString()),
-                            int.Parse(reader["answer_id"].ToString()),
-                            reader["messafe"].ToString(),
+                            qid,
+                            aid,
+                            reader["message"].ToString(),
                             Convert.ToInt64(reader["submission_time"].ToString()),
                             int.Parse(reader["edited_number"].ToString())
                         );
