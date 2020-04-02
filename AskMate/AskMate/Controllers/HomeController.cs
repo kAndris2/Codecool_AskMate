@@ -204,12 +204,12 @@ namespace AskMate.Controllers
         {
             if (type == "answer")
             {
-                Idao.NewComment(-1, id, comment);
+                Idao.NewComment(null, id, comment);
                 return View("Question", Idao.GetQuestionById(Idao.GetAnswerById(id).Question_Id));
             }
             else
             {
-                Idao.NewComment(id, -1, comment);
+                Idao.NewComment(id, null, comment);
                 return View("Question", Idao.GetQuestionById(id));
             }
         }

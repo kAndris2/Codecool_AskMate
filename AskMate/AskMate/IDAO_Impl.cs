@@ -324,7 +324,7 @@ namespace AskMate
             }
         }
 
-        public void NewComment(int qid, int aid, string content)
+        public void NewComment(int? qid, int? aid, string content)
         {
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             int id = 0;
@@ -337,8 +337,16 @@ namespace AskMate
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(sqlstr, conn))
                 {
-                    cmd.Parameters.AddWithValue("question_id", qid);
-                    cmd.Parameters.AddWithValue("answer_id", aid);
+                    if (qid is null)
+                        cmd.Parameters.AddWithValue("question_id", DBNull.Value);
+                    else
+                        cmd.Parameters.AddWithValue("question_id", qid);
+
+                    if (aid is null)
+                        cmd.Parameters.AddWithValue("answer_id", DBNull.Value);
+                    else
+                        cmd.Parameters.AddWithValue("answer_id", aid);
+
                     cmd.Parameters.AddWithValue("message", content);
                     cmd.Parameters.AddWithValue("time", milisec);
                     cmd.ExecuteNonQuery();

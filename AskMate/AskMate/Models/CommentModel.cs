@@ -8,13 +8,13 @@ namespace AskMate.Models
     public class CommentModel
     {
         public int ID { get; set; }
-        public int QuestionID { get; set; }
-        public int AnswerID { get; set; }
+        public int? QuestionID { get; set; }
+        public int? AnswerID { get; set; }
         public String Message { get; set; }
         public long Date { get; set; }
         public int Edited { get; set; }
 
-        public CommentModel(int id, int qid, int aid, string message, long date)
+        public CommentModel(int id, int? qid, int? aid, string message, long date)
         {
             ID = id;
             QuestionID = qid;
@@ -23,7 +23,7 @@ namespace AskMate.Models
             Date = date;
         }
 
-        public CommentModel(int id, int qid, int aid, string message, long date, int edited)
+        public CommentModel(int id, int? qid, int? aid, string message, long date, int edited)
         {
             ID = id;
             QuestionID = qid;
