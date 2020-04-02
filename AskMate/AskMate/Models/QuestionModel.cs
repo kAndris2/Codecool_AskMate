@@ -52,9 +52,22 @@ namespace AskMate.Models
         public void DeleteAnswer(AnswerModel answer) { Answers.Remove(answer); }
         public void DeleteComment(CommentModel comment) { Comments.Remove(comment); }
 
+        public CommentModel GetCommentById(int id)
+        {
+            CommentModel instance = null;
+            foreach (CommentModel comment in Comments)
+            {
+                if (id.Equals(comment.ID))
+                {
+                    instance = comment;
+                    break;
+                }
+            }
+            return instance;
+        }
+
         public override string ToString()
         {
-
             return $"{Id};{Title};{Content};{Date};{ImgLink};{Vote};{Views};";
         }
     }

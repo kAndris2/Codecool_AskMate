@@ -143,7 +143,7 @@ namespace AskMate.Controllers
         {
             AnswerModel answer = Idao.GetAnswerByUnique(id);
             QuestionModel question = Idao.GetQuestionById(answer.Question_Id);
-            Idao.DeleteAnswer(answer);
+            Idao.Delete(answer.Id, "answer");
             return View("Question", question);
         }
 

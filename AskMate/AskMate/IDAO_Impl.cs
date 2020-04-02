@@ -88,6 +88,23 @@ namespace AskMate
             return instance;
         }
 
+        public AnswerModel GetAnswerById(int id)
+        {
+            AnswerModel instance = null;
+            foreach (QuestionModel question in Questions)
+            {
+                foreach (AnswerModel answer in question.Answers)
+                {
+                    if (id.Equals(answer.Id))
+                    {
+                        instance = answer;
+                        break;
+                    }
+                }
+            }
+            return instance;
+        }
+
         public List<QuestionModel> GetEntries()
         {
             if (Entry == -1)
@@ -102,6 +119,30 @@ namespace AskMate
                     break;
             }
             return questions;
+        }
+
+        private void RemoveCommentFrom(int id)
+        {
+            CommentModel instance = null;
+            foreach (QuestionModel question in Questions)
+            {
+                if (question.GetCommentById(id) != null)
+                {
+                    instance = question.GetCommentById(id);
+                    question.DeleteComment(instance);
+                    break;
+                }
+
+                foreach (AnswerModel answer in question.Answers)
+                {
+                    if (answer.GetCommentById(id) != null)
+                    {
+                        instance = answer.GetCommentById(id);
+                        answer.DeleteComment(instance);
+                        break;
+                    }
+                }
+            }
         }
 
         private void AddCommentTo(CommentModel comment)
@@ -129,17 +170,30 @@ namespace AskMate
 
         //-SQL_METHODS---------------------------------------------------------------------------------------------------
 
-        public void DeleteAnswer(AnswerModel answer)
+        public void Delete(int id, string table)
         {
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
-                string sqlstr = "DELETE FROM answer " +
-                                $"WHERE id = {answer.Id};";
+                string sqlstr = $"DELETE FROM {table} " +
+                                $"WHERE id = {id};";
                 var cmd = new NpgsqlCommand(sqlstr, conn);
                 cmd.ExecuteNonQuery();
             }
-            GetQuestionById(answer.Question_Id).DeleteAnswer(answer);
+
+            if (table == "answer")
+            {
+                AnswerModel answer = GetAnswerById(id);
+                GetQuestionById(answer.Question_Id).DeleteAnswer(answer);
+            }
+            else if (table == "question")
+            {
+                Questions.Remove(GetQuestionById(id));
+            }
+            else if (table == "comment")
+            {
+                RemoveCommentFrom(id);
+            }
         }
 
         public void SortQuestion(string order)

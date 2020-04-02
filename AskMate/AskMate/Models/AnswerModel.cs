@@ -43,6 +43,20 @@ namespace AskMate.Models
         public void SetContent(string content) { Content = content; }
         public void SetImgLink(string imglink) { ImgLink = imglink; }
 
+        public CommentModel GetCommentById(int id)
+        {
+            CommentModel instance = null;
+            foreach (CommentModel comment in Comments)
+            {
+                if (id.Equals(comment.ID))
+                {
+                    instance = comment;
+                    break;
+                }
+            }
+            return instance;
+        }
+
         public long GetUnique()
         {
             return Convert.ToInt64($"{Id}{Date}");
