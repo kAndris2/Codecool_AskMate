@@ -118,22 +118,13 @@ namespace AskMate.Controllers
                 ViewData["FileLocation"] = filePath;
 
                 if (type == "question")
+                    Idao.AddLinkToTable(filePath, type, id);
+                else if (type == "answer")
                 {
-                    Idao.AddLinkToQuestion(filePath, id);
-                }
-                else if (type == "ans")
-                {
-                    Idao.AddLinkToAnswer(filePath, id);
-                }
-                else
-                {
-                    //na az szopó
+                    AnswerModel ans = Idao.NewAnswer(answer, id);
+                    Idao.AddLinkToTable(filePath, type, ans.Id);
                 }
 
-            }
-            if (type == "ans")
-            {
-                Idao.NewAnswer(answer, id);
             }
             return View("Question", Idao.GetQuestionById(id));
         }

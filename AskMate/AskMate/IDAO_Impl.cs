@@ -293,7 +293,7 @@ namespace AskMate
             AddCommentTo(new CommentModel(id,qid,aid,content,milisec));
         }
 
-        public void NewAnswer(string content, int question_id)
+        public AnswerModel NewAnswer(string content, int question_id)
         {
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             int id = 0;
@@ -320,7 +320,9 @@ namespace AskMate
                     }
                 }
             }
-            GetQuestionById(question_id).AddAnswer(new AnswerModel(id, question_id, content, milisec));
+            AnswerModel answer = new AnswerModel(id, question_id, content, milisec);
+            GetQuestionById(question_id).AddAnswer(answer);
+            return answer;
         }
 
         public void NewQuestion(string title, string content)
@@ -453,9 +455,11 @@ namespace AskMate
 
         }
 
-        public void AddLinkToQuestion(string filePath, int id)
+        public void AddLinkToTable(string filePath, string table, int id)
         {
-            string sqlstr = "UPDATE question SET image = @image WHERE id = @id";
+            string sqlstr = $"UPDATE {table}" +
+                            " SET image = @image " +
+                            "WHERE id = @id";
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
@@ -467,27 +471,29 @@ namespace AskMate
                 }
             }
 
-            foreach (QuestionModel q in Questions)
+            if (table == "question")
             {
-                if (id.Equals(q.Id))
+                foreach (QuestionModel question in Questions)
                 {
-                    q.AddImage(filePath);
-                    QuestionRefresh(q);
-                    break;
+                    if (id.Equals(question.Id))
+                    {
+                        question.AddImage(filePath);
+                        break;
+                    }
                 }
             }
-        }
-
-        public void AddLinkToAnswer(string filePath, int id)
-        {
-
-            foreach (AnswerModel ans in GetAnswers(id))
+            else if (table == "answer")
             {
-                if (ans.Id == id)
+                foreach (QuestionModel question in Questions)
                 {
-                    ans.AddImage(filePath);
-                    AnswerRefresh(ans);
-                    break;
+                    foreach (AnswerModel answer in question.Answers)
+                    {
+                        if (id.Equals(answer.Id))
+                        {
+                            answer.AddImage(filePath);
+                            break;
+                        }
+                    }
                 }
             }
         }
