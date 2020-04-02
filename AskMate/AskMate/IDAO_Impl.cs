@@ -15,6 +15,7 @@ namespace AskMate
         List<TagModel> Tags = new List<TagModel>();
         List<QuestionTagModel> QuestionTags = new List<QuestionTagModel>();
         public int Entry { get; set; } = 5;
+        public string SearchText { get; set; }
         private Dictionary<string, bool> Sort = new Dictionary<string, bool>
         {
             { "id", true },
@@ -86,18 +87,55 @@ namespace AskMate
 
         public List<QuestionModel> GetEntries()
         {
-            if (Entry == -1)
-                return Questions;
-
-            List<QuestionModel> questions = new List<QuestionModel>();
-
-            for (int i = Questions.Count - 1; i >= 0; i--)
+            List<QuestionModel> questions;
+            if (SearchText == null)
             {
-                questions.Add(Questions[i]);
-                if (questions.Count == Entry)
-                    break;
+                questions = Questions.ToList();
+                /* System.Console.WriteLine("added empty"); */
             }
-            return questions;
+            else
+            {
+                questions = new List<QuestionModel>();
+                /* System.Console.WriteLine("added cuz contains smthing");
+                System.Console.WriteLine("this:" + SearchText); */
+                foreach (var question in Questions)
+                {
+                    if (question.Title.Contains(SearchText))
+                    {
+                        questions.Add(question);
+                    }
+                    else if (question.Content.Contains(SearchText))
+                    {
+                        questions.Add(question);
+                    }
+                    else
+                    {
+                        foreach (var answer in question.Answers)
+                        {
+                            if (answer.Content.Contains(SearchText))
+                            {
+                                questions.Add(question);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (Entry == -1)
+            {
+                return questions;
+            }
+            else
+            {
+                List<QuestionModel> _questions = new List<QuestionModel>();
+                for (int i = questions.Count - 1; i >= 0; i--)
+                {
+                    _questions.Add(questions[i]);
+                    if (_questions.Count == Entry)
+                        break;
+                }
+                return _questions;
+            }
         }
 
         private void RemoveCommentFrom(int id)
@@ -175,7 +213,7 @@ namespace AskMate
             return nTag;
         }
 
-        
+
         public void Delete(int id, string table)
         {
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
@@ -237,6 +275,7 @@ namespace AskMate
             Questions.Clear();
             Questions = questions;
         }
+
 
         public void UpdateAnswer(int id, string content, string img)
         {
@@ -360,7 +399,7 @@ namespace AskMate
                     }
                 }
             }
-            AddCommentTo(new CommentModel(id,qid,aid,content,milisec));
+            AddCommentTo(new CommentModel(id, qid, aid, content, milisec));
         }
 
         public AnswerModel NewAnswer(string content, int question_id)
@@ -381,7 +420,7 @@ namespace AskMate
                     cmd.Parameters.AddWithValue("message", content);
                     cmd.ExecuteNonQuery();
                 }
-                using (var cmd = new NpgsqlCommand("SELECT * FROM answer", conn)) 
+                using (var cmd = new NpgsqlCommand("SELECT * FROM answer", conn))
                 {
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
@@ -423,10 +462,10 @@ namespace AskMate
                 }
             }
             QuestionModel question = new QuestionModel(id, title, content, milisec);
-           
+
             for (int i = 0; i < newTags.Count; i++)
             {
-                QuestionTagModel qTag = new QuestionTagModel(0,0);
+                QuestionTagModel qTag = new QuestionTagModel(0, 0);
                 qTag.NewTagToQuestionTag(newTags[i], question);
                 question.AddNewTag(qTag);
             }
@@ -587,7 +626,7 @@ namespace AskMate
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
-                using ( var cmd = new NpgsqlCommand(sqlstr,conn))
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
                 {
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
@@ -596,12 +635,12 @@ namespace AskMate
                     }
                 }
             }
-       
+
         }
         public void GetQuestionTags()
         {
             string sqlstr = "select * from question_tag";
-           
+
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
@@ -610,7 +649,7 @@ namespace AskMate
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        QuestionTags.Add(new QuestionTagModel(int.Parse(reader["question_id"].ToString()),int.Parse(reader["tag_id"].ToString())));
+                        QuestionTags.Add(new QuestionTagModel(int.Parse(reader["question_id"].ToString()), int.Parse(reader["tag_id"].ToString())));
                     }
                 }
             }
@@ -624,10 +663,10 @@ namespace AskMate
             {
                 foreach (QuestionTagModel qtag in QuestionTags)
                 {
-                    if(qtag.QuestionID == question.Id)
+                    if (qtag.QuestionID == question.Id)
                     {
                         question.AddNewTag(qtag);
-                        
+
                     }
                 }
                 question.GetTag();
@@ -664,7 +703,7 @@ namespace AskMate
                 }
             }
             SetTagsToQuestion();
-            
+
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();

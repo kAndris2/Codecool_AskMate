@@ -57,7 +57,6 @@ namespace AskMate.Controllers
                 Idao.Entry = -1;
             else
                 Idao.Entry = int.Parse(entry);
-
             return View("Index", Idao);
         }
 
@@ -215,7 +214,7 @@ namespace AskMate.Controllers
         }
 
         [HttpGet("/edit_answer/{id}")]
-        public IActionResult Edit_Answer(int id) 
+        public IActionResult Edit_Answer(int id)
         {
             return View("Answer_Edit", Idao.GetAnswerById(id));
         }
@@ -226,6 +225,15 @@ namespace AskMate.Controllers
             string link = img == null ? Idao.GetAnswerById(id).ImgLink : img;
             Idao.UpdateAnswer(id, content, link);
             return View("Question", Idao.GetQuestionById(Idao.GetAnswerById(id).Question_Id));
+        }
+
+        //Search
+        [HttpPost]
+        public IActionResult Search([FromForm(Name = "search")] string search)
+        {
+            Idao.SearchText = search;
+            //Idao.SearchEntries();
+            return View("Index", Idao);
         }
     }
 }

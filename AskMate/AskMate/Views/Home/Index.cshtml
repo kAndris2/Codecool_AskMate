@@ -1,20 +1,32 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    bool searched = false;
 }
 
 @model IDAO_Impl
 
-@using (Html.BeginForm("ShowEntries", "Home", FormMethod.Post))
-{
-  <input list="entries" name="entry" placeholder="Show entries">
-  <datalist id="entries">
-    <option value="5"/>
-    <option value="10"/>
-    <option value="20"/>
-    <option value="Show all!"/>
-  </datalist>
-  <input type="submit" value="Show!">
-}
+<div class="container">
+    <div class="row justify-content-between">
+        @using (Html.BeginForm("ShowEntries", "Home", FormMethod.Post))
+        {
+            <input list="entries" name="entry" placeholder="Show entries">
+            <datalist id="entries">
+                <option value="5"/>
+                <option value="10"/>
+                <option value="20"/>
+                <option value="Show all!"/>
+            </datalist>
+            <input type="submit" value="Show!">
+        }
+        <div class="float-right">
+            @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+            {
+                <input type="text" name="search" placeholder="Search by title/description..." value="@Model.SearchText" size="25">
+                <input type="submit" value="Search!">
+            }
+        </div>
+    </div>
+</div>
 
 <br>
 <table class="table table-striped">
@@ -46,6 +58,7 @@
             }
         </tr>
     </thead>
+
     @foreach (QuestionModel question in Model.GetEntries())
     {
         <tr>
