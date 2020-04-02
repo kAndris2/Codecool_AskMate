@@ -14,7 +14,7 @@ namespace AskMate
         List<AnswerModel> GetAnswers(int questionId);
 
         void EditLine(int id, string title, string Content);
-        void NewQuestion(string title, string content);
+        void NewQuestion(string title, string content, List<TagModel> newTags);
         void QuestionRefresh(QuestionModel question);
         void AnswerRefresh(AnswerModel answer);
         void CommentRefresh(CommentModel comment);

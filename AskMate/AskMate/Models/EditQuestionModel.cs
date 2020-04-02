@@ -10,5 +10,6 @@ namespace AskMate.Models
         public int Id { get; set; }
         public String Title { get; set; }
         public String Content { get; set; }
+        public string ownTags { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,10 @@ namespace AskMate.Models
         public long Date { get; }
         public List<AnswerModel> Answers { get; } = new List<AnswerModel>();
         public List<CommentModel> Comments { get; } = new List<CommentModel>();
+        public List<QuestionTagModel> ownTags { get; } = new List<QuestionTagModel>();
+        public List<TagModel> tags { get; set; } = new List<TagModel>();
 
+        public List<string> tagNames { get; private set; } = new List<string>();
         public QuestionModel(int id, string title, string content, long date)
         {
             Id = id;
@@ -44,6 +48,30 @@ namespace AskMate.Models
         public void VoteUp() { Vote++; }
         public void VoteDown() { Vote--; }
         public void IncreaseView() { Views++; }
+        public void AddNewTag(QuestionTagModel newtag) { ownTags.Add(newtag); } //set tag to question
+        public void GetTag()
+        {
+
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                //string sqlstr = "";
+                foreach (QuestionTagModel tag in ownTags)
+                {
+                    string sqlstr = "select * from tag where id = @id";
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                    {
+                        cmd.Parameters.AddWithValue("id", tag.TagID);
+                        var reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            tagNames.Add(reader["name"].ToString());
+                        }
+                    }
+                    conn.Close();
+                }
+            }
+        }//get the name of the tag(s)
 
 
         public void SetTitle(string title) { Title = title; }

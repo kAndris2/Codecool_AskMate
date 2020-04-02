@@ -25,6 +25,9 @@
                 <th class="th-sm text-center">
                     <button class="btn btn-outline-warning" type="submit" name="order" value="id">#ID</button>
                 </th>
+                <th class="">
+                    Tags
+                </th>
                 <th class="th-sm text-center">
                     <button class="btn btn-outline-warning" type="submit" name="order" value="title">Title</button>
                 </th>
@@ -48,6 +51,17 @@
         <tr>
             <td class="text-center">
                 @Html.DisplayFor(modelItem => question.Id)
+            </td>
+
+            <td>
+                @if(question.tagNames.Count > 0)
+                {
+                    foreach(string name in question.tagNames)
+                    {
+                        <span class="badge badge-info badge-pill">@name</span>
+                    }
+                }
+                else { <span>No Tags</span>}
             </td>
 
             <td class="text-center">

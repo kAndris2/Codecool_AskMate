@@ -23,9 +23,18 @@ namespace AskMate.Controllers
 
             string Title = newQuestion.Title;
             string Content = newQuestion.Content;
+            string ownTags = newQuestion.ownTags;
+            List<string> tags;
+            tags = ownTags.Split(',').ToList();
+            List<TagModel> newTags = new List<TagModel>();
+            foreach (string tag in tags)
+            {
+                newTags.Add(IDAO_Impl.Instance.CreateTag(tag));
+            }
+
 
             var newQ = IDAO_Impl.Instance;
-            newQ.NewQuestion(Title, Content);
+            newQ.NewQuestion(Title, Content, newTags);
 
             return RedirectToAction("Index", "Home");
         }

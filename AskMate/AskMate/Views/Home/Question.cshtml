@@ -11,6 +11,7 @@
     <li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">
         <h3>#@Model.Id - @Model.Title</h3>
         <a>@Model.GetDate()</a>
+        
         <div>
             <button id="downVote" class="btn bg-transparent btn-vote text-danger" onclick="location.href='@Url.Action("DownVote", "Home", new {id = @Model.Id})'" title="Downvote">
                 <span class="oi oi-chevron-bottom downvote"></span>
@@ -22,8 +23,11 @@
         </div>
     </li>
     <li class="list-group-item">
-
-
+        <div class="float-left">
+            <span class="float-left badge badge-pill badge-info">@Model.tagNames[0] <button type="button" class="close btn-danger" aria-label="Delete"><span aria-hidden="true">&times;</span></button></span>
+        </div>
+    </li>
+    <li class="list-group-item">
         <script src="~/js/jquery-3.4.1.min.js"></script>
         <form method="post" asp-controller="Home" asp-action="ImageUpload" enctype="multipart/form-data">
             <div class="form-group row">
@@ -42,9 +46,9 @@
             <!--<img src="ViewData["FileLocation"]" width="600" height="400"/>
         ToDo Hozzáfűzni a csv-hez a képet-->
         </form>
-        
+
         @{
-            if (Model.ImgLink == null)
+            if (Model.ImgLink == "")
             {
                 <p>No image uploaded</p>
             }
