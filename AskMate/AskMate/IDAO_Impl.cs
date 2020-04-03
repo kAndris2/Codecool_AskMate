@@ -336,6 +336,7 @@ namespace AskMate
         public void EditLine(int id, string title, string content)
         {
             string sqlstr = "UPDATE question SET title = @title, message = @message WHERE id = @id";
+            bool found = false;
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
@@ -344,7 +345,6 @@ namespace AskMate
                     cmd.Parameters.AddWithValue("title", title);
                     cmd.Parameters.AddWithValue("message", content);
                     cmd.Parameters.AddWithValue("id", id);
-
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -354,13 +354,13 @@ namespace AskMate
                 {
                     question.SetTitle(title);
                     question.SetContent(content);
-
-                }
-                else
-                {
-                    throw new Exception("No id ");
+                    found = true;
+                    break;
                 }
             }
+
+            if (!found)
+                throw new Exception("No such id!");
         }
 
         public void NewComment(int? qid, int? aid, string content)
