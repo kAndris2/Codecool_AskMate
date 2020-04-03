@@ -256,19 +256,7 @@ namespace AskMate
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        questions.Add
-                        (
-                            new QuestionModel
-                            (
-                            int.Parse(reader["id"].ToString()),
-                            reader["title"].ToString(),
-                            reader["message"].ToString(),
-                            Convert.ToInt64(reader["submission_time"].ToString()),
-                            reader["image"].ToString(),
-                            int.Parse(reader["vote_number"].ToString()),
-                            int.Parse(reader["view_number"].ToString())
-                            )
-                        );
+                        questions.Add(GetQuestionById(int.Parse(reader["id"].ToString())));
                     }
                 }
             }
