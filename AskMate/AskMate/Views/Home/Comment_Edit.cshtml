@@ -1,0 +1,24 @@
+﻿@model AskMate.Models.CommentModel
+@{
+    ViewData["Title"] = "Comment_Edit";
+}
+
+<h1>Comment ID: #@Model.ID Edit</h1>
+
+@using (Html.BeginForm("CommentEdit", "Home", FormMethod.Post))
+{
+
+    <div class="form-group">
+        <label for="">Message:</label>
+        @Html.TextBoxFor(m => m.Message, new { @class = "form-control", @required = "required", @Name = "message" })
+    </div>
+
+    <input type="hidden" value="@Model.ID" name="id" />
+    <button class="btn btn-success" type="submit">Edit</button>
+
+    <div class="float-right">
+        <span>
+            @Html.ActionLink("Back", "edit_answer", new { id = Model.AnswerID }, new { @class = "btn btn-danger ml-auto mr-1" })
+        </span>
+    </div>
+}

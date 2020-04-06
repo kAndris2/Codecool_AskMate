@@ -162,6 +162,22 @@ namespace AskMate
             }
         }
 
+        public QuestionModel GetQuestionByCommentId(int id)
+        {
+            foreach (QuestionModel question in Questions)
+            {
+                if (question.GetCommentById(id) != null)
+                    return question;
+
+                foreach (AnswerModel answer in question.Answers)
+                {
+                    if (answer.GetCommentById(id) != null)
+                        return question;
+                }
+            }
+            throw new ArgumentException($"Invalid comment ID! - ('{id}')");
+        }
+
         private void AddCommentTo(CommentModel comment)
         {
             foreach (QuestionModel question in Questions)
@@ -183,6 +199,22 @@ namespace AskMate
                     }
                 }
             }
+        }
+
+        private CommentModel GetCommentById(int id)
+        {
+            foreach (QuestionModel question in Questions)
+            {
+                if (question.GetCommentById(id) != null)
+                    return question.GetCommentById(id);
+
+                foreach (AnswerModel answer in question.Answers)
+                {
+                    if (answer.GetCommentById(id) != null)
+                        return answer.GetCommentById(id);
+                }
+            }
+            throw new ArgumentException($"Invalid comment ID! - ('{id}')");
         }
 
         //-SQL_METHODS---------------------------------------------------------------------------------------------------
@@ -319,6 +351,29 @@ namespace AskMate
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        public void UpdateComment(int id, string message)
+        {
+            CommentModel comment = GetCommentById(id);
+
+           long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            string sqlstr = $"UPDATE comment " +
+                            "SET message = @message, submission_time = @date " +
+                            "WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("message", message);
+                    cmd.Parameters.AddWithValue("date", milisec);
+                    cmd.Parameters.AddWithValue("id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            comment.Message = message;
+            comment.Date = milisec;
         }
 
         public void EditLine(int id, string title, string content)

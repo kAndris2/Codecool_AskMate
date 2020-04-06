@@ -235,5 +235,48 @@ namespace AskMate.Controllers
             //Idao.SearchEntries();
             return View("Index", Idao);
         }
+
+        //-COMMENT--------------------------------------------------------------------------------------------------------
+
+        [HttpGet("/delete_comment/{id}")]
+        public IActionResult Delete_Comment(int id)
+        {
+            QuestionModel question = Idao.GetQuestionByCommentId(id);
+            Idao.Delete(id, "comment");
+            return View("Question", question);
+        }
+
+        [HttpGet("/edit_comment/{id}")]
+        public IActionResult Edit_Comment(int id)
+        {
+            CommentModel instance = null;
+
+            foreach (QuestionModel question in Idao.GetQuestions())
+            {
+                if (question.GetCommentById(id) != null)
+                {
+                    instance = question.GetCommentById(id);
+                    break;
+                }
+
+                foreach (AnswerModel answer in question.Answers)
+                {
+                    if (answer.GetCommentById(id) != null)
+                    {
+                        instance = answer.GetCommentById(id);
+                        break;
+                    }
+                }
+            }
+
+            return View("Comment_Edit", instance);
+        }
+
+        [HttpPost]
+        public IActionResult CommentEdit([FromForm(Name = "message")] string message, [FromForm(Name = "id")] int id)
+        {
+            Idao.UpdateComment(id, message);
+            return View("Question", Idao.GetQuestionByCommentId(id));
+        }
     }
 }

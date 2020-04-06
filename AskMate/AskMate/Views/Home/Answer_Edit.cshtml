@@ -20,6 +20,16 @@
 
     @foreach (CommentModel comment in Model.GetComments())
     {
+        <span>
+            @Html.ActionLink("Edit", "edit_comment", new { id = comment.ID }, new { @class = "btn btn-outline-primary" })
+        </span>
+
+        <div class="float-right">
+            <span>
+                @Html.ActionLink("Delete", "delete_comment", new { id = comment.ID }, new { @class = "btn btn-outline-danger" })
+            </span>
+        </div>
+
         <div class="list-group">
             <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
                 <div class="d-flex w-100 justify-content-between">
