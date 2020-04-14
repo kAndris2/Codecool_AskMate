@@ -30,6 +30,7 @@ namespace AskMate.Models
             Reputation = reputation;
         }
 
+        public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
         public void IncreaseReputation(int value) { Reputation += value; }
         public void DecreaseReputation(int value) { Reputation -= value; }
     }
