@@ -11,6 +11,7 @@ namespace AskMate.Models
         public int Id { get; }
         public int Vote { get; private set; }
         public int Views { get; private set;}
+        public int User_Id { get; private set; }
         public String Title { get; private set; }
         public String Content { get; private set; }
         public String ImgLink { get; private set; }
