@@ -1,0 +1,19 @@
+﻿@model AskMate.IDAO_Impl
+@{
+    ViewData["Title"] = "ProfileList";
+}
+
+<h1>Profiles</h1>
+
+@foreach (UserModel user in Model.Users)
+{
+    <div class="card text-white bg-info mb-3" style="max-width: 18rem;">
+        <div class="card-header">@user.Name</div>
+        <div class="card-body">
+            <h5 class="card-title">@user.Email</h5>
+            <p class="card-text">Registered: @user.GetDate()</p>
+            <p class="card-text">Reputation: @user.Reputation</p>
+        </div>
+    </div>
+    <br>
+}
