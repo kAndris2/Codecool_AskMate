@@ -13,6 +13,7 @@ namespace AskMate.Models
         public String Message { get; set; }
         public long Date { get; set; }
         public int Edited { get; set; }
+        public int User_Id { get; set; }
 
         public CommentModel(int id, int? qid, int? aid, string message, long date)
         {

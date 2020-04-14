@@ -11,9 +11,12 @@ namespace AskMate
     public sealed class IDAO_Impl : IDAO
     {
         static IDAO_Impl instance = null;
+
         List<QuestionModel> Questions = new List<QuestionModel>();
         public List<TagModel> Tags { get; set; } = new List<TagModel>();
         List<QuestionTagModel> QuestionTags = new List<QuestionTagModel>();
+        List<UserModel> Users = new List<UserModel>();
+
         public int Entry { get; set; } = 5;
         public string SearchText { get; set; }
         private Dictionary<string, bool> Sort = new Dictionary<string, bool>
@@ -53,10 +56,8 @@ namespace AskMate
             throw new ArgumentException($"Invalid Question ID! ('{questionId}')");
         }
 
-        public List<QuestionModel> GetQuestions()
-        {
-            return Questions;
-        }
+        public List<QuestionModel> GetQuestions() { return Questions; }
+        public List<UserModel> GetUsers() { return Users; }
 
         public QuestionModel GetQuestionById(int id)
         {

@@ -7,22 +7,25 @@ namespace AskMate.Models
 {
     public class UserModel
     {
+        public int Id { get; set; }
         public String Email { get; private set; }
         public String Name { get; private set; }
         public String Password { get; private set; }
         public long Date { get; }
         public int Reputation { get; private set; }
 
-        public UserModel(string email, string name, string password, long date)
+        public UserModel(int id, string email, string name, string password, long date)
         {
+            Id = id;
             Email = email;
             Name = name;
             Password = password;
             Date = date;
         }
 
-        public UserModel(string email, string name, string password, long date, int reputation)
+        public UserModel(int id, string email, string name, string password, long date, int reputation)
         {
+            Id = id;
             Email = email;
             Name = name;
             Password = password;
