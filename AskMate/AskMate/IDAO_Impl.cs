@@ -11,11 +11,15 @@ namespace AskMate
     public sealed class IDAO_Impl : IDAO
     {
         static IDAO_Impl instance = null;
+
         List<QuestionModel> Questions = new List<QuestionModel>();
         List<TagModel> Tags = new List<TagModel>();
         List<QuestionTagModel> QuestionTags = new List<QuestionTagModel>();
+        List<UserModel> Users = new List<UserModel>();
+
         public int Entry { get; set; } = 5;
         public string SearchText { get; set; }
+
         private Dictionary<string, bool> Sort = new Dictionary<string, bool>
         {
             { "id", true },
