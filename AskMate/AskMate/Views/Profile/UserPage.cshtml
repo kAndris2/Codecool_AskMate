@@ -1,0 +1,21 @@
+﻿@model AskMate.Models.UserModel
+@{
+    ViewData["Title"] = "UserPage";
+}
+
+@foreach (QuestionModel question in IDAO_Impl.Instance.GetQuestions())
+{
+    if (question.User_Id.Equals(Model.Id))
+    {
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">
+            @Html.ActionLink($"#{question.Id} - {question.Title}", "question", new { id = question.Id })
+        </h4>
+
+        <p>@question.Content</p>
+        <hr>
+        <p class="mb-0">@question.GetDate()</p>
+</div>
+    }
+}
+

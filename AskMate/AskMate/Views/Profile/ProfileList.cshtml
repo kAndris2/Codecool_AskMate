@@ -5,7 +5,7 @@
 
 <h1>Profiles</h1>
 
-@foreach (UserModel user in Model.Users)
+@foreach (UserModel user in Model.GetUsers())
 {
     <div class="card text-white bg-info mb-3" style="max-width: 18rem;">
         <div class="card-header">@user.Name</div>

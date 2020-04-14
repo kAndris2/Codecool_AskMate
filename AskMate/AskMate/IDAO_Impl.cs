@@ -15,7 +15,7 @@ namespace AskMate
         List<QuestionModel> Questions = new List<QuestionModel>();
         List<TagModel> Tags = new List<TagModel>();
         List<QuestionTagModel> QuestionTags = new List<QuestionTagModel>();
-        public List<UserModel> Users = new List<UserModel>();
+        List<UserModel> Users = new List<UserModel>();
 
         public int Entry { get; set; } = 5;
         public string SearchText { get; set; }
@@ -56,10 +56,8 @@ namespace AskMate
             throw new ArgumentException($"Invalid Question ID! ('{questionId}')");
         }
 
-        public List<QuestionModel> GetQuestions()
-        {
-            return Questions;
-        }
+        public List<QuestionModel> GetQuestions() { return Questions; }
+        public List<UserModel> GetUsers() { return Users; }
 
         public QuestionModel GetQuestionById(int id)
         {
