@@ -9,10 +9,16 @@ namespace AskMate.Controllers
 {
     public class ProfileController : Controller
     {
+        public IDAO_Impl Idao = IDAO_Impl.Instance;
+
         public ActionResult Index()
         {
             return View();
         }
 
+        public IActionResult Profiles()
+        {
+            return View("ProfileList", Idao);
+        }
     }
 }
