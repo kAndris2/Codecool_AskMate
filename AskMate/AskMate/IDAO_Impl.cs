@@ -46,15 +46,14 @@ namespace AskMate
             LoadFiles();
         }
 
-        public int GetNumberOfTagQuestion(int id)
+        public UserModel GetUserByEmail(string email)
         {
-            int count = 0;
-            foreach (QuestionTagModel tag in QuestionTags)
+            foreach (UserModel user in Users)
             {
-                if (id.Equals(tag.TagID))
-                    count++;
+                if (user.Email.Equals(email))
+                    return user;
             }
-            return count;
+            throw new ArgumentException($"Invalid User Email! ('{email}')");
         }
 
         public UserModel GetUserById(int id)
@@ -553,18 +552,21 @@ namespace AskMate
             return answer;
         }
 
-        public void NewQuestion(string title, string content, List<TagModel> newTags)
+        public void NewQuestion(string title, string content, int userid, List<TagModel> newTags)
         {
 
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             int id = 0;
-            string sqlstr = "INSERT INTO question (submission_time,profile_id,view_number,vote_number,title,message) VALUES (@time,@pid,@views,@votes,@title,@message)";
+            string sqlstr = "INSERT INTO question " +
+                                "(submission_time,profile_id,view_number,vote_number,title,message) " +
+                                "VALUES " +
+                                "(@time,@pid,@views,@votes,@title,@message)";
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(sqlstr, conn))
                 {
-                    cmd.Parameters.AddWithValue("pid", id);
+                    cmd.Parameters.AddWithValue("pid", userid);
                     cmd.Parameters.AddWithValue("time", milisec);
                     cmd.Parameters.AddWithValue("views", 0);
                     cmd.Parameters.AddWithValue("votes", 0);
@@ -581,7 +583,7 @@ namespace AskMate
                     }
                 }
             }
-            QuestionModel question = new QuestionModel(id, title, content, milisec);
+            QuestionModel question = new QuestionModel(id, title, content, milisec, userid);
 
             for (int i = 0; i < newTags.Count; i++)
             {
