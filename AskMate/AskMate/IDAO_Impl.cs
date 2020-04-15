@@ -14,7 +14,7 @@ namespace AskMate
 
         List<QuestionModel> Questions = new List<QuestionModel>();
         public List<TagModel> Tags { get; set; } = new List<TagModel>();
-        List<QuestionTagModel> QuestionTags = new List<QuestionTagModel>();
+        public List<QuestionTagModel> QuestionTags = new List<QuestionTagModel>();
         List<UserModel> Users = new List<UserModel>();
 
         public int Entry { get; set; } = 5;
@@ -44,6 +44,17 @@ namespace AskMate
         private IDAO_Impl()
         {
             LoadFiles();
+        }
+
+        public int GetNumberOfTagQuestion(int id)
+        {
+            int count = 0;
+            foreach (QuestionTagModel tag in QuestionTags)
+            {
+                if (id.Equals(tag.TagID))
+                    count++;
+            }
+            return count;
         }
 
         public UserModel GetUserById(int id)

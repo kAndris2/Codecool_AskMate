@@ -1,17 +1,22 @@
-@model List<TagModel>
-
 @{
     ViewData["Title"] = "Tags";
+    IDAO_Impl Idao = IDAO_Impl.Instance;
 }
 
-@* <p>működik gec</p> *@
-
-<h3>Currently there are @Model.Count tags</h3>
-
-<h3>Tags in use</h3>
-<ul>
-    @foreach (var tag in Model)
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th class="th-sm text-center">#ID</th>
+            <th class="th-sm text-center">Name</th>
+            <th class="th-sm text-center">Question count</th>
+        </tr>
+    </thead>
+    @foreach (TagModel tag in Idao.Tags)
     {
-        <li>@tag.Name - @IDAO_Impl.Instance.GetQuestionsByTag(tag).Count questions</li>
+        <tr>
+            <td class="text-center">@tag.ID</td>
+            <td class="text-center">@tag.Name</td>
+            <td class="text-center">@Idao.GetNumberOfTagQuestion(tag.ID)</td>
+        </tr>
     }
-</ul>
+</table>
