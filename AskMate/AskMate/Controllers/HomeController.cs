@@ -252,8 +252,8 @@ namespace AskMate.Controllers
         }
 
         //Search
-        [HttpPost]
-        public IActionResult Search([FromForm(Name = "search")] string search)
+        [HttpGet]
+        public IActionResult Search(string search)
         {
             Idao.SearchText = search;
             //Idao.SearchEntries();
