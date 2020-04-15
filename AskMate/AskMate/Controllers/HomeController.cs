@@ -306,7 +306,7 @@ namespace AskMate.Controllers
 
         public IActionResult Tags()
         {
-            return View();
+            return View(Idao.Tags);
         }
     }
 }
