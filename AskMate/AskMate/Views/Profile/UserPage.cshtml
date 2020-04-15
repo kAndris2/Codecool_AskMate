@@ -9,7 +9,7 @@
     {
         <div class="alert alert-success" role="alert">
             <h4 class="alert-heading">
-                @Html.ActionLink($"#{question.Id} - {question.Title}", "question", new { id = question.Id })
+                @Html.ActionLink($"Q: #{question.Id} - {question.Title}", "question", "Home", new { id = question.Id })
             </h4>
 
             <p>@question.Content</p>
@@ -24,7 +24,7 @@
         {
             <div class="alert alert-info" role="alert">
                 <h4 class="alert-heading">
-                    @Html.ActionLink($"#{question.Id} - {question.Title}", "question", new { id = question.Id })
+                    @Html.ActionLink($"A: #{question.Id} - {question.Title}", "question", "Home", new { id = question.Id })
                 </h4>
 
                 <p>@answer.Content</p>
@@ -39,7 +39,7 @@
             {
                 <div class="alert alert-warning" role="alert">
                     <h4 class="alert-heading">
-                        @Html.ActionLink($"#{question.Id} - {question.Title}", "question", new { id = question.Id })
+                        @Html.ActionLink($"C: #{question.Id} - {question.Title}", "question", "Home", new { id = question.Id })
                     </h4>
 
                     <h6 class="mb-0">Answer ID: #@answer.Id</h6>
@@ -58,7 +58,7 @@
         {
             <div class="alert alert-warning" role="alert">
                 <h4 class="alert-heading">
-                    @Html.ActionLink($"#{question.Id} - {question.Title}", "question", new { id = question.Id })
+                    @Html.ActionLink($"C: #{question.Id} - {question.Title}", "question", "Home", new { id = question.Id })
                 </h4>
 
                 <p>@comment.Message</p>

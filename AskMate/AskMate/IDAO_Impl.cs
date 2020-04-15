@@ -835,7 +835,8 @@ namespace AskMate
                             Convert.ToInt64(reader["submission_time"].ToString()),
                             int.Parse(reader["vote_number"].ToString()),
                             int.Parse(reader["question_id"].ToString()),
-                            reader["image"].ToString()
+                            reader["image"].ToString(),
+                            int.Parse(reader["profile_id"].ToString())
                         );
 
                         GetQuestionById(answer.Question_Id).AddAnswer(answer);
@@ -871,7 +872,8 @@ namespace AskMate
                             aid,
                             reader["message"].ToString(),
                             Convert.ToInt64(reader["submission_time"].ToString()),
-                            int.Parse(reader["edited_number"].ToString())
+                            int.Parse(reader["edited_number"].ToString()),
+                            int.Parse(reader["profile_id"].ToString())
                         );
                         AddCommentTo(comment);
                     }
