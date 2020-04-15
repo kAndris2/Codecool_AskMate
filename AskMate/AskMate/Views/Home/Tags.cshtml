@@ -4,14 +4,30 @@
     ViewData["Title"] = "Tags";
 }
 
-@* <p>működik gec</p> *@
-
 <h3>Currently there are @Model.Count tags</h3>
 
-<h3>Tags in use</h3>
-<ul>
+<div class="accordion" id="accordionTags">
     @foreach (var tag in Model)
     {
-        <li>@tag.Name - @IDAO_Impl.Instance.GetQuestionsByTag(tag).Count questions</li>
+        int index = Model.IndexOf(tag);
+        List<QuestionModel> questions = IDAO_Impl.Instance.GetQuestionsByTag(tag);
+        string quantity = questions.Count == 1 ? $"{questions.Count} question" : $"{questions.Count} questions";
+        <div class="card">
+            <div class="card-header" id="tagItem_@index">
+                <a href="#@index" data-target="#collapse_@index" data-toggle="collapse">
+                    <span class="badge badge-info badge-pill">@tag.Name</span>
+                </a>
+                <p class="float-right m-0">@quantity</p>
+            </div>
+
+            <div id="collapse_@index" class="collapse">
+                @foreach (var question in questions)
+                {
+                    <div class="card-body">
+                        @Html.ActionLink(question.Title, "question", new { id = question.Id })
+                    </div>
+                }
+            </div>
+        </div>
     }
-</ul>
+</div>

@@ -489,12 +489,13 @@ namespace AskMate
 
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             int id = 0;
-            string sqlstr = "INSERT INTO question (submission_time,view_number,vote_number,title,message) VALUES (@time,@views,@votes,@title,@message)";
+            string sqlstr = "INSERT INTO question (submission_time,profile_id,view_number,vote_number,title,message) VALUES (@time,@pid,@views,@votes,@title,@message)";
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(sqlstr, conn))
                 {
+                    cmd.Parameters.AddWithValue("pid", id);
                     cmd.Parameters.AddWithValue("time", milisec);
                     cmd.Parameters.AddWithValue("views", 0);
                     cmd.Parameters.AddWithValue("votes", 0);
