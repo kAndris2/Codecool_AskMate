@@ -367,6 +367,23 @@ namespace AskMate
             }
         }
 
+        public void UpdateUser(UserModel user)
+        {
+            string sqlstr = "UPDATE profile " +
+                            "SET reputation = @reputation " +
+                            "WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("reputation", user.Reputation);
+                    cmd.Parameters.AddWithValue("id", user.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public void UpdateQuestionView(QuestionModel question)
         {
             string sqlstr = "UPDATE question " +

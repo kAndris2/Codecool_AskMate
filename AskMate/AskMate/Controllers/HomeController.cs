@@ -167,16 +167,28 @@ namespace AskMate.Controllers
         public IActionResult UpVote([FromRoute(Name = "id")]int id)
         {
             QuestionModel question = Idao.GetQuestionById(id);
+
             question.VoteUp();
             Idao.UpdateVoteNumber(question.Id, question.Vote, "question");
+
+            UserModel user = Idao.GetUserById(question.User_Id);
+            user.IncreaseReputation(5);
+            Idao.UpdateUser(user);
+
             return View("Question", question);
         }
 
         public IActionResult DownVote([FromRoute(Name = "id")]int id)
         {
             QuestionModel question = Idao.GetQuestionById(id);
+
             question.VoteDown();
             Idao.UpdateVoteNumber(question.Id, question.Vote, "question");
+
+            UserModel user = Idao.GetUserById(question.User_Id);
+            user.DecreaseReputation(2);
+            Idao.UpdateUser(user);
+
             return View("Question", question);
         }
 
@@ -185,16 +197,28 @@ namespace AskMate.Controllers
         public IActionResult A_UpVote([FromRoute(Name = "id")]int id)
         {
             AnswerModel answer = Idao.GetAnswerById(id);
+
             answer.VoteUp();
             Idao.UpdateVoteNumber(answer.Id, answer.Vote, "answer");
+
+            UserModel user = Idao.GetUserById(answer.User_Id);
+            user.IncreaseReputation(10);
+            Idao.UpdateUser(user);
+
             return View("Question", Idao.GetQuestionById(answer.Question_Id));
         }
 
         public IActionResult A_DownVote([FromRoute(Name = "id")]int id)
         {
             AnswerModel answer = Idao.GetAnswerById(id);
+
             answer.VoteDown();
             Idao.UpdateVoteNumber(answer.Id, answer.Vote, "answer");
+
+            UserModel user = Idao.GetUserById(answer.User_Id);
+            user.DecreaseReputation(2);
+            Idao.UpdateUser(user);
+
             return View("Question", Idao.GetQuestionById(answer.Question_Id));
         }
 
