@@ -154,6 +154,22 @@
 
 <ul class="list-group">
     <li class="list-group-item">
+        @foreach (var comment in Model.Comments)
+        {
+            <hr>
+            <div class="container-fluid">
+                <p>@comment.Message –&nbsp;<span class="text-date">@comment.GetDate()</span></p>
+            </div>
+            if (comment.Equals(Model.Comments.Last()))
+            {
+                <hr>
+            }
+        }
+    </li>
+</ul>
+
+<ul class="list-group">
+    <li class="list-group-item">
         <form method="POST" asp-controller="Home" asp-action="AddComment" enctype="multipart/form-data">
             <div class="justify-content-between pt-4">
                 <p>Add a comment</p>
