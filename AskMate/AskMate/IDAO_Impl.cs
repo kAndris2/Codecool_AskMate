@@ -16,7 +16,7 @@ namespace AskMate
         public List<TagModel> Tags { get; set; } = new List<TagModel>();
         public List<QuestionTagModel> QuestionTags = new List<QuestionTagModel>();
         List<UserModel> Users = new List<UserModel>();
-
+        
         public int Entry { get; set; } = 5;
         public string SearchText { get; set; }
         private Dictionary<string, bool> Sort = new Dictionary<string, bool>

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using AskMate.Models;
 
+
 namespace AskMate.Controllers
 {
     public class ProfileController : Controller
@@ -30,8 +31,8 @@ namespace AskMate.Controllers
             return View("UserPage", Idao.GetUserById(id));
         }
         //logintest
-        
-
+       
+       
 
     }
 }
