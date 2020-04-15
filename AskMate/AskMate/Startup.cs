@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using AskMate.Services;
 
 namespace AskMate
 {
@@ -25,6 +26,9 @@ namespace AskMate
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+           
+            services.AddSingleton(typeof(IUserService), new InMemoryUserService());
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
         }

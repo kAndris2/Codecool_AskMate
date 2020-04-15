@@ -24,7 +24,7 @@ namespace AskMate.Models
             Date = date;
         }
 
-        public AnswerModel(int id, string content, long date, int vote, int qid, string link)
+        public AnswerModel(int id, string content, long date, int vote, int qid, string link, int userid)
         {
             Id = id;
             Content = content;
@@ -32,6 +32,7 @@ namespace AskMate.Models
             Vote = vote;
             ImgLink = link;   //HARDCODED
             Question_Id = qid;
+            User_Id = userid;
         }
 
         public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }

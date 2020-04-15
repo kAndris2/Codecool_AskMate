@@ -8,12 +8,12 @@ namespace AskMate.Models
     public class UserModel
     {
         public int Id { get; set; }
-        public String Email { get; private set; }
-        public String Name { get; private set; }
-        public String Password { get; private set; }
+        public String Email { get; set; }
+        public String Name { get; set; }
+        public String Password { get; set; }
         public long Date { get; }
         public int Reputation { get; private set; }
-
+        
         public UserModel(int id, string email, string name, string password, long date)
         {
             Id = id;
@@ -36,5 +36,9 @@ namespace AskMate.Models
         public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
         public void IncreaseReputation(int value) { Reputation += value; }
         public void DecreaseReputation(int value) { Reputation -= value; }
+
+        public void SetMail(string mail) { Email = mail; }
+        public void SetName(string name) { Name = name; }
+        public void SetPass(string pass) { Password = pass; }
     }
 }

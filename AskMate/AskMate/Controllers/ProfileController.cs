@@ -4,6 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using AskMate.Services;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+using AskMate.Models;
+
 
 namespace AskMate.Controllers
 {
@@ -16,9 +24,15 @@ namespace AskMate.Controllers
             return View();
         }
 
-        public IActionResult Profiles()
+        [HttpGet("/user/{id}")]
+        public IActionResult User(int id)
+
         {
-            return View("ProfileList", Idao);
+            return View("UserPage", Idao.GetUserById(id));
         }
+        //logintest
+       
+       
+
     }
 }

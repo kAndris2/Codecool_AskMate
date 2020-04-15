@@ -20,17 +20,18 @@ namespace AskMate.Models
         public List<CommentModel> Comments { get; } = new List<CommentModel>();
         public List<QuestionTagModel> ownTags { get; } = new List<QuestionTagModel>();
         public List<TagModel> tags { get; set; } = new List<TagModel>();
-
         public List<string> tagNames { get; private set; } = new List<string>();
-        public QuestionModel(int id, string title, string content, long date)
+        
+        public QuestionModel(int id, string title, string content, long date)//, int userid)
         {
             Id = id;
             Title = title;
             Content = content;
             Date = date;
+            //User_Id = userid;
         }
 
-        public QuestionModel(int id, string title, string content, long date, string img, int vote, int views)
+        public QuestionModel(int id, string title, string content, long date, string img, int vote, int views, int userid)
         {
             Id = id;
             Title = title;
@@ -39,6 +40,7 @@ namespace AskMate.Models
             ImgLink = img;
             Vote = vote;
             Views = views;
+            User_Id = userid;
         }
 
         public DateTime GetDate() { return new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(Date.ToString())); }
