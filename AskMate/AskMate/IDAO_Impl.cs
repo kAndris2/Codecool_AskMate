@@ -14,7 +14,7 @@ namespace AskMate
 
         List<QuestionModel> Questions = new List<QuestionModel>();
         public List<TagModel> Tags { get; set; } = new List<TagModel>();
-        List<QuestionTagModel> QuestionTags = new List<QuestionTagModel>();
+        public List<QuestionTagModel> QuestionTags = new List<QuestionTagModel>();
         List<UserModel> Users = new List<UserModel>();
 
         public int Entry { get; set; } = 5;
@@ -44,6 +44,27 @@ namespace AskMate
         private IDAO_Impl()
         {
             LoadFiles();
+        }
+
+        public int GetNumberOfTagQuestion(int id)
+        {
+            int count = 0;
+            foreach (QuestionTagModel tag in QuestionTags)
+            {
+                if (id.Equals(tag.TagID))
+                    count++;
+            }
+            return count;
+        }
+
+        public UserModel GetUserById(int id)
+        {
+            foreach(UserModel user in Users)
+            {
+                if (user.Id.Equals(id))
+                    return user;
+            }
+            throw new ArgumentException($"Invalid User ID! ('{id}')");
         }
 
         public List<AnswerModel> GetAnswers(int questionId)
@@ -352,6 +373,23 @@ namespace AskMate
                     cmd.Parameters.AddWithValue("message", answer.Content);
                     cmd.Parameters.AddWithValue("image", answer.ImgLink);
                     cmd.Parameters.AddWithValue("id", answer.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void UpdateUser(UserModel user)
+        {
+            string sqlstr = "UPDATE profile " +
+                            "SET reputation = @reputation " +
+                            "WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("reputation", user.Reputation);
+                    cmd.Parameters.AddWithValue("id", user.Id);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -800,7 +838,8 @@ namespace AskMate
                             Convert.ToInt64(reader["submission_time"].ToString()),
                             reader["image"].ToString(),
                             int.Parse(reader["vote_number"].ToString()),
-                            int.Parse(reader["view_number"].ToString())
+                            int.Parse(reader["view_number"].ToString()),
+                            int.Parse(reader["profile_id"].ToString())
                             )
                         );
                     }
@@ -824,7 +863,8 @@ namespace AskMate
                             Convert.ToInt64(reader["submission_time"].ToString()),
                             int.Parse(reader["vote_number"].ToString()),
                             int.Parse(reader["question_id"].ToString()),
-                            reader["image"].ToString()
+                            reader["image"].ToString(),
+                            int.Parse(reader["profile_id"].ToString())
                         );
 
                         GetQuestionById(answer.Question_Id).AddAnswer(answer);
@@ -860,7 +900,8 @@ namespace AskMate
                             aid,
                             reader["message"].ToString(),
                             Convert.ToInt64(reader["submission_time"].ToString()),
-                            int.Parse(reader["edited_number"].ToString())
+                            int.Parse(reader["edited_number"].ToString()),
+                            int.Parse(reader["profile_id"].ToString())
                         );
                         AddCommentTo(comment);
                     }

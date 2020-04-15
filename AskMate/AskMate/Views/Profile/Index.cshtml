@@ -5,7 +5,7 @@
 <table class="table">
     <thead class="thead-dark">
         <tr>
-            <th class="th-sm text-center">ID</th>
+            <th class="th-sm text-center">#ID</th>
             <th class="th-sm text-center">Name</th>
             <th class="th-sm text-center">E-mail</th>
             <th class="th-sm text-center">Registration date</th>
@@ -16,7 +16,11 @@
     {
         <tr>
             <td class="text-center">@user.Id</td>
-            <td class="text-center">@user.Name</td>
+
+            <td class="text-center">
+                @Html.ActionLink(user.Name, "user", "Profile", new { id = user.Id })
+            </td>
+
             <td class="text-center">@user.Email</td>
             <td class="text-center">@user.GetDate()</td>
             <td class="text-center">@user.Reputation</td>

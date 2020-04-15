@@ -24,7 +24,7 @@ namespace AskMate.Models
             Date = date;
         }
 
-        public CommentModel(int id, int? qid, int? aid, string message, long date, int edited)
+        public CommentModel(int id, int? qid, int? aid, string message, long date, int edited, int userid)
         {
             ID = id;
             QuestionID = qid;
@@ -32,6 +32,7 @@ namespace AskMate.Models
             Message = message;
             Date = date;
             Edited = edited;
+            User_Id = userid;
         }
 
         public void IncreaseEditNumber() { Edited++; }
