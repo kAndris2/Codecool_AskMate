@@ -22,7 +22,7 @@ namespace AskMate.Controllers
         {
             return View();
         }
-
+        
         public IActionResult Profiles()
         {
             return View("ProfileList", Idao);

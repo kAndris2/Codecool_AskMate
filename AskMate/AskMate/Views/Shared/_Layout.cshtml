@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject IUserService userService;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -19,43 +21,61 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Tags">Tags</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </li>
+                </ul>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Tags">Tags</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
 
-                        <li class="nav-item">
-                            @Html.ActionLink(
-                                "Sign up",
-                                "Register",                         // controller action
-                                "Account",        // controller
-                                null,         // action parameters aka route values
-                                new { @class = "btn btn-warning ml-auto mr-1" })
-                        </li>
-                        <li class="nav-item">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="float-left">Logged in as @User.Claims.First().Value</div>
+                        <div class="float-right">
                             @Html.ActionLink(
                                 "Profiles",
                                 "Index",                         // controller action
                                 "Profile",        // controller
                                 null,         // action parameters aka route values
                                 new { @class = "btn btn-warning ml-auto mr-1" })
-                        </li>
-                        <li class="nav-item">
+                        </div>
+                        <div class="float-right">
                             @Html.ActionLink(
                                 "New Question",
                                 "Index",                         // controller action
                                 "Question",        // controller
                                 null,         // action parameters aka route values
                                 new { @class = "btn btn-success ml-auto mr-1" })
-                        </li>
-                    </ul>
+                        </div>
+                        <div class="float-right">
+                            
+                            @Html.ActionLink("Log Out", "Logout", "Account", null, new { @class = "btn btn-danger" })
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="float-right">
+                            @Html.ActionLink(
+                                "Sign up",
+                                "Register",                         // controller action
+                                "Account",        // controller
+                                null,         // action parameters aka route values
+                                new { @class = "btn btn-warning ml-auto mr-1" })
+                        </div>
+                        <div class="float-right">
+                            @Html.ActionLink("Log In", "Login", "Account", null, new { @class = "btn btn-success" })
+                        </div>
+                    }
+
+
+
+
 
 
                 </div>

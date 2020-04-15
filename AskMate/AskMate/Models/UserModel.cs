@@ -13,7 +13,7 @@ namespace AskMate.Models
         public String Password { get; set; }
         public long Date { get; }
         public int Reputation { get; private set; }
-
+        
         public UserModel(int id, string email, string name, string password, long date)
         {
             Id = id;
