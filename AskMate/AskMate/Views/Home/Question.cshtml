@@ -35,7 +35,6 @@
                 <label>pics</label>
                 <div class="col-sm-10">
                     <div class="custom-file">
-                        <input type="hidden" name="user_email" value="@User.Claims.First().Value" />
                         <input type="hidden" name="type" value="question" />
                         <input type="hidden" value="@Model.Id" name="id" />
                         <input class="form-control custom-file-input" type="file" name="file" />
@@ -148,6 +147,7 @@
                 <label class="custom-file-label">Browse</label>
             </div>
             <input name="id" type="hidden" value="@Model.Id" />
+            <input type="hidden" name="user_email" value="@User.Claims.First().Value" />
             <input type="submit" class="btn btn-success" value="Add Answer">
         </form>
     </li>
