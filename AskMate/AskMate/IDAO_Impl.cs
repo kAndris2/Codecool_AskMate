@@ -46,6 +46,16 @@ namespace AskMate
             LoadFiles();
         }
 
+        public UserModel GetUserById(int id)
+        {
+            foreach(UserModel user in Users)
+            {
+                if (user.Id.Equals(id))
+                    return user;
+            }
+            throw new ArgumentException($"Invalid User ID! ('{id}')");
+        }
+
         public List<AnswerModel> GetAnswers(int questionId)
         {
             foreach (QuestionModel item in Questions)
@@ -800,7 +810,8 @@ namespace AskMate
                             Convert.ToInt64(reader["submission_time"].ToString()),
                             reader["image"].ToString(),
                             int.Parse(reader["vote_number"].ToString()),
-                            int.Parse(reader["view_number"].ToString())
+                            int.Parse(reader["view_number"].ToString()),
+                            int.Parse(reader["profile_id"].ToString())
                             )
                         );
                     }

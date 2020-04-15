@@ -16,9 +16,10 @@ namespace AskMate.Controllers
             return View();
         }
 
-        public IActionResult Profiles()
+        [HttpGet("/user/{id}")]
+        public IActionResult User(int id)
         {
-            return View("ProfileList", Idao);
+            return View("UserPage", Idao.GetUserById(id));
         }
     }
 }
