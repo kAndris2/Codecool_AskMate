@@ -259,6 +259,7 @@ namespace AskMate.Controllers
                     break;
                 }
 
+
                 foreach (AnswerModel answer in question.Answers)
                 {
                     if (answer.GetCommentById(id) != null)
@@ -277,6 +278,11 @@ namespace AskMate.Controllers
         {
             Idao.UpdateComment(id, message);
             return View("Question", Idao.GetQuestionByCommentId(id));
+        }
+
+        public IActionResult Tags()
+        {
+            return View(Idao.Tags);
         }
     }
 }

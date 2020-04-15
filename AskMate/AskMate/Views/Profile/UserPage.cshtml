@@ -1,0 +1,71 @@
+﻿@model AskMate.Models.UserModel
+@{
+    ViewData["Title"] = "UserPage";
+}
+
+@foreach (QuestionModel question in IDAO_Impl.Instance.GetQuestions())
+{
+    if (question.User_Id.Equals(Model.Id))
+    {
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">
+                @Html.ActionLink($"#{question.Id} - {question.Title}", "question", new { id = question.Id })
+            </h4>
+
+            <p>@question.Content</p>
+            <hr>
+            <p class="mb-0">@question.GetDate()</p>
+        </div>
+    }
+
+    foreach (AnswerModel answer in question.Answers)
+    {
+        if (answer.User_Id.Equals(Model.Id))
+        {
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">
+                    @Html.ActionLink($"#{question.Id} - {question.Title}", "question", new { id = question.Id })
+                </h4>
+
+                <p>@answer.Content</p>
+                <hr>
+                <p class="mb-0">@answer.GetDate()</p>
+            </div>
+        }
+
+        foreach (CommentModel comment in answer.Comments)
+        {
+            if (comment.User_Id.Equals(Model.Id))
+            {
+                <div class="alert alert-warning" role="alert">
+                    <h4 class="alert-heading">
+                        @Html.ActionLink($"#{question.Id} - {question.Title}", "question", new { id = question.Id })
+                    </h4>
+
+                    <h6 class="mb-0">Answer ID: #@answer.Id</h6>
+
+                    <p>@comment.Message</p>
+                    <hr>
+                    <p class="mb-0">@comment.GetDate()</p>
+                </div>
+            }
+        }
+    }
+
+    foreach (CommentModel comment in question.Comments)
+    {
+        if (comment.ID.Equals(Model.Id))
+        {
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading">
+                    @Html.ActionLink($"#{question.Id} - {question.Title}", "question", new { id = question.Id })
+                </h4>
+
+                <p>@comment.Message</p>
+                <hr>
+                <p class="mb-0">@comment.GetDate()</p>
+            </div>
+        }
+    }
+}
+

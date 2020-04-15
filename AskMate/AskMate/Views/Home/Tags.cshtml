@@ -1,0 +1,17 @@
+@model List<TagModel>
+
+@{
+    ViewData["Title"] = "Tags";
+}
+
+@* <p>működik gec</p> *@
+
+<h3>Currently there are @Model.Count tags</h3>
+
+<h3>Tags in use</h3>
+<ul>
+    @foreach (var tag in Model)
+    {
+        <li>@tag.Name - @IDAO_Impl.Instance.GetQuestionsByTag(tag).Count questions</li>
+    }
+</ul>

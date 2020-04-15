@@ -13,9 +13,9 @@ namespace AskMate
         static IDAO_Impl instance = null;
 
         List<QuestionModel> Questions = new List<QuestionModel>();
-        List<TagModel> Tags = new List<TagModel>();
+        public List<TagModel> Tags { get; set; } = new List<TagModel>();
         List<QuestionTagModel> QuestionTags = new List<QuestionTagModel>();
-        public List<UserModel> Users = new List<UserModel>();
+        List<UserModel> Users = new List<UserModel>();
 
         public int Entry { get; set; } = 5;
         public string SearchText { get; set; }
@@ -56,10 +56,8 @@ namespace AskMate
             throw new ArgumentException($"Invalid Question ID! ('{questionId}')");
         }
 
-        public List<QuestionModel> GetQuestions()
-        {
-            return Questions;
-        }
+        public List<QuestionModel> GetQuestions() { return Questions; }
+        public List<UserModel> GetUsers() { return Users; }
 
         public QuestionModel GetQuestionById(int id)
         {
@@ -224,8 +222,10 @@ namespace AskMate
 
         public TagModel CreateTag(string tag)
         {
-            string sqlstr = "INSERT INTO tag (name) VALUES (@tag)";
             int id = 0;
+            TagModel nTag;
+
+            string sqlstr = "INSERT INTO tag (name) VALUES (@tag)";
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
@@ -243,11 +243,15 @@ namespace AskMate
                     }
                 }
             }
-            TagModel nTag = new TagModel(id, tag);
+            nTag = new TagModel(id, tag);
             Tags.Add(nTag);
             return nTag;
         }
 
+        public List<QuestionModel> GetQuestionsByTag(TagModel tag)
+        {
+            return Questions.FindAll(q => q.tagNames.Contains(tag.Name));
+        }
 
         public void Delete(int id, string table)
         {
@@ -360,7 +364,7 @@ namespace AskMate
         {
             CommentModel comment = GetCommentById(id);
 
-           long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             string sqlstr = $"UPDATE comment " +
                             "SET message = @message, submission_time = @date " +
                             "WHERE id = @id";
@@ -681,7 +685,6 @@ namespace AskMate
                     }
                 }
             }
-
         }
         public void GetQuestionTags()
         {

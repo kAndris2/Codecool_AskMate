@@ -3,17 +3,24 @@
     ViewData["Title"] = "ProfileList";
 }
 
-<h1>Profiles</h1>
-
-@foreach (UserModel user in Model.Users)
-{
-    <div class="card text-white bg-info mb-3" style="max-width: 18rem;">
-        <div class="card-header">@user.Name</div>
-        <div class="card-body">
-            <h5 class="card-title">@user.Email</h5>
-            <p class="card-text">Registered: @user.GetDate()</p>
-            <p class="card-text">Reputation: @user.Reputation</p>
-        </div>
-    </div>
-    <br>
-}
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th class="th-sm text-center">ID</th>
+            <th class="th-sm text-center">Name</th>
+            <th class="th-sm text-center">E-mail</th>
+            <th class="th-sm text-center">Registration date</th>
+            <th class="th-sm text-center">Reputation</th>
+        </tr>
+    </thead>
+    @foreach (UserModel user in Model.GetUsers())
+    {
+        <tr>
+            <td class="text-center">@user.Id</td>
+            <td class="text-center">@user.Name</td>
+            <td class="text-center">@user.Email</td>
+            <td class="text-center">@user.GetDate()</td>
+            <td class="text-center">@user.Reputation</td>
+        </tr>
+    }
+</table>
