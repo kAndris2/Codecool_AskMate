@@ -13,7 +13,7 @@ namespace AskMate
         List<AnswerModel> GetAnswers(int questionId);
 
         void EditLine(int id, string title, string Content);
-        void NewQuestion(string title, string content, List<TagModel> newTags);
+        void NewQuestion(string title, string content, int userid, List<TagModel> newTags);
         void QuestionRefresh(QuestionModel question);
         void AnswerRefresh(AnswerModel answer);
         void CommentRefresh(CommentModel comment);

@@ -18,7 +18,7 @@ namespace AskMate.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(EditQuestionModel newQuestion)
+        public ActionResult Index(EditQuestionModel newQuestion, [FromForm(Name = "user_email")] string email)
         {
             var iDAO = IDAO_Impl.Instance;
 
@@ -42,7 +42,7 @@ namespace AskMate.Controllers
                 }
             }
 
-            iDAO.NewQuestion(Title, Content, newTags);
+            iDAO.NewQuestion(Title, Content, iDAO.GetUserByEmail(email).Id, newTags);
 
             return RedirectToAction("Index", "Home");
         }

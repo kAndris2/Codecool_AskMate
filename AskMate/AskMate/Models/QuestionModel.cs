@@ -22,13 +22,13 @@ namespace AskMate.Models
         public List<TagModel> tags { get; set; } = new List<TagModel>();
         public List<string> tagNames { get; private set; } = new List<string>();
         
-        public QuestionModel(int id, string title, string content, long date)//, int userid)
+        public QuestionModel(int id, string title, string content, long date, int userid)
         {
             Id = id;
             Title = title;
             Content = content;
             Date = date;
-            //User_Id = userid;
+            User_Id = userid;
         }
 
         public QuestionModel(int id, string title, string content, long date, string img, int vote, int views, int userid)
