@@ -23,40 +23,38 @@
                 </button>
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link text-dark btn btn-light mr-2" asp-area="" asp-controller="Home" asp-action="Tags">Tags</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Tags">Tags</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                </ul>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <div class="float-left">Logged in as @User.Claims.First().Value</div>
-                        <div class="float-right">
+                        <li class="nav-item">
                             @Html.ActionLink(
-                                "Profiles",
-                                "Index",                         // controller action
-                                "Profile",        // controller
-                                null,         // action parameters aka route values
-                                new { @class = "btn btn-warning" })
-                        </div>
-                        <div class="float-right">
+                            "Profiles",
+                            "Index",                         // controller action
+                            "Profile",        // controller
+                            null,         // action parameters aka route values
+                            new { @class = "nav-link text-dark btn btn-light mr-2" })
+                        </li>
+                        <li class="nav-item">
                             @Html.ActionLink(
                                 "New Question",
                                 "Index",                         // controller action
                                 "Question",        // controller
                                 null,         // action parameters aka route values
-                                new { @class = "btn btn-success" })
-                        </div>
-                        <div class="float-right">
+                                new { @class = "nav-link text-dark btn btn-light mr-2" })
+                        </li>
+                    }
+                </ul>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                    
+                    <div class="mr-5">Logged in as @User.Claims.First().Value </div>
+                    
+                    
+                    <div class="float-right">
 
-                            @Html.ActionLink("Log Out", "Logout", "Account", null, new { @class = "btn btn-danger" })
-                        </div>
+                        @Html.ActionLink("Log Out", "Logout", "Account", null, new { @class = "btn btn-danger" })
+                    </div>
                     }
                     else
                     {
@@ -66,20 +64,15 @@
                                 "Register",                         // controller action
                                 "Account",        // controller
                                 null,         // action parameters aka route values
-                                new { @class = "btn btn-warning" })
+                                new { @class = "btn btn-warning mr-3 text-white" })
                         </div>
                         <div class="float-right">
                             @Html.ActionLink("Log In", "Login", "Account", null, new { @class = "btn btn-success" })
                         </div>
                     }
 
-
-
-
-
-
-                </div>
             </div>
+            <!--</div>-->
         </nav>
     </header>
     <div class="container">
