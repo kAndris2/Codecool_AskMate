@@ -1,5 +1,4 @@
-﻿@model AskMate.IDAO_Impl
-@{
+﻿@{
     ViewData["Title"] = "ProfileList";
 }
 
@@ -13,7 +12,7 @@
             <th class="th-sm text-center">Reputation</th>
         </tr>
     </thead>
-    @foreach (UserModel user in Model.GetUsers())
+    @foreach (UserModel user in IDAO_Impl.Instance.GetUsers())
     {
         <tr>
             <td class="text-center">@user.Id</td>
