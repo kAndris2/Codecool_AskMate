@@ -18,7 +18,7 @@ namespace AskMate.Controllers
 {
     public class AccountController : Controller
     {
-        
+        IDAO_Impl Idao = IDAO_Impl.Instance;
 
         [HttpGet]
         public ViewResult Register()
@@ -44,18 +44,7 @@ namespace AskMate.Controllers
         {
             if (ModelState.IsValid)
             {
-                string sqlstr = "INSERT INTO users (username,email,pass) VALUES (@user,@email,@pass)";
-                using (var conn = new NpgsqlConnection(Program.ConnectionString))
-                {
-                    conn.Open();
-                    using (var cmd = new NpgsqlCommand(sqlstr, conn))
-                    {
-                        cmd.Parameters.AddWithValue("user", model.Username);
-                        cmd.Parameters.AddWithValue("email", model.Email);
-                        cmd.Parameters.AddWithValue("pass", model.Password);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
+                Idao.Register(model.Username, model.Email, model.Password);
                 return View("RegSuccess");
             }
             else { return View(); }

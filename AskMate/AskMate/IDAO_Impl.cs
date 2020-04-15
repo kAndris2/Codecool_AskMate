@@ -220,6 +220,37 @@ namespace AskMate
 
         //-SQL_METHODS---------------------------------------------------------------------------------------------------
 
+        public void Register(string name, string email, string password)
+        {
+            int id = 0;
+            long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            string sqlstr = "INSERT INTO profile " +
+                                "(registration_date,email,password,name) " +
+                                "VALUES " +
+                                "(@date,@email,@password,@name)";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("date", milisec);
+                    cmd.Parameters.AddWithValue("email", email);
+                    cmd.Parameters.AddWithValue("password", password);
+                    cmd.Parameters.AddWithValue("name", name);
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = new NpgsqlCommand("SELECT * FROM profile", conn))
+                {
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        id = int.Parse(reader["id"].ToString());
+                    }
+                }
+            }
+            Users.Add(new UserModel(id, email, name, password, milisec));
+        }
+
         public TagModel CreateTag(string tag)
         {
             int id = 0;
@@ -727,6 +758,30 @@ namespace AskMate
         /// </summary>
         public void LoadFiles()
         {
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand("SELECT * FROM profile", conn))
+                {
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Users.Add
+                        (
+                            new UserModel
+                            (
+                            int.Parse(reader["id"].ToString()),
+                            reader["email"].ToString(),
+                            reader["name"].ToString(),
+                            reader["password"].ToString(),
+                            Convert.ToInt64(reader["registration_date"].ToString()),
+                            int.Parse(reader["reputation"].ToString())
+                            )
+                        );
+                    }
+                }
+            }
+
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
