@@ -15,7 +15,9 @@
     {
         <tr>
             <td class="text-center">@tag.ID</td>
-            <td class="text-center">@tag.Name</td>
+            <td class="text-center">
+                <span class="badge badge-info badge-pill">@tag.Name</span>
+            </td>
             <td class="text-center">@Idao.GetNumberOfTagQuestion(tag.ID)</td>
         </tr>
     }
