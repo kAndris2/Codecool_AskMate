@@ -3,6 +3,8 @@
     ViewData["Title"] = "UserPage";
 }
 
+<h1>@Model.Name's activities:</h1>
+
 @foreach (QuestionModel question in IDAO_Impl.Instance.GetQuestions())
 {
     if (question.User_Id.Equals(Model.Id))

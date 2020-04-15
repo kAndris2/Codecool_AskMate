@@ -223,16 +223,17 @@ namespace AskMate.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddComment(int id, [FromForm(Name = "comment")] string comment, [FromForm(Name = "type")] string type)
+        public IActionResult AddComment(int id, [FromForm(Name = "comment")] string comment, [FromForm(Name = "type")] string type, [FromForm(Name = "user_email")] string email)
         {
+            UserModel user = Idao.GetUserByEmail(email);
             if (type == "answer")
             {
-                Idao.NewComment(null, id, comment);
+                Idao.NewComment(null, id, comment, user.Id);
                 return View("Question", Idao.GetQuestionById(Idao.GetAnswerById(id).Question_Id));
             }
             else
             {
-                Idao.NewComment(id, null, comment);
+                Idao.NewComment(id, null, comment, user.Id);
                 return View("Question", Idao.GetQuestionById(id));
             }
         }

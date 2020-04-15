@@ -35,9 +35,9 @@
                 <label>pics</label>
                 <div class="col-sm-10">
                     <div class="custom-file">
+                        <input type="hidden" name="user_email" value="@User.Claims.First().Value" />
                         <input type="hidden" name="type" value="question" />
                         <input type="hidden" value="@Model.Id" name="id" />
-                        <input type="hidden" name="user_email" value="@User.Claims.First().Value" />
                         <input class="form-control custom-file-input" type="file" name="file" />
                         <label class="custom-file-label">Browse</label>
                     </div>
@@ -123,6 +123,7 @@
                                 <textarea class="form-control-plaintext bg-light text-black-50" style="border-radius: 1rem;" name="comment" required></textarea>
                                 <input name="id" type="hidden" value="@answer.Id" />
                                 <input name="type" type="hidden" value="answer" />
+                                <input type="hidden" name="user_email" value="@User.Claims.First().Value" />
                                 <div class="pt-2 float-right">
                                     <button class="btn btn-success" type="submit">Add Comment</button>
                                 </div>
@@ -176,6 +177,7 @@
                 <textarea class="form-control-plaintext bg-light text-black-50" style="border-radius: 1rem;" name="comment" required></textarea>
                 <input name="id" type="hidden" value="@Model.Id" />
                 <input name="type" type="hidden" value="question" />
+                <input type="hidden" name="user_email" value="@User.Claims.First().Value" />
                 <div class="pt-2 float-right">
                     <button class="btn btn-success" type="submit">Add Comment</button>
                 </div>

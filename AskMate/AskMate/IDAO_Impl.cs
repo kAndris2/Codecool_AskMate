@@ -481,14 +481,14 @@ namespace AskMate
                 throw new Exception("No such id!");
         }
 
-        public void NewComment(int? qid, int? aid, string content)
+        public void NewComment(int? qid, int? aid, string content, int userid)
         {
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             int id = 0;
             string sqlstr = "INSERT INTO comment " +
-                                "(question_id,answer_id,message,submission_time) " +
+                                "(question_id,answer_id,message,submission_time,profile_id) " +
                             "VALUES " +
-                                "(@question_id,@answer_id,@message,@time)";
+                                "(@question_id,@answer_id,@message,@time,@pid)";
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
@@ -506,6 +506,7 @@ namespace AskMate
 
                     cmd.Parameters.AddWithValue("message", content);
                     cmd.Parameters.AddWithValue("time", milisec);
+                    cmd.Parameters.AddWithValue("pid", userid);
                     cmd.ExecuteNonQuery();
                 }
                 using (var cmd = new NpgsqlCommand("SELECT * FROM comment", conn))
