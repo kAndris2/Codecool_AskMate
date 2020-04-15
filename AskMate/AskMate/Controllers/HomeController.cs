@@ -86,7 +86,7 @@ namespace AskMate.Controllers
 
         //Image
         [HttpPost]
-        public async Task<IActionResult> ImageUpload(IFormFile file, int id, [FromForm(Name = "type")] string type, [FromForm(Name = "answer")] string answer)
+        public async Task<IActionResult> ImageUpload(IFormFile file, int id, [FromForm(Name = "type")] string type, [FromForm(Name = "answer")] string answer, [FromForm(Name = "user_email")] string email)
         {
 
             var filePath = "";
@@ -120,13 +120,13 @@ namespace AskMate.Controllers
                     Idao.AddLinkToTable(filePath, type, id);
                 else if (type == "answer")
                 {
-                    AnswerModel ans = Idao.NewAnswer(answer, id);
+                    AnswerModel ans = Idao.NewAnswer(answer, id, Idao.GetUserByEmail(email).Id);
                     Idao.AddLinkToTable(filePath, type, ans.Id);
                 }
 
             }
             else if (type == "answer")
-                Idao.NewAnswer(answer, id);
+                Idao.NewAnswer(answer, id, Idao.GetUserByEmail(email).Id);
 
             return View("Question", Idao.GetQuestionById(id));
         }

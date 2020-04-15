@@ -520,14 +520,14 @@ namespace AskMate
             AddCommentTo(new CommentModel(id, qid, aid, content, milisec));
         }
 
-        public AnswerModel NewAnswer(string content, int question_id)
+        public AnswerModel NewAnswer(string content, int question_id, int userid)
         {
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             int id = 0;
             string sqlstr = "INSERT INTO answer " +
-                                "(submission_time,question_id,message) " +
+                                "(submission_time,question_id,message,profile_id) " +
                             "VALUES " +
-                                "(@time,@question_id,@message)";
+                                "(@time,@question_id,@message,@pid)";
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
@@ -536,6 +536,7 @@ namespace AskMate
                     cmd.Parameters.AddWithValue("time", milisec);
                     cmd.Parameters.AddWithValue("question_id", question_id);
                     cmd.Parameters.AddWithValue("message", content);
+                    cmd.Parameters.AddWithValue("pid", userid);
                     cmd.ExecuteNonQuery();
                 }
                 using (var cmd = new NpgsqlCommand("SELECT * FROM answer", conn))
@@ -547,7 +548,7 @@ namespace AskMate
                     }
                 }
             }
-            AnswerModel answer = new AnswerModel(id, question_id, content, milisec);
+            AnswerModel answer = new AnswerModel(id, question_id, content, milisec, userid);
             GetQuestionById(question_id).AddAnswer(answer);
             return answer;
         }
