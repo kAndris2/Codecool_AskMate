@@ -51,6 +51,7 @@ namespace AskMate.Models
         public void VoteUp() { Vote++; }
         public void VoteDown() { Vote--; }
         public void AddNewTag(QuestionTagModel newtag) { ownTags.Add(newtag); } //set tag to question
+        public List<CommentModel> GetComments() { return Comments; }
         public void GetTag()
         {
 

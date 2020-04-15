@@ -9,22 +9,48 @@
 {
 
 
-<div class="form-group">
-    <label for="">ID: #@Model.Id</label>
-    @Html.TextBoxFor(m => m.Id,new { @class = "form-control", @type="hidden"})
-</div>
-<div class="form-group">
-    <label for="">Title</label>
-    @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
-</div>
-<div class="form-group">
-    <label for="">Question</label>
-    @Html.TextBoxFor(m => m.Content, new { @class = "form-control" })
-</div>
-<button type="submit" class="btn btn-success">Edit</button>
-<div class="float-right">
-    <span>
-        @Html.ActionLink("Back", "Index", "Home", null, new { @class = "btn btn-danger ml-auto mr-1" })
-    </span>
-</div>
+    <div class="form-group">
+        <label for="">ID: #@Model.Id</label>
+        @Html.TextBoxFor(m => m.Id, new { @class = "form-control", @type = "hidden" })
+    </div>
+    <div class="form-group">
+        <label for="">Title</label>
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="">Question</label>
+        @Html.TextBoxFor(m => m.Content, new { @class = "form-control" })
+    </div>
+
+    @foreach (CommentModel comment in Model.GetComments())
+    {
+        <span>
+            @Html.ActionLink("Edit", "edit_comment", new { id = comment.ID }, new { @class = "btn btn-outline-primary" })
+        </span>
+
+        <div class="float-right">
+            <span>
+                @Html.ActionLink("Delete", "delete_comment", new { id = comment.ID }, new { @class = "btn btn-outline-danger" })
+            </span>
+        </div>
+
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">@comment.GetDate()</h5>
+                    <small>ID: #@comment.ID</small>
+                </div>
+                <p class="mb-1">@comment.Message</p>
+                <small>(Edited: @comment.Edited times.)</small>
+            </a>
+        </div>
+        <br>
+    }
+
+    <button type="submit" class="btn btn-success">Edit</button>
+    <div class="float-right">
+        <span>
+            @Html.ActionLink("Back", "Index", "Home", null, new { @class = "btn btn-danger ml-auto mr-1" })
+        </span>
+    </div>
 }
