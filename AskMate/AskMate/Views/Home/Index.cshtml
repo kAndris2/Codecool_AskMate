@@ -52,9 +52,12 @@
                 <th class="text-center">
                     <button class="btn btn-outline-warning" type="submit" name="order" value="vote_number">Votes</button>
                 </th>
-                <th class="text-center">
-                    <button class="btn btn-outline-warning" disabled>Actions</button>
-                </th>
+                if (User.Identity.IsAuthenticated)
+                {
+                    <th class="text-center">
+                        <button class="btn btn-outline-warning" disabled>Actions</button>
+                    </th>
+                }
             }
         </tr>
     </thead>
@@ -92,11 +95,13 @@
             <td class="text-center">
                 <span class="badge badge-primary badge-pill">@question.Vote</span>
             </td>
-
-            <td class="text-center">
-                @Html.ActionLink("Edit", "edit", new { id = question.Id }, new { @class = "text-success" }) |
-                <a href="#" class="text-danger" id="ModalId" onclick="viewModal(@question.Id)">Delete</a>
-            </td>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <td class="text-center">
+                    @Html.ActionLink("Edit", "edit", new { id = question.Id }, new { @class = "text-success" }) |
+                    <a href="#" class="text-danger" id="ModalId" onclick="viewModal(@question.Id)">Delete</a>
+                </td>
+            }
         </tr>
     }
 </table>
