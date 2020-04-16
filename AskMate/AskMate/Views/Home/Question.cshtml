@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Details";
     Model.IncreaseView();
+    var authorized = User.Identity.IsAuthenticated;
 }
 
 <link rel="stylesheet" href="~/css/Index.css">
@@ -28,6 +29,11 @@
             {<span class="float-left badge badge-pill badge-info">@name<button type="button" class="close btn-danger" aria-label="Delete"><span aria-hidden="true">&times;</span></button></span>}
         </div>
     </li>
+
+    @if (!authorized)
+    { <p></p>}
+    else
+    {
     <li class="list-group-item">
         <script src="~/js/jquery-3.4.1.min.js"></script>
         <form method="post" asp-controller="Home" asp-action="ImageUpload" enctype="multipart/form-data">
@@ -47,9 +53,9 @@
             <!--<img src="ViewData["FileLocation"]" width="600" height="400"/>
         ToDo Hozzáfűzni a csv-hez a képet-->
         </form>
-
+    
         @{
-            if (Model.ImgLink == "")
+            if (Model.ImgLink == DBNull.Value.ToString())
             {
                 <p>No image uploaded</p>
             }
@@ -61,6 +67,7 @@
             }
         }
     </li>
+            }
     <li class="list-group-item list-group-item-info">
         <div class="">
             @Model.Content
@@ -92,9 +99,9 @@
                             </button>
                         </span>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body bg-dark">
                         @{
-                            if (answer.ImgLink != "N/A")
+                            if (answer.ImgLink != DBNull.Value.ToString())
                             {
                                 <a class="float-right" data-toggle="lightbox" href="@answer.ImgLink">
                                     <img height="100 px" width="100 px" class="img-fluid" src="@answer.ImgLink">
@@ -116,6 +123,10 @@
                                 <hr>
                             }
                         }
+                        @if (!authorized)
+                        { <p>big no no</p>}
+                        else
+                        {
                         <form method="POST" asp-controller="Home" asp-action="AddComment" enctype="multipart/form-data">
                             <div class="justify-content-between pt-4">
                                 <p>Add a comment</p>
@@ -128,13 +139,17 @@
                                 </div>
                             </div>
                         </form>
+                        }
                     </div>
                 </div>
             }
         }
     </li>
 </ul>
-
+@if (!authorized)
+{ <p>big no no</p>}
+else
+{
 <ul class="list-group">
     <li class="list-group-item">
         <form method="post" asp-controller="Home" asp-action="ImageUpload" enctype="multipart/form-data">
@@ -152,6 +167,7 @@
         </form>
     </li>
 </ul>
+}
 
 <ul class="list-group">
     <li class="list-group-item">
@@ -169,6 +185,10 @@
     </li>
 </ul>
 
+@if (!authorized)
+{ <p>big no no</p>}
+else
+{
 <ul class="list-group">
     <li class="list-group-item">
         <form method="POST" asp-controller="Home" asp-action="AddComment" enctype="multipart/form-data">
@@ -185,7 +205,7 @@
         </form>
     </li>
 </ul>
-
+}
 <button class="btn btn-info" onclick="window.location.href='/Home'">Back to questions</button>
 <script type="text/javascript">
     $(document).ready(function () {

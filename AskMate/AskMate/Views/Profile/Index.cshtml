@@ -1,7 +1,15 @@
 ﻿@{
     ViewData["Title"] = "ProfileList";
+    var authorized = User.Identity.IsAuthenticated;
 }
 
+@if (!authorized)
+{
+    <div class="alert alert-danger">You don't have permission to view this page!</div>
+    <div>Try to <a href="../Account/Login">log in </a>first</div>
+}
+else
+{
 <table class="table">
     <thead class="thead-dark">
         <tr>
@@ -27,3 +35,4 @@
         </tr>
     }
 </table>
+}

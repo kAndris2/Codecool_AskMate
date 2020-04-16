@@ -2,8 +2,15 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var authorized = User.Identity.IsAuthenticated;
 }
-
+@if (!authorized)
+{
+    <div class="alert alert-danger">You don't have permission to view this page!</div>
+    <div>Try to <a href="../Account/Login">log in </a>first</div>
+}
+else
+{
 <h1>Add a new question</h1>
 
 
@@ -76,3 +83,4 @@
     });
 
 </script>
+}
