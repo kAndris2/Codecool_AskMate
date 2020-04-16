@@ -107,10 +107,11 @@
                                     <img height="100 px" width="100 px" class="img-fluid" src="@answer.ImgLink">
                                 </a>
                             }
+                            else { <p class="float-right">No image attached</p>}
                         }
                         <h6 class="card-title">@answer.Content</h6>
                         <p class="text-date">@answer.GetDate()</p>
-                        <div style="padding-bottom: 100px;"></div>
+                        <!--<div style="padding-bottom: 50px;"></div>-->
                         @* COMMENTS BELOW *@
                         @foreach (var comment in answer.Comments)
                         {
