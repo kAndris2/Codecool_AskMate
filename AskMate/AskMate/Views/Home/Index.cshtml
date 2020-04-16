@@ -95,7 +95,7 @@
             <td class="text-center">
                 <span class="badge badge-primary badge-pill">@question.Vote</span>
             </td>
-            @if (User.Identity.IsAuthenticated)
+            @if (User.Identity.IsAuthenticated && Model.GetUserById(question.User_Id).Equals(Model.GetUserByEmail(User.Claims.First().Value)))
             {
                 <td class="text-center">
                     @Html.ActionLink("Edit", "edit", new { id = question.Id }, new { @class = "text-success" }) |
