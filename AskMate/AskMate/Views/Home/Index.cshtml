@@ -9,20 +9,39 @@
     <div class="row justify-content-between">
         @using (Html.BeginForm("ShowEntries", "Home", FormMethod.Post))
         {
-            <input list="entries" name="entry" placeholder="Show entries">
+            @*<input list="entries" name="entry" placeholder="Show entries">
             <datalist id="entries">
                 <option value="5"/>
                 <option value="10"/>
                 <option value="20"/>
                 <option value="Show all!"/>
             </datalist>
-            <input type="submit" value="Show!">
+            <input type="submit" value="Show!">*@
+            <div class="input-group">
+                <input list="entries" type="text" class="form-control" name="entry" placeholder="Show Entries">
+                <datalist id="entries">
+                    <option value="5"/>
+                    <option value="10"/>
+                    <option value="20"/>
+                    <option value="Show all!"/>
+                </datalist>
+                <span class="input-group-btn">
+                    <button class="btn btn-light" type="submit">Show!</button>
+                </span>
+            </div>
+
         }
         <div class="float-right">
             @using (Html.BeginForm("Search", "Home", FormMethod.Get))
             {
-                <input type="text" name="search" placeholder="Search by title/description..." value="@Model.SearchText" size="25">
-                <input type="submit" value="Search!">
+                @*<input class="form-control" type="text" name="search" placeholder="Search by title/description..." value="@Model.SearchText" size="25">*@
+                @*<span class="float-right"><input class="btn btn-light" type="submit" value="Search!"></span>*@
+                <div class="input-group">
+                    <input type="text" class="form-control" name="search" placeholder="Search by title/description..." value="@Model.SearchText" size="25">
+                    <span class="input-group-btn">
+                        <button class="btn btn-light" type="submit">Search!</button>
+                    </span>
+                </div>
             }
         </div>
     </div>
