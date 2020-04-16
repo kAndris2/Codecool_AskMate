@@ -4,6 +4,7 @@
     ViewData["Title"] = "Details";
     Model.IncreaseView();
     var authorized = User.Identity.IsAuthenticated;
+    string eMail = User.Claims.First().Value;
     IDAO_Impl Idao = IDAO_Impl.Instance;
 }
 
@@ -15,63 +16,71 @@
         <h3>#@Model.Id - @Model.Title</h3>
         <a>@Model.GetDate()</a>
         @if (!authorized) { }
-        else { 
-        <div>
-            <button id="downVote" class="btn bg-transparent btn-vote text-danger" onclick="location.href='@Url.Action("DownVote", "Home", new {id = @Model.Id})'" title="Downvote">
-                <span class="oi oi-chevron-bottom downvote"></span>
-            </button>
-            <span class="badge badge-primary badge-pill">@Model.Vote</span>
-            <button id="upVote" class="btn bg-transparent btn-vote text-success" onclick="location.href='@Url.Action("UpVote", "Home", new {id = @Model.Id})'" title="Upvote">
-                <span class="oi oi-chevron-top upvote"></span>
-            </button>
-        </div>
+        else 
+        { 
+            <div>
+                <button id="downVote" class="btn bg-transparent btn-vote text-danger" onclick="location.href='@Url.Action("DownVote", "Home", new {id = @Model.Id})'" title="Downvote">
+                    <span class="oi oi-chevron-bottom downvote"></span>
+                </button>
+                <span class="badge badge-primary badge-pill">@Model.Vote</span>
+                <button id="upVote" class="btn bg-transparent btn-vote text-success" onclick="location.href='@Url.Action("UpVote", "Home", new {id = @Model.Id})'" title="Upvote">
+                    <span class="oi oi-chevron-top upvote"></span>
+                </button>
+            </div>
         }
     </li>
     <li class="list-group-item">
         <div class="float-left">
             @foreach (string name in Model.tagNames)
-            {<span class="float-left badge badge-pill badge-info">@name<button type="button" class="close btn-danger" aria-label="Delete"><span aria-hidden="true">&times;</span></button></span>}
+            {
+                <span class="float-left badge badge-pill badge-info">@name<button type="button" class="close btn-danger" aria-label="Delete"><span aria-hidden="true">&times;</span></button></span>
+            }
         </div>
     </li>
 
     @if (!authorized)
-    { <p></p>}
+    { 
+        <p></p>
+    }
     else
     {
-    <li class="list-group-item">
-        <script src="~/js/jquery-3.4.1.min.js"></script>
-        <form method="post" asp-controller="Home" asp-action="ImageUpload" enctype="multipart/form-data">
-            <div class="form-group row">
-                <label>pics</label>
-                <div class="col-sm-10">
-                    <div class="custom-file">
-                        <input type="hidden" name="type" value="question" />
-                        <input type="hidden" value="@Model.Id" name="id" />
-                        <input class="form-control custom-file-input" type="file" name="file" />
-                        <label class="custom-file-label">Browse</label>
-                    </div>
-                </div>
-                <button class="btn btn-info" type="submit">Upload</button>
+        <li class="list-group-item">
+            <script src="~/js/jquery-3.4.1.min.js"></script>
+            @if (Idao.GetUserById(Model.User_Id).Equals(Idao.GetUserByEmail(eMail)))
+            {
+                <form method="post" asp-controller="Home" asp-action="ImageUpload" enctype="multipart/form-data">
+                    <div class="form-group row">
+                        <label>pics</label>
+                        <div class="col-sm-10">
+                            <div class="custom-file">
+                                <input type="hidden" name="type" value="question" />
+                                <input type="hidden" value="@Model.Id" name="id" />
+                                <input class="form-control custom-file-input" type="file" name="file" />
+                                <label class="custom-file-label">Browse</label>
+                            </div>
+                        </div>
+                        <button class="btn btn-info" type="submit">Upload</button>
 
-            </div>
-            <!--<img src="ViewData["FileLocation"]" width="600" height="400"/>
-        ToDo Hozzáfűzni a csv-hez a képet-->
-        </form>
-    
-        @{
-            if (Model.ImgLink == DBNull.Value.ToString())
-            {
-                <p>No image uploaded</p>
+                    </div>
+                    <!--<img src="ViewData["FileLocation"]" width="600" height="400"/>
+                    ToDo Hozzáfűzni a csv-hez a képet-->
+                </form>
             }
-            else
-            {
-                <a href="@Model.ImgLink" data-toggle="lightbox">
-                    <img src="@Model.ImgLink" height="100 px" width="100 px" class="img-fluid">
-                </a>
+
+            @{
+                if (Model.ImgLink == DBNull.Value.ToString())
+                {
+                    <p>No image uploaded</p>
+                }
+                else
+                {
+                    <a href="@Model.ImgLink" data-toggle="lightbox">
+                        <img src="@Model.ImgLink" height="100 px" width="100 px" class="img-fluid">
+                    </a>
+                }
             }
-        }
-    </li>
-            }
+        </li>
+    }
     <li class="list-group-item list-group-item-info">
         <div class="">
             @Model.Content
@@ -89,26 +98,40 @@
                     <div class="card-header">
                         #@answer.Id
                         <span class="float-right">
-                            @if(User.Identity.Name == "admasd")
+                            @if(authorized && Idao.GetUserByEmail(User.Claims.First().Value).Id == Idao.GetQuestionById(answer.Question_Id).User_Id)
                             {
-                                if (Model.AcceptedAnswer != answer)
+                                if(Model.AcceptedAnswerID.HasValue)
                                 {
-                                    @Html.ActionLink("Mark as accepted", "MarkAnswerAccepted", new { answerID = answer.Id }, new { @class = "btn btn-success" })
+                                    if (Idao.GetAnswerById(Model.AcceptedAnswerID.Value) != answer)
+                                    {
+                                        @Html.ActionLink("Mark as accepted", "MarkAnswerAccepted", new { answerID = answer.Id }, new { @class = "btn btn-success" })
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-success disabled">Marked accepted! <span class="oi oi-check"></span></button>
+                                    }
                                 }
                                 else
                                 {
-                                    <button class="btn btn-success disabled">Marked accepted! <span class="oi oi-check"></span></button>
+                                    @Html.ActionLink("Mark as accepted", "MarkAnswerAccepted", new { answerID = answer.Id }, new { @class = "btn btn-success" })
                                 }
                             }
                             else
                             {
-                                if(Model.AcceptedAnswer == answer)
+                                if(Model.AcceptedAnswerID.HasValue)
                                 {
-                                    <span class="oi oi-check" style="color: rgb(87, 255, 45);">Accepted</span>
+                                    if(Idao.GetAnswerById(Model.AcceptedAnswerID.Value) == answer)
+                                    {
+                                        <span class="oi oi-check color-success">Accepted</span>
+                                    }
                                 }
                             }
-                            @Html.ActionLink("Edit", "edit_answer", new { id = answer.Id })
-                            @Html.ActionLink("Delete", "delete", new { id = answer.Id }, new { @class = "text-danger" })
+                            
+                            @if (Idao.GetUserById(Model.User_Id).Equals(Idao.GetUserByEmail(eMail)))
+                            {
+                                @Html.ActionLink("Edit", "edit_answer", new { id = answer.Id })
+                                @Html.ActionLink("Delete", "delete", new { id = answer.Id }, new { @class = "text-danger" })
+                            }
                             <!----
                             <a asp-controller="Home" asp-action="DeleteAnswer" href="#" class="text-danger">Delete</a>
                             -->
@@ -156,7 +179,7 @@
                                 <textarea class="form-control-plaintext bg-light text-black-50" style="border-radius: 1rem;" name="comment" required></textarea>
                                 <input name="id" type="hidden" value="@answer.Id" />
                                 <input name="type" type="hidden" value="answer" />
-                                <input type="hidden" name="user_email" value="@User.Claims.First().Value" />
+                                <input type="hidden" name="user_email" value="@eMail" />
                                 <div class="pt-2 float-right">
                                     <button class="btn btn-success" type="submit">Add Comment</button>
                                 </div>
@@ -185,7 +208,7 @@ else
                 <label class="custom-file-label">Browse</label>
             </div>
             <input name="id" type="hidden" value="@Model.Id" />
-            <input type="hidden" name="user_email" value="@User.Claims.First().Value" />
+            <input type="hidden" name="user_email" value="@eMail" />
             <input type="submit" class="btn btn-success" value="Add Answer">
         </form>
     </li>
@@ -220,7 +243,7 @@ else
                 <textarea class="form-control-plaintext bg-light text-black-50" style="border-radius: 1rem;" name="comment" required></textarea>
                 <input name="id" type="hidden" value="@Model.Id" />
                 <input name="type" type="hidden" value="question" />
-                <input type="hidden" name="user_email" value="@User.Claims.First().Value" />
+                <input type="hidden" name="user_email" value="@eMail" />
                 <div class="pt-2 float-right">
                     <button class="btn btn-success" type="submit">Add Comment</button>
                 </div>

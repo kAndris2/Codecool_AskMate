@@ -16,7 +16,7 @@ namespace AskMate
         public List<TagModel> Tags { get; set; } = new List<TagModel>();
         public List<QuestionTagModel> QuestionTags = new List<QuestionTagModel>();
         List<UserModel> Users = new List<UserModel>();
-        
+
         public int Entry { get; set; } = 5;
         public string SearchText { get; set; }
         private Dictionary<string, bool> Sort = new Dictionary<string, bool>
@@ -67,7 +67,7 @@ namespace AskMate
 
         public UserModel GetUserById(int id)
         {
-            foreach(UserModel user in Users)
+            foreach (UserModel user in Users)
             {
                 if (user.Id.Equals(id))
                     return user;
@@ -407,6 +407,21 @@ namespace AskMate
             }
         }
 
+        public void UpdateQuestionAcceptedAnswer(QuestionModel question)
+        {
+            string sqlstr = "UPDATE question " + "SET accepted_answer_id = @maid " + "WHERE id = @id";
+            using (var conn = new NpgsqlConnection(Program.ConnectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(sqlstr, conn))
+                {
+                    cmd.Parameters.AddWithValue("maid", question.AcceptedAnswerID);
+                    cmd.Parameters.AddWithValue("id", question.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public void UpdateVoteNumber(int id, int number, string table)
         {
             string sqlstr = $"UPDATE {table} " +
@@ -556,14 +571,15 @@ namespace AskMate
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             int id = 0;
             string sqlstr = "INSERT INTO question " +
-                                "(submission_time,profile_id,view_number,vote_number,title,message) " +
+                                "(accepted_answer_id,submission_time,profile_id,view_number,vote_number,title,message) " +
                                 "VALUES " +
-                                "(@time,@pid,@views,@votes,@title,@message)";
+                                "(@aaid,@time,@pid,@views,@votes,@title,@message)";
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(sqlstr, conn))
                 {
+                    cmd.Parameters.AddWithValue("aaid", DBNull.Value);
                     cmd.Parameters.AddWithValue("pid", userid);
                     cmd.Parameters.AddWithValue("time", milisec);
                     cmd.Parameters.AddWithValue("views", 0);
@@ -823,11 +839,21 @@ namespace AskMate
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
+                        int? aaid;
+                        if (!int.TryParse(reader["accepted_answer_id"].ToString(), out int x))
+                        {
+                            aaid = null;
+                        }
+                        else
+                        {
+                            aaid = int.Parse(reader["accepted_answer_id"].ToString());
+                        }
                         Questions.Add
                         (
                             new QuestionModel
                             (
                             int.Parse(reader["id"].ToString()),
+                            aaid,
                             reader["title"].ToString(),
                             reader["message"].ToString(),
                             Convert.ToInt64(reader["submission_time"].ToString()),

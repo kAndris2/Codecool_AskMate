@@ -17,7 +17,7 @@ namespace AskMate.Models
         public String ImgLink { get; private set; }
         public long Date { get; }
         public List<AnswerModel> Answers { get; } = new List<AnswerModel>();
-        public AnswerModel AcceptedAnswer { get; set; } = null;
+        public int? AcceptedAnswerID { get; set; }
         public List<CommentModel> Comments { get; } = new List<CommentModel>();
         public List<QuestionTagModel> ownTags { get; } = new List<QuestionTagModel>();
         public List<TagModel> tags { get; set; } = new List<TagModel>();
@@ -35,6 +35,19 @@ namespace AskMate.Models
         public QuestionModel(int id, string title, string content, long date, string img, int vote, int views, int userid)
         {
             Id = id;
+            Title = title;
+            Content = content;
+            Date = date;
+            ImgLink = img;
+            Vote = vote;
+            Views = views;
+            User_Id = userid;
+        }
+
+        public QuestionModel(int id, int? acceptedAnswerID, string title, string content, long date, string img, int vote, int views, int userid)
+        {
+            Id = id;
+            AcceptedAnswerID = acceptedAnswerID;
             Title = title;
             Content = content;
             Date = date;
@@ -101,11 +114,6 @@ namespace AskMate.Models
                 }
             }
             return instance;
-        }
-
-        public bool HasAcceptedAnswer()
-        {
-            return AcceptedAnswer != null ? true : false;
         }
 
         public override string ToString()

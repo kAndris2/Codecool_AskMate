@@ -314,7 +314,8 @@ namespace AskMate.Controllers
         {
             AnswerModel answer = Idao.GetAnswerById(answerID);
             QuestionModel question = Idao.GetQuestionById(answer.Question_Id);
-            question.AcceptedAnswer = answer;
+            question.AcceptedAnswerID = answer.Id;
+            Idao.UpdateQuestionAcceptedAnswer(question);
 
             return View("Question", question);
         }
