@@ -54,12 +54,12 @@ namespace AskMate.Controllers
                     if (user.Email == model.Email)
                     {
                         err = true;
-                        newErrors.Add("User with this e-mail already exists");
+                        newErrors.Add("User with this e-mail already exists! Choose annnother one!");
                     }
                     else if(user.Name == model.Username)
                     {
                         err = true;
-                        newErrors.Add("User with this username already exists");
+                        newErrors.Add("User with this username already exists! Choose annnother one!");
                     }
                 }
                
@@ -98,7 +98,15 @@ namespace AskMate.Controllers
             UserModel user = _userService.Login(email, password);
             if (user == null)
             {
-                return RedirectToAction("Login", "Account");
+                List<string> errors = new List<string>
+                {
+                    "Invalid e-mail/password!"
+                };
+                ErrorViewModel err = new ErrorViewModel
+                {
+                    Error = errors
+                };
+                return View(err);
 
             }
 

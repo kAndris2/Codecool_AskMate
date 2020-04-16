@@ -45,31 +45,32 @@
                         </li>
                     }
                 </ul>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                    
+                @if (User.Identity.IsAuthenticated)
+                {
+
                     <div class="mr-5">Logged in as @User.Claims.First().Value </div>
-                    
-                    
+
+
                     <div class="float-right">
 
                         @Html.ActionLink("Log Out", "Logout", "Account", null, new { @class = "btn btn-danger" })
                     </div>
-                    }
-                    else
-                    {
-                        <div class="float-right">
-                            @Html.ActionLink(
-                                "Sign up",
-                                "Register",                         // controller action
-                                "Account",        // controller
-                                null,         // action parameters aka route values
-                                new { @class = "btn btn-warning mr-3 text-white" })
-                        </div>
-                        <div class="float-right">
-                            @Html.ActionLink("Log In", "Login", "Account", null, new { @class = "btn btn-success" })
-                        </div>
-                    }
+                }
+                else
+                {
+                    <div class="float-right">
+                        @Html.ActionLink(
+                            "Sign up",
+                            "Register",                         // controller action
+                            "Account",        // controller
+                            null,         // action parameters aka route values
+                            new { @class = "btn btn-warning mr-3 text-white" })
+                    </div>
+                    <div class="float-right">
+                        @Html.ActionLink("Log In", "Login", "Account", null, new { @class = "btn btn-success" })
+                        
+                    </div>
+                }
 
             </div>
             <!--</div>-->
@@ -80,6 +81,7 @@
             @RenderBody()
         </main>
     </div>
+
 
     <footer class="border-top footer text-muted">
         <div class="container text-center">
@@ -92,6 +94,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/table.js" asp-append-version="true"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+
     <!--KÉP MIATT-->
 
     <script src="~/js/ekko-lightbox.min.js"></script>

@@ -1,20 +1,33 @@
-﻿
+﻿@model AskMate.Models.ErrorViewModel
 @{
     ViewData["Title"] = "Login";
 }
 
+
 <div class="text-center">
-    <h1 class="display-4">Login</h1>
-    <form method="post">
-        <label>E-mail</label>
-        <input type="text" name="email" />
+        <h1 class="display-4">Login</h1>
+        <form method="post">
+            <div class="form-group">
+                <label>E-mail</label>
+                <input class="form-control" type="email" name="email" />
+            </div>
 
-        @*<label>Username</label>
-        <input type="text" name="name" />*@
+            <div class="form-group">
+                <label>Password</label>
+                <input class="form-control" type="password" name="password" />
+            </div>
+            <button class="btn btn-success">Login</button>
+        </form>
+    </div>
 
-        <label>Password</label>
-        <input type="password" name="password" />
-        
-        <button>Login</button>
-    </form>
-</div>
+
+<div>
+        @if (Model != null && Model.Error.Count > 0)
+        {
+            foreach (string error in Model.Error)
+            {
+                <p class="alert alert-danger">@error</p>
+            }
+        }
+
+    </div>

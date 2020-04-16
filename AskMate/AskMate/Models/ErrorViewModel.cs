@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace AskMate.Models
 {
@@ -7,5 +8,7 @@ namespace AskMate.Models
         public string RequestId { get; set; }
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+
+        public List<string> Error { get; set; }
     }
 }
