@@ -71,6 +71,7 @@ namespace AskMate.Controllers
                 else
                 {
                     Idao.Register(model.Username, model.Email, model.Password);
+                    await LoginAsync(model.Email, model.Password);
                     return View("RegSuccess");
                 }
             }
