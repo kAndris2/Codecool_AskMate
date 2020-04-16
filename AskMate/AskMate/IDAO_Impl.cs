@@ -518,7 +518,7 @@ namespace AskMate
                     }
                 }
             }
-            AddCommentTo(new CommentModel(id, qid, aid, content, milisec));
+            AddCommentTo(new CommentModel(id, qid, aid, content, milisec, userid));
         }
 
         public AnswerModel NewAnswer(string content, int question_id, int userid)
