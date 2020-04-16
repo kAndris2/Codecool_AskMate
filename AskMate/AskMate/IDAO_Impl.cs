@@ -571,7 +571,7 @@ namespace AskMate
             long milisec = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             int id = 0;
             string sqlstr = "INSERT INTO question " +
-                                "(marked_answer_id,submission_time,profile_id,view_number,vote_number,title,message) " +
+                                "(accepted_answer_id,submission_time,profile_id,view_number,vote_number,title,message) " +
                                 "VALUES " +
                                 "(@maid,@time,@pid,@views,@votes,@title,@message)";
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
