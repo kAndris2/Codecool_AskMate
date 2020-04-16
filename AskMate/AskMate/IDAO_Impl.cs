@@ -46,6 +46,15 @@ namespace AskMate
             LoadFiles();
         }
 
+        private void ReloadLists()
+        {
+            Questions.Clear();
+            Tags.Clear();
+            QuestionTags.Clear();
+            Users.Clear();
+            LoadFiles();
+        }
+
         public UserModel GetUserByEmail(string email)
         {
             foreach (UserModel user in Users)
@@ -238,7 +247,7 @@ namespace AskMate
             throw new ArgumentException($"Invalid comment ID! - ('{id}')");
         }
 
-        //-SQL_METHODS---------------------------------------------------------------------------------------------------
+        //-SQL_METHODS------------------------------------------------------------------------------------------------------
 
         public void Register(string name, string email, string password)
         {
@@ -314,20 +323,7 @@ namespace AskMate
                 var cmd = new NpgsqlCommand(sqlstr, conn);
                 cmd.ExecuteNonQuery();
             }
-
-            if (table == "answer")
-            {
-                AnswerModel answer = GetAnswerById(id);
-                GetQuestionById(answer.Question_Id).DeleteAnswer(answer);
-            }
-            else if (table == "question")
-            {
-                Questions.Remove(GetQuestionById(id));
-            }
-            else if (table == "comment")
-            {
-                RemoveCommentFrom(id);
-            }
+            ReloadLists();
         }
 
         public void SortQuestion(string order)
@@ -690,16 +686,7 @@ namespace AskMate
                     cmd.ExecuteNonQuery();
                 }
             }
-
-            foreach (QuestionModel question in Questions)
-            {
-                if (id.Equals(question.Id))
-                {
-                    Questions.Remove(question);
-                    break;
-                }
-            }
-
+            ReloadLists();
         }
 
         public void AddLinkToTable(string filePath, string table, int id)
