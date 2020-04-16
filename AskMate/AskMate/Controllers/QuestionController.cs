@@ -25,20 +25,26 @@ namespace AskMate.Controllers
             string Title = newQuestion.Title;
             string Content = newQuestion.Content;
             string ownTags = newQuestion.ownTags;
-            List<string> tags;
-            tags = ownTags.Split(',').ToList();
+            List<string> tags = new List<string>();
+
+            if (ownTags != null)
+                tags = ownTags.Split(',').ToList();
+
             List<TagModel> newTags = new List<TagModel>();
 
-            foreach (string tag in tags)
+            if (tags.Count >= 1)
             {
-                TagModel tagModel = iDAO.Tags.Find(t => t.Name == tag);
-                if (tagModel == null)    //Check if tag doesn't exist
+                foreach (string tag in tags)
                 {
-                    newTags.Add(IDAO_Impl.Instance.CreateTag(tag));
-                }
-                else
-                {
-                    newTags.Add(tagModel);
+                    TagModel tagModel = iDAO.Tags.Find(t => t.Name == tag);
+                    if (tagModel == null)    //Check if tag doesn't exist
+                    {
+                        newTags.Add(IDAO_Impl.Instance.CreateTag(tag));
+                    }
+                    else
+                    {
+                        newTags.Add(tagModel);
+                    }
                 }
             }
 
