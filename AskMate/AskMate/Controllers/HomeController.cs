@@ -134,10 +134,9 @@ namespace AskMate.Controllers
         [HttpGet("/delete/{id}")]
         public IActionResult Delete(int id)
         {
-            AnswerModel answer = Idao.GetAnswerById(id);
-            QuestionModel question = Idao.GetQuestionById(answer.Question_Id);
-            Idao.Delete(answer.Id, "answer");
-            return View("Question", question);
+            int qid = Idao.GetAnswerById(id).Question_Id;
+            Idao.Delete(id, "answer");
+            return View("Question", Idao.GetQuestionById(qid));
         }
 
         [HttpGet("/edit/{id}")]
@@ -245,7 +244,7 @@ namespace AskMate.Controllers
         }
 
         [HttpPost]
-        public IActionResult AnswerEdit([FromForm(Name = "content")] string content, [FromForm(Name = "img")] string img, [FromForm(Name = "id")] int id)
+        public IActionResult AnswerEdit([FromForm(Name = "content")] string content, [FromForm(Name = "img")] string? img, [FromForm(Name = "id")] int id)
         {
             string link = img == null ? Idao.GetAnswerById(id).ImgLink : img;
             Idao.UpdateAnswer(id, content, link);
@@ -266,9 +265,9 @@ namespace AskMate.Controllers
         [HttpGet("/delete_comment/{id}")]
         public IActionResult Delete_Comment(int id)
         {
-            QuestionModel question = Idao.GetQuestionByCommentId(id);
+            int qid = Idao.GetQuestionByCommentId(id).Id;
             Idao.Delete(id, "comment");
-            return View("Question", question);
+            return View("Question", Idao.GetQuestionById(qid));
         }
 
         [HttpGet("/edit_comment/{id}")]
