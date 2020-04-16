@@ -17,7 +17,7 @@ namespace AskMate.Models
         public String ImgLink { get; private set; }
         public long Date { get; }
         public List<AnswerModel> Answers { get; } = new List<AnswerModel>();
-        public int AcceptedAnswerID { get; set; }
+        public int? AcceptedAnswerID { get; set; }
         public List<CommentModel> Comments { get; } = new List<CommentModel>();
         public List<QuestionTagModel> ownTags { get; } = new List<QuestionTagModel>();
         public List<TagModel> tags { get; set; } = new List<TagModel>();
@@ -44,10 +44,10 @@ namespace AskMate.Models
             User_Id = userid;
         }
 
-        public QuestionModel(int id, int AcceptedAnswerId, string title, string content, long date, string img, int vote, int views, int userid)
+        public QuestionModel(int id, int? acceptedAnswerID, string title, string content, long date, string img, int vote, int views, int userid)
         {
             Id = id;
-            AcceptedAnswerID = AcceptedAnswerId;
+            AcceptedAnswerID = acceptedAnswerID;
             Title = title;
             Content = content;
             Date = date;

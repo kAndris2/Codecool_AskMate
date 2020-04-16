@@ -573,13 +573,13 @@ namespace AskMate
             string sqlstr = "INSERT INTO question " +
                                 "(accepted_answer_id,submission_time,profile_id,view_number,vote_number,title,message) " +
                                 "VALUES " +
-                                "(@maid,@time,@pid,@views,@votes,@title,@message)";
+                                "(@aaid,@time,@pid,@views,@votes,@title,@message)";
             using (var conn = new NpgsqlConnection(Program.ConnectionString))
             {
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(sqlstr, conn))
                 {
-                    cmd.Parameters.AddWithValue("maid", DBNull.Value);
+                    cmd.Parameters.AddWithValue("aaid", DBNull.Value);
                     cmd.Parameters.AddWithValue("pid", userid);
                     cmd.Parameters.AddWithValue("time", milisec);
                     cmd.Parameters.AddWithValue("views", 0);
@@ -839,12 +839,21 @@ namespace AskMate
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
+                        int? aaid;
+                        if (!int.TryParse(reader["accepted_answer_id"].ToString(), out int x))
+                        {
+                            aaid = null;
+                        }
+                        else
+                        {
+                            aaid = int.Parse(reader["accepted_answer_id"].ToString());
+                        }
                         Questions.Add
                         (
                             new QuestionModel
                             (
                             int.Parse(reader["id"].ToString()),
-                            int.Parse(reader["accepted_answer_id"].ToString()),
+                            aaid,
                             reader["title"].ToString(),
                             reader["message"].ToString(),
                             Convert.ToInt64(reader["submission_time"].ToString()),

@@ -100,23 +100,32 @@
                         <span class="float-right">
                             @if(authorized && Idao.GetUserByEmail(User.Claims.First().Value).Id == Idao.GetQuestionById(answer.Question_Id).User_Id)
                             {
-                                if (Idao.GetAnswerById(Model.AcceptedAnswerID) != answer)
+                                if(Model.AcceptedAnswerID.HasValue)
                                 {
-                                    @Html.ActionLink("Mark as accepted", "MarkAnswerAccepted", new { answerID = answer.Id }, new { @class = "btn btn-success" })
+                                    if (Idao.GetAnswerById(Model.AcceptedAnswerID.Value) != answer)
+                                    {
+                                        @Html.ActionLink("Mark as accepted", "MarkAnswerAccepted", new { answerID = answer.Id }, new { @class = "btn btn-success" })
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-success disabled">Marked accepted! <span class="oi oi-check"></span></button>
+                                    }
                                 }
                                 else
                                 {
-                                    <button class="btn btn-success disabled">Marked accepted! <span class="oi oi-check"></span></button>
+                                    @Html.ActionLink("Mark as accepted", "MarkAnswerAccepted", new { answerID = answer.Id }, new { @class = "btn btn-success" })
                                 }
                             }
                             else
                             {
-                                if(Idao.GetAnswerById(Model.AcceptedAnswerID) == answer)
+                                if(Model.AcceptedAnswerID.HasValue)
                                 {
-                                    <span class="oi oi-check color-success">Accepted</span>
+                                    if(Idao.GetAnswerById(Model.AcceptedAnswerID.Value) == answer)
+                                    {
+                                        <span class="oi oi-check color-success">Accepted</span>
+                                    }
                                 }
                             }
-                            
                             @Html.ActionLink("Edit", "edit_answer", new { id = answer.Id })
                             @Html.ActionLink("Delete", "delete", new { id = answer.Id }, new { @class = "text-danger" })
                             <!----
