@@ -583,13 +583,16 @@ namespace AskMate
             }
             QuestionModel question = new QuestionModel(id, title, content, milisec, userid);
 
-            for (int i = 0; i < newTags.Count; i++)
+            if (newTags.Count >= 1)
             {
-                QuestionTagModel qTag = new QuestionTagModel(0, 0);
-                qTag.NewTagToQuestionTag(newTags[i], question);
-                question.AddNewTag(qTag);
+                for (int i = 0; i < newTags.Count; i++)
+                {
+                    QuestionTagModel qTag = new QuestionTagModel(0, 0);
+                    qTag.NewTagToQuestionTag(newTags[i], question);
+                    question.AddNewTag(qTag);
+                }
+                question.GetTag();
             }
-            question.GetTag();
             Questions.Add(question);
         }
 
