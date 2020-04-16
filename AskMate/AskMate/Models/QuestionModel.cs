@@ -10,18 +10,19 @@ namespace AskMate.Models
     {
         public int Id { get; }
         public int Vote { get; private set; }
-        public int Views { get; private set;}
+        public int Views { get; private set; }
         public int User_Id { get; private set; }
         public String Title { get; private set; }
         public String Content { get; private set; }
         public String ImgLink { get; private set; }
         public long Date { get; }
         public List<AnswerModel> Answers { get; } = new List<AnswerModel>();
+        public AnswerModel AcceptedAnswer { get; set; } = null;
         public List<CommentModel> Comments { get; } = new List<CommentModel>();
         public List<QuestionTagModel> ownTags { get; } = new List<QuestionTagModel>();
         public List<TagModel> tags { get; set; } = new List<TagModel>();
         public List<string> tagNames { get; private set; } = new List<string>();
-        
+
         public QuestionModel(int id, string title, string content, long date, int userid)
         {
             Id = id;
@@ -76,8 +77,8 @@ namespace AskMate.Models
             }
         }//get the name of the tag(s)
 
-        public void IncreaseView() 
-        { 
+        public void IncreaseView()
+        {
             Views++;
             IDAO_Impl.Instance.UpdateQuestionView(this);
         }
@@ -100,6 +101,11 @@ namespace AskMate.Models
                 }
             }
             return instance;
+        }
+
+        public bool HasAcceptedAnswer()
+        {
+            return AcceptedAnswer != null ? true : false;
         }
 
         public override string ToString()

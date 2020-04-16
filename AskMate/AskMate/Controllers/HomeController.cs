@@ -308,5 +308,15 @@ namespace AskMate.Controllers
         {
             return View(Idao.Tags);
         }
+
+        [HttpGet("/MarkAnswerAccepted/{answerID}")]
+        public IActionResult MarkAnswerAccepted(int answerID)
+        {
+            AnswerModel answer = Idao.GetAnswerById(answerID);
+            QuestionModel question = Idao.GetQuestionById(answer.Question_Id);
+            question.AcceptedAnswer = answer;
+
+            return View("Question", question);
+        }
     }
 }

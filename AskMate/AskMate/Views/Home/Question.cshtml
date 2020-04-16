@@ -1,8 +1,13 @@
-﻿@model AskMate.Models.QuestionModel
+﻿@inject IUserService userService;
+@model AskMate.Models.QuestionModel
 @{
     ViewData["Title"] = "Details";
     Model.IncreaseView();
+<<<<<<< Updated upstream
     var authorized = User.Identity.IsAuthenticated;
+=======
+    IDAO_Impl Idao = IDAO_Impl.Instance;
+>>>>>>> Stashed changes
 }
 
 <link rel="stylesheet" href="~/css/Index.css">
@@ -85,6 +90,24 @@
                     <div class="card-header">
                         #@answer.Id
                         <span class="float-right">
+                            @if(User.Identity.Name == "admasd")
+                            {
+                                if (Model.AcceptedAnswer != answer)
+                                {
+                                    @Html.ActionLink("Mark as accepted", "MarkAnswerAccepted", new { answerID = answer.Id }, new { @class = "btn btn-success" })
+                                }
+                                else
+                                {
+                                    <button class="btn btn-success disabled">Marked accepted! <span class="oi oi-check"></span></button>
+                                }
+                            }
+                            else
+                            {
+                                if(Model.AcceptedAnswer == answer)
+                                {
+                                    <span class="oi oi-check" style="color: rgb(87, 255, 45);">Accepted</span>
+                                }
+                            }
                             @Html.ActionLink("Edit", "edit_answer", new { id = answer.Id })
                             @Html.ActionLink("Delete", "delete", new { id = answer.Id }, new { @class = "text-danger" })
                             <!----

@@ -72,7 +72,7 @@ namespace AskMate.Controllers
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
-                
+
             }
 
             var claims = new List<Claim> { new Claim(ClaimTypes.Email, user.Email) };
