@@ -15,13 +15,14 @@ namespace AskMate.Models
         public int Edited { get; set; }
         public int User_Id { get; set; }
 
-        public CommentModel(int id, int? qid, int? aid, string message, long date)
+        public CommentModel(int id, int? qid, int? aid, string message, long date, int userid)
         {
             ID = id;
             QuestionID = qid;
             AnswerID = aid;
             Message = message;
             Date = date;
+            User_Id = userid;
         }
 
         public CommentModel(int id, int? qid, int? aid, string message, long date, int edited, int userid)
