@@ -37,6 +37,8 @@ namespace AskMate.Controllers
 
             [DataType(DataType.Password), Compare(nameof(Password))]
             public string ConfirmPassword { get; set; }
+
+            public List<string> errors { get; set; }
         }
 
         [HttpPost]
@@ -44,8 +46,33 @@ namespace AskMate.Controllers
         {
             if (ModelState.IsValid)
             {
-                Idao.Register(model.Username, model.Email, model.Password);
-                return View("RegSuccess");
+                List<UserModel> users = Idao.GetUsers();
+                List<string> newErrors = new List<string>();
+                bool err = false;
+                foreach ( UserModel user in users)
+                {
+                    if (user.Email == model.Email)
+                    {
+                        err = true;
+                        newErrors.Add("User with this e-mail already exists");
+                    }
+                    else if(user.Name == model.Username)
+                    {
+                        err = true;
+                        newErrors.Add("User with this username already exists");
+                    }
+                }
+               
+                if (err)
+                {
+                    model.errors = newErrors;
+                    return View(model);
+                }
+                else
+                {
+                    Idao.Register(model.Username, model.Email, model.Password);
+                    return View("RegSuccess");
+                }
             }
             else { return View(); }
         }

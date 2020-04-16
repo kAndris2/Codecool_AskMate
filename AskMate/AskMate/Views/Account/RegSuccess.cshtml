@@ -1,7 +1,71 @@
 ﻿
 @{
-    ViewData["Title"] = "Success";
+    Layout = null;
 }
 
-<h1>Registration successful!</h1>
+<!DOCTYPE html>
 
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <META HTTP-EQUIV="refresh" CONTENT="4;URL=../">
+</head>
+<body>
+    <h1>Registration Successful!</h1>
+</body>
+</html>
+
+<!--Loading script-ish xddd -->
+@*<script type="text/javascript">
+    let angle = 0;
+    let w = 40;
+    let mangle;
+    let maxD;
+
+    function setup() {
+       
+        let cnv = createCanvas(800, 800, WEBGL);
+        cnv.position((windowWidth/2) - 400, 100);
+        mangle = asin(1 / sqrt(2));
+        maxD = dist(0, 0, 300, 300);
+
+    }
+
+    function draw() {
+        background(0,0);
+        ortho(-500, 500, -500, 500, 0, 1700);
+        //  translate(0,0, -100);
+
+        rotateX(-mangle);
+        rotateY(-QUARTER_PI);
+
+
+
+        //rotateX(angle * 0.25);
+        //let offset = 0;
+        for (let z = 0; z < height; z += w) {
+            for (let x = 0; x < width; x += w) {
+                push();
+                let d = dist(x, z, width / 2, height / 2);
+                let offset = map(d, 0, maxD, -3.3, 3.3);
+                let a = angle + offset;
+                let h = map(sin(a), -1, 1, 130, 450);
+
+                translate(x - width / 2, 0, z - height / 2);
+                normalMaterial();
+                //rect(x -width /2 + w / 2,0,w-2,h);
+                box(w - 2, h, w - 2);
+
+                pop();
+            }
+            //  offset += 0.1;
+        }
+
+        angle -= 0.07;
+
+    }
+
+</script>*@
