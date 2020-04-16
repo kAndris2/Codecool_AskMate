@@ -4,7 +4,11 @@
     ViewData["Title"] = "Details";
     Model.IncreaseView();
     var authorized = User.Identity.IsAuthenticated;
-    string eMail = User.Claims.First().Value;
+    string eMail = "";
+    if (authorized)
+    {
+        eMail = User.Claims.First().Value;
+    }
     IDAO_Impl Idao = IDAO_Impl.Instance;
 }
 
@@ -127,7 +131,7 @@
                                 }
                             }
                             
-                            @if (Idao.GetUserById(Model.User_Id).Equals(Idao.GetUserByEmail(eMail)))
+                            @if (authorized && Idao.GetUserById(Model.User_Id).Equals(Idao.GetUserByEmail(eMail)))
                             {
                                 @Html.ActionLink("Edit", "edit_answer", new { id = answer.Id })
                                 @Html.ActionLink("Delete", "delete", new { id = answer.Id }, new { @class = "text-danger" })
