@@ -117,8 +117,11 @@
                                 }
                             }
                             
-                            @Html.ActionLink("Edit", "edit_answer", new { id = answer.Id })
-                            @Html.ActionLink("Delete", "delete", new { id = answer.Id }, new { @class = "text-danger" })
+                            @if (Idao.GetUserById(Model.User_Id).Equals(Idao.GetUserByEmail(eMail)))
+                            {
+                                @Html.ActionLink("Edit", "edit_answer", new { id = answer.Id })
+                                @Html.ActionLink("Delete", "delete", new { id = answer.Id }, new { @class = "text-danger" })
+                            }
                             <!----
                             <a asp-controller="Home" asp-action="DeleteAnswer" href="#" class="text-danger">Delete</a>
                             -->
