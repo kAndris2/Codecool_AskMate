@@ -71,12 +71,11 @@
                 <th class="text-center">
                     <button class="btn btn-outline-warning" type="submit" name="order" value="vote_number">Votes</button>
                 </th>
-                if (User.Identity.IsAuthenticated)
-                {
-                    <th class="text-center">
-                        <button class="btn btn-outline-warning" disabled>Actions</button>
-                    </th>
-                }
+                
+                <th class="text-center">
+                    <button class="btn btn-outline-warning" disabled>Actions</button>
+                </th>
+                
             }
         </tr>
     </thead>
@@ -119,6 +118,12 @@
                 <td class="text-center">
                     @Html.ActionLink("Edit", "edit", new { id = question.Id }, new { @class = "text-success" }) |
                     <a href="#" class="text-danger" id="ModalId" onclick="viewModal(@question.Id)">Delete</a>
+                </td>
+            }
+            else
+            {
+                <td class="text-center">
+                    <p class="text-danger">You have no power here!</p>
                 </td>
             }
         </tr>
