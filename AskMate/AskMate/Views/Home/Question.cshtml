@@ -3,11 +3,8 @@
 @{
     ViewData["Title"] = "Details";
     Model.IncreaseView();
-<<<<<<< Updated upstream
     var authorized = User.Identity.IsAuthenticated;
-=======
     IDAO_Impl Idao = IDAO_Impl.Instance;
->>>>>>> Stashed changes
 }
 
 <link rel="stylesheet" href="~/css/Index.css">
@@ -90,9 +87,9 @@
                     <div class="card-header">
                         #@answer.Id
                         <span class="float-right">
-                            @if(User.Identity.Name == "admasd")
+                            @if(authorized && Idao.GetUserByEmail(User.Claims.First().Value).Id == Idao.GetQuestionById(answer.Question_Id).User_Id)
                             {
-                                if (Model.AcceptedAnswer != answer)
+                                if (Idao.GetAnswerById(Model.AcceptedAnswerID) != answer)
                                 {
                                     @Html.ActionLink("Mark as accepted", "MarkAnswerAccepted", new { answerID = answer.Id }, new { @class = "btn btn-success" })
                                 }
@@ -103,11 +100,12 @@
                             }
                             else
                             {
-                                if(Model.AcceptedAnswer == answer)
+                                if(Idao.GetAnswerById(Model.AcceptedAnswerID) == answer)
                                 {
-                                    <span class="oi oi-check" style="color: rgb(87, 255, 45);">Accepted</span>
+                                    <span class="oi oi-check color-success">Accepted</span>
                                 }
                             }
+                            
                             @Html.ActionLink("Edit", "edit_answer", new { id = answer.Id })
                             @Html.ActionLink("Delete", "delete", new { id = answer.Id }, new { @class = "text-danger" })
                             <!----
