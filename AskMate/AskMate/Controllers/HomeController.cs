@@ -315,6 +315,7 @@ namespace AskMate.Controllers
             AnswerModel answer = Idao.GetAnswerById(answerID);
             QuestionModel question = Idao.GetQuestionById(answer.Question_Id);
             question.AcceptedAnswerID = answer.Id;
+            Idao.GetUserById(answer.User_Id).IncreaseReputation(15);
             Idao.UpdateQuestionAcceptedAnswer(question);
 
             return View("Question", question);
